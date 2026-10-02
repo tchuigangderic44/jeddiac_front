@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Bell, Calendar, ArrowRight, ArrowLeft, Clock, Search, X, Tag, Sparkles, Filter } from "lucide-react";
-import { api } from "../services/api";
+import { api, getMediaUrl } from "../services/api";
 import { useLanguage } from "../context/LanguageContext";
-
-const NEWS_DEFAULT_IMAGES = [
-  "https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1577495508048-b635879837f1?w=800&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=800&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=800&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?w=800&auto=format&fit=crop&q=80"
-];
 
 const FALLBACK_NEWS = [
   {
@@ -72,20 +64,25 @@ export default function AllNewsPage({ onBackToHome }) {
     }
   };
 
-  // Derive categories
-  const categories = ["all", ...new Set(news.map((item) => item.category).filter(Boolean))];
+  // Derive categories (both FR and EN if available)
+  const categories = ["all", ...new Set(news.map((item) => (isEnglish && item.categoryEn) ? item.categoryEn : item.category).filter(Boolean))];
 
   // Filter and sort
   const filteredNews = news
     .filter((item) => {
-      const matchCat = selectedCategory === "all" || item.category === selectedCategory;
+      const itemCat = (isEnglish && item.categoryEn) ? item.categoryEn : item.category;
+      const matchCat = selectedCategory === "all" || itemCat === selectedCategory || item.category === selectedCategory || item.categoryEn === selectedCategory;
       const q = searchQuery.toLowerCase().trim();
       const matchSearch =
         !q ||
         (item.title && item.title.toLowerCase().includes(q)) ||
+        (item.titleEn && item.titleEn.toLowerCase().includes(q)) ||
         (item.summary && item.summary.toLowerCase().includes(q)) ||
+        (item.summaryEn && item.summaryEn.toLowerCase().includes(q)) ||
         (item.content && item.content.toLowerCase().includes(q)) ||
-        (item.tags && item.tags.toLowerCase().includes(q));
+        (item.contentEn && item.contentEn.toLowerCase().includes(q)) ||
+        (item.tags && item.tags.toLowerCase().includes(q)) ||
+        (item.tagsEn && item.tagsEn.toLowerCase().includes(q));
       return matchCat && matchSearch;
     })
     .sort((a, b) => {
@@ -199,8 +196,12 @@ export default function AllNewsPage({ onBackToHome }) {
           </div>
         ) : (
           <div className="news-cards-grid dedicated-grid">
-            {filteredNews.map((item, index) => {
-              const imageSrc = item.imageUrl || NEWS_DEFAULT_IMAGES[index % NEWS_DEFAULT_IMAGES.length];
+            {filteredNews.map((item) => {
+              const imageSrc = item.coverImage ? getMediaUrl(item.coverImage) : null;
+              const title = (isEnglish && item.titleEn) ? item.titleEn : item.title;
+              const category = (isEnglish && item.categoryEn) ? item.categoryEn : (item.category || (isEnglish ? "Official Dispatch" : "Communiqué"));
+              const summary = (isEnglish && item.summaryEn) ? item.summaryEn : item.summary;
+              const tags = (isEnglish && item.tagsEn) ? item.tagsEn : item.tags;
               const dateStr = new Date(item.publishedAt || item.createdAt).toLocaleDateString(
                 isEnglish ? "en-US" : "fr-FR",
                 { day: "numeric", month: "long", year: "numeric" }
@@ -209,9 +210,25 @@ export default function AllNewsPage({ onBackToHome }) {
               return (
                 <article key={item.id} className="news-editorial-card">
                   <div className="news-card-photo-wrap">
-                    <img src={imageSrc} alt={item.title} className="news-card-photo" loading="lazy" />
+                    {imageSrc ? (
+                      <img src={imageSrc} alt={title} className="news-card-photo" loading="lazy" />
+                    ) : (
+                      <div className="news-card-default-bg">
+                        <div className="news-card-default-brand">
+                          <img 
+                            src="/assets/jeddiac-lineaire-blanc.png" 
+                            alt="JEDDIAC" 
+                            className="news-card-default-logo"
+                            onError={(e) => { e.currentTarget.style.display = "none"; }}
+                          />
+                          <span className="news-card-default-caption">
+                            {category}
+                          </span>
+                        </div>
+                      </div>
+                    )}
                     <span className="news-category-badge">
-                      {item.category || (isEnglish ? "Official" : "Communiqué")}
+                      {category}
                     </span>
                   </div>
 
@@ -227,12 +244,12 @@ export default function AllNewsPage({ onBackToHome }) {
                       </span>
                     </div>
 
-                    <h3 className="news-card-title">{item.title}</h3>
-                    <p className="news-card-excerpt">{item.summary}</p>
+                    <h3 className="news-card-title">{title}</h3>
+                    <p className="news-card-excerpt">{summary}</p>
 
-                    {item.tags && (
+                    {tags && (
                       <div className="news-tags-row">
-                        {item.tags.split(",").slice(0, 3).map((tag, i) => (
+                        {tags.split(",").slice(0, 3).map((tag, i) => (
                           <span key={i} className="news-tag-bubble">
                             #{tag.trim()}
                           </span>
@@ -255,60 +272,94 @@ export default function AllNewsPage({ onBackToHome }) {
       </div>
 
       {/* Full Detail Modal */}
-      {selectedNews && (
-        <div className="modal-overlay" onClick={() => setSelectedNews(null)}>
-          <div className="modal-card article-modal-card" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close-btn" onClick={() => setSelectedNews(null)} aria-label="Fermer">
-              <X size={20} />
-            </button>
+      {selectedNews && (() => {
+        const modalTitle = (isEnglish && selectedNews.titleEn) ? selectedNews.titleEn : selectedNews.title;
+        const modalCategory = (isEnglish && selectedNews.categoryEn) ? selectedNews.categoryEn : (selectedNews.category || (isEnglish ? "Official Dispatch" : "Communiqué Officiel"));
+        const modalSummary = (isEnglish && selectedNews.summaryEn) ? selectedNews.summaryEn : selectedNews.summary;
+        const modalContent = (isEnglish && selectedNews.contentEn) ? selectedNews.contentEn : (selectedNews.content || selectedNews.summary);
+        const modalTags = (isEnglish && selectedNews.tagsEn) ? selectedNews.tagsEn : selectedNews.tags;
 
-            <span className="badge badge-green-light" style={{ marginBottom: "1rem" }}>
-              {selectedNews.category || (isEnglish ? "Official Dispatch" : "Communiqué Officiel")}
-            </span>
-
-            <h2 style={{ fontSize: "1.75rem", color: "#13221B", lineHeight: "1.35", marginBottom: "1rem" }}>
-              {selectedNews.title}
-            </h2>
-
-            <div style={{ display: "flex", gap: "1.2rem", color: "#6A8278", fontSize: "0.88rem", marginBottom: "1.5rem" }}>
-              <span style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
-                <Calendar size={14} />
-                {new Date(selectedNews.publishedAt || selectedNews.createdAt).toLocaleDateString(
-                  isEnglish ? "en-US" : "fr-FR",
-                  { day: "numeric", month: "long", year: "numeric" }
-                )}
-              </span>
-              <span style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
-                <Clock size={14} />
-                {isEnglish ? "Official Release" : "Publication Officielle"}
-              </span>
-            </div>
-
-            <div style={{ color: "#2B4036", lineHeight: "1.8", fontSize: "1.05rem" }}>
-              <p style={{ fontWeight: 600, fontSize: "1.15rem", marginBottom: "1.2rem", color: "#13221B" }}>
-                {selectedNews.summary}
-              </p>
-              <p>{selectedNews.content || selectedNews.summary}</p>
-            </div>
-
-            {selectedNews.tags && (
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "1.5rem" }}>
-                {selectedNews.tags.split(",").map((tag, i) => (
-                  <span key={i} className="badge badge-gold-light">
-                    #{tag.trim()}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            <div style={{ marginTop: "2rem", paddingTop: "1.5rem", borderTop: "1px solid #E5EBE7", display: "flex", justifyContent: "flex-end" }}>
-              <button onClick={() => setSelectedNews(null)} className="btn btn-forest">
-                {t("close")}
+        return (
+          <div className="modal-overlay" onClick={() => setSelectedNews(null)}>
+            <div className="modal-card article-modal-card" onClick={(e) => e.stopPropagation()}>
+              <button className="modal-close-btn" onClick={() => setSelectedNews(null)} aria-label={isEnglish ? "Close" : "Fermer"}>
+                <X size={20} />
               </button>
+
+              <span className="badge badge-green-light" style={{ marginBottom: "1rem" }}>
+                {modalCategory}
+              </span>
+
+              <div style={{ marginBottom: "1.25rem", borderRadius: "10px", overflow: "hidden", maxHeight: "260px" }}>
+                {selectedNews.coverImage ? (
+                  <img 
+                    src={getMediaUrl(selectedNews.coverImage)} 
+                    alt={modalTitle} 
+                    style={{ width: "100%", height: "220px", objectFit: "cover", display: "block" }} 
+                  />
+                ) : (
+                  <div className="news-card-default-bg" style={{ height: "180px" }}>
+                    <div className="news-card-default-brand">
+                      <img 
+                        src="/assets/jeddiac-lineaire-blanc.png" 
+                        alt="JEDDIAC" 
+                        className="news-card-default-logo"
+                        onError={(e) => { e.currentTarget.style.display = "none"; }}
+                      />
+                      <span className="news-card-default-caption">
+                        {modalCategory}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <h2 style={{ fontSize: "1.75rem", color: "#13221B", lineHeight: "1.35", marginBottom: "1rem" }}>
+                {modalTitle}
+              </h2>
+
+              <div style={{ display: "flex", gap: "1.2rem", color: "#6A8278", fontSize: "0.88rem", marginBottom: "1.5rem" }}>
+                <span style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
+                  <Calendar size={14} />
+                  {new Date(selectedNews.publishedAt || selectedNews.createdAt).toLocaleDateString(
+                    isEnglish ? "en-US" : "fr-FR",
+                    { day: "numeric", month: "long", year: "numeric" }
+                  )}
+                </span>
+                <span style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
+                  <Clock size={14} />
+                  {isEnglish ? "Official Release" : "Publication Officielle"}
+                </span>
+              </div>
+
+              <div style={{ color: "#2B4036", lineHeight: "1.8", fontSize: "1.05rem" }}>
+                {modalSummary && (
+                  <p style={{ fontWeight: 600, fontSize: "1.15rem", marginBottom: "1.2rem", color: "#13221B" }}>
+                    {modalSummary}
+                  </p>
+                )}
+                <p style={{ whiteSpace: "pre-line" }}>{modalContent}</p>
+              </div>
+
+              {modalTags && (
+                <div className="news-tags-row" style={{ marginTop: "1.5rem" }}>
+                  {modalTags.split(",").map((tag, i) => (
+                    <span key={i} className="news-tag-bubble">
+                      #{tag.trim()}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <div style={{ marginTop: "2rem", paddingTop: "1.5rem", borderTop: "1px solid #E5EBE7", display: "flex", justifyContent: "flex-end" }}>
+                <button onClick={() => setSelectedNews(null)} className="btn btn-forest">
+                  {t("close")}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
     </div>
   );
 }

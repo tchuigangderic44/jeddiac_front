@@ -1,10 +1,21 @@
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
+export const getMediaUrl = (pathOrUrl) => {
+  if (!pathOrUrl) return "";
+  if (pathOrUrl.startsWith("http://") || pathOrUrl.startsWith("https://") || pathOrUrl.startsWith("data:")) {
+    return pathOrUrl;
+  }
+  const cleanBase = API_BASE_URL.replace(/\/$/, "");
+  const cleanPath = pathOrUrl.startsWith("/") ? pathOrUrl : `/${pathOrUrl}`;
+  return `${cleanBase}${cleanPath}`;
+};
+
 async function request(endpoint, options = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
+  const isFormData = typeof FormData !== "undefined" && options.body instanceof FormData;
   const headers = {
-    "Content-Type": "application/json",
+    ...(isFormData ? {} : { "Content-Type": "application/json" }),
     ...(options.token ? { Authorization: `Bearer ${options.token}` } : {}),
     ...options.headers,
   };
@@ -95,18 +106,41 @@ export const api = {
 
   // Admin News
   getAdminNews: (token, params = "") => request(`/admin/news${params}`, { token }),
-  createNews: (token, payload) => request("/admin/news", {
-    method: "POST",
-    token,
-    body: JSON.stringify(payload),
-  }),
-  updateNews: (token, id, payload) => request(`/admin/news/${id}`, {
-    method: "PUT",
-    token,
-    body: JSON.stringify(payload),
-  }),
+  createNews: (token, payload) => {
+    const isFormData = typeof FormData !== "undefined" && payload instanceof FormData;
+    return request("/admin/news", {
+      method: "POST",
+      token,
+      body: isFormData ? payload : JSON.stringify(payload),
+    });
+  },
+  updateNews: (token, id, payload) => {
+    const isFormData = typeof FormData !== "undefined" && payload instanceof FormData;
+    return request(`/admin/news/${id}`, {
+      method: "PUT",
+      token,
+      body: isFormData ? payload : JSON.stringify(payload),
+    });
+  },
   deleteNews: (token, id) => request(`/admin/news/${id}`, {
     method: "DELETE",
+    token,
+  }),
+  getAdminNewsDetails: (token, id) => request(`/admin/news/${id}`, { token }),
+  suspendNews: (token, id) => request(`/admin/news/${id}/suspend`, {
+    method: "PATCH",
+    token,
+  }),
+  reactivateNews: (token, id) => request(`/admin/news/${id}/reactivate`, {
+    method: "PATCH",
+    token,
+  }),
+  deactivateNews: (token, id) => request(`/admin/news/${id}/deactivate`, {
+    method: "PATCH",
+    token,
+  }),
+  activateNews: (token, id) => request(`/admin/news/${id}/activate`, {
+    method: "PATCH",
     token,
   }),
 
