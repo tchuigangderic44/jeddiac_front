@@ -39,6 +39,7 @@ function AppContent() {
   const [applicationSubject, setApplicationSubject] = useState("");
   const [activeSection, setActiveSection] = useState("accueil");
   const [currentView, setCurrentView] = useState("home"); // "home" | "all-news" | "all-profiles" | "all-articles" | "all-agenda" | "admin"
+  const [profilesCategory, setProfilesCategory] = useState("all");
 
   // Page Transition Simulation State
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -235,7 +236,10 @@ function AppContent() {
       )}
 
       {currentView === "all-profiles" && (
-        <AllProfilesPage onBackToHome={() => navigateToHomeSection("equipe")} />
+        <AllProfilesPage 
+          onBackToHome={() => navigateToHomeSection("equipe")} 
+          initialCategory={profilesCategory}
+        />
       )}
 
       {currentView === "all-articles" && (
@@ -276,12 +280,15 @@ function AppContent() {
 
           {/* Our Team & User Profiles (inspired by Climate Chance Qui sommes-nous / Équipe - strictly non-admin) */}
           <TeamSection 
-            onNavigateAllProfiles={() => navigateTo(
-              "all-profiles", 
-              "#tous-les-profils",
-              isEnglish ? "Opening member & network directory..." : "Accès au répertoire des profils & membres...",
-              isEnglish ? "Synchronizing 90 partner hubs and network journalists" : "Synchronisation des 90 structures et journalistes du réseau"
-            )} 
+            onNavigateAllProfiles={(cat = "all") => {
+              setProfilesCategory(cat);
+              navigateTo(
+                "all-profiles", 
+                "#tous-les-profils",
+                isEnglish ? "Opening member & network directory..." : "Accès au répertoire des profils & membres...",
+                isEnglish ? "Synchronizing 90 partner hubs and network journalists" : "Synchronisation des 90 structures et journalistes du réseau"
+              );
+            }} 
           />
 
           {/* The 5 Strategic Axes of JEDDIAC */}

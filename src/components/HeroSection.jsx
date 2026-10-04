@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Sparkles, ArrowRight, Radio, Award, MapPin, CheckCircle2, Trees, Users, ChevronLeft, ChevronRight } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
+import { api, getMediaUrl } from "../services/api";
 
 const TESTIMONIALS = {
   fr: [
@@ -10,31 +11,7 @@ const TESTIMONIALS = {
       author: "Jean Marie Kenfack",
       role: "Porteur du programme JEDDIAC",
       badge: "Vision & Direction JEDDIAC",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80"
-    },
-    {
-      id: 2,
-      quote: "« La rigueur de la donnée écologique couplée à la créativité des jeunes journalistes est la clé pour préserver durablement le Bassin du Congo. »",
-      author: "Dr. Aïssatou Bella",
-      role: "Conseillère Scientifique & Écologie",
-      badge: "Sciences & Biodiversité",
-      avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&auto=format&fit=crop&q=80"
-    },
-    {
-      id: 3,
-      quote: "« En confiant des micros aux élèves des 10 régions, nous faisons émerger des voix et des solutions locales que les grands médias ignorent. »",
-      author: "Rodrigue Manga",
-      role: "Responsable Pôle Radio & Podcasts",
-      badge: "Production Audio & Terroirs",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80"
-    },
-    {
-      id: 4,
-      quote: "« Le journalisme de solutions donne le pouvoir d'agir. Chacune de nos enquêtes junior met en valeur des actions citoyennes concrètes et reproductibles. »",
-      author: "Grâce Bikou",
-      role: "Rédactrice en Chef Adjointe Enquêtes",
-      badge: "Journalisme de Solutions",
-      avatar: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=120&auto=format&fit=crop&q=80"
+      avatar: null
     }
   ],
   en: [
@@ -44,31 +21,7 @@ const TESTIMONIALS = {
       author: "Jean Marie Kenfack",
       role: "Leader of JEDDIAC Program",
       badge: "Vision & Direction JEDDIAC",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80"
-    },
-    {
-      id: 2,
-      quote: "“The rigor of ecological data coupled with the creativity of young journalists is key to sustainably preserving the Congo Basin.”",
-      author: "Dr. Aïssatou Bella",
-      role: "Scientific Advisor & Ecology",
-      badge: "Sciences & Biodiversity",
-      avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&auto=format&fit=crop&q=80"
-    },
-    {
-      id: 3,
-      quote: "“By handing microphones to students across 10 regions, we surface grassroots voices and solutions that mainstream media overlook.”",
-      author: "Rodrigue Manga",
-      role: "Head of Youth Radio & Podcasts",
-      badge: "Audio Production & Grassroots",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80"
-    },
-    {
-      id: 4,
-      quote: "“Solutions journalism provides the agency to act. Each junior investigation showcases tangible and replicable citizen initiatives.”",
-      author: "Grâce Bikou",
-      role: "Deputy Editor-in-Chief Investigations",
-      badge: "Solutions Journalism",
-      avatar: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=120&auto=format&fit=crop&q=80"
+      avatar: null
     }
   ]
 };
@@ -101,11 +54,18 @@ function useAnimatedCounter(targetValue, duration = 1800) {
 }
 
 export default function HeroSection({ stats, onOpenApplication, onExploreAxes }) {
-  const { language, t } = useLanguage();
+  const { language, t, isEnglish } = useLanguage();
   const [scrollY, setScrollY] = useState(0);
   const [activeQuote, setActiveQuote] = useState(0);
   const [isFading, setIsFading] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+
+  // Dynamic data from API
+  const [leaderData, setLeaderData] = useState(null);
+  const [heroImage, setHeroImage] = useState(null);
+  const [heroImageCaption, setHeroImageCaption] = useState(null);
+  const [heroImageLocation, setHeroImageLocation] = useState(null);
+  const [latestDispatch, setLatestDispatch] = useState(null);
 
   // Animated counters
   const countJeunes = useAnimatedCounter(stats?.journalistesCibles || 20000, 2000);
@@ -115,7 +75,9 @@ export default function HeroSection({ stats, onOpenApplication, onExploreAxes })
 
   const currentTestimonials = TESTIMONIALS[language] || TESTIMONIALS.fr;
   const currentQuote = currentTestimonials[activeQuote] || currentTestimonials[0];
+  const hasMultipleQuotes = currentTestimonials.length > 1;
 
+  // Parallax scroll listener
   useEffect(() => {
     let ticking = false;
     const handleScroll = () => {
@@ -132,9 +94,62 @@ export default function HeroSection({ stats, onOpenApplication, onExploreAxes })
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Automatic Testimonial Carousel with 8s progressive duration
+  // Fetch API data for member profile, authentic hero image and latest dispatch
   useEffect(() => {
-    if (isPaused) return;
+    let isMounted = true;
+
+    // Load leader details from API (avatar, title)
+    api.getMembers()
+      .then((res) => {
+        if (!isMounted || !res || !res.values) return;
+        const leader = res.values.find(
+          (m) =>
+            m.lastName?.toLowerCase().includes("kenfack") ||
+            m.role === "coordinator" ||
+            m.category === "direction"
+        );
+        if (leader) {
+          setLeaderData({
+            author: `${leader.firstName || ""} ${leader.lastName || ""}`.trim(),
+            role: isEnglish
+              ? (leader.metierEn || leader.metier)
+              : (leader.metier || leader.metierEn),
+            avatar: leader.avatar ? getMediaUrl(leader.avatar) : null
+          });
+        }
+      })
+      .catch((err) => console.warn("Hero leader load err:", err.message));
+
+    // Load authentic media and latest dispatch from news API
+    api.getNews("?limit=10")
+      .then((res) => {
+        if (!isMounted || !res || !res.values) return;
+        const withCover = res.values.find((n) => n.coverImage && n.status === "active");
+        if (withCover) {
+          setHeroImage(getMediaUrl(withCover.coverImage));
+          setHeroImageCaption(isEnglish && withCover.titleEn ? withCover.titleEn : withCover.title);
+          setHeroImageLocation(
+            isEnglish && withCover.categoryEn
+              ? withCover.categoryEn
+              : withCover.category || "Dépêche Officielle"
+          );
+        }
+        const latest = res.values.find((n) => n.status === "active");
+        if (latest) {
+          setLatestDispatch(latest);
+        }
+      })
+      .catch((err) => console.warn("Hero news load err:", err.message));
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isEnglish]);
+
+  // Testimonial Carousel: only active when there is MORE than 1 testimonial
+  useEffect(() => {
+    if (!hasMultipleQuotes || isPaused) return;
+
     const interval = setInterval(() => {
       setIsFading(true);
       setTimeout(() => {
@@ -144,10 +159,10 @@ export default function HeroSection({ stats, onOpenApplication, onExploreAxes })
     }, 8000);
 
     return () => clearInterval(interval);
-  }, [isPaused, activeQuote, currentTestimonials.length]);
+  }, [hasMultipleQuotes, isPaused, activeQuote, currentTestimonials.length]);
 
   const switchQuote = (index) => {
-    if (index === activeQuote || isFading) return;
+    if (!hasMultipleQuotes || index === activeQuote || isFading) return;
     setIsFading(true);
     setTimeout(() => {
       setActiveQuote(index);
@@ -156,28 +171,42 @@ export default function HeroSection({ stats, onOpenApplication, onExploreAxes })
   };
 
   const nextQuote = () => {
+    if (!hasMultipleQuotes) return;
     switchQuote((activeQuote + 1) % currentTestimonials.length);
   };
 
   const prevQuote = () => {
+    if (!hasMultipleQuotes) return;
     switchQuote((activeQuote - 1 + currentTestimonials.length) % currentTestimonials.length);
   };
 
-  // Parallax translation: slower movement factor
+  // Parallax translation
   const parallaxOffset = Math.min(scrollY * 0.32, 280);
+
+  // Compute author, role, avatar and initials
+  const displayAuthor = leaderData?.author || currentQuote.author;
+  const displayRole = leaderData?.role || currentQuote.role;
+  const displayAvatar = leaderData?.avatar || currentQuote.avatar;
+  const initials = displayAuthor
+    ? displayAuthor
+        .replace(/^(Dr\.?|Prof\.?|M\.?)\s+/i, "")
+        .split(" ")
+        .map((n) => n[0])
+        .slice(0, 2)
+        .join("")
+        .toUpperCase()
+    : "JM";
 
   return (
     <section id="accueil" className="hero-editorial-section">
-      {/* Background Visual with Parallax & Living Nature Animation — Congo Basin Rainforest & Sunrise */}
+      {/* Background Visual with Parallax & Living Nature Animation — Congo Basin Rainforest */}
       <div className="hero-parallax-wrapper" aria-hidden="true">
-        {/* Parallax scroll translation layer */}
         <div 
           className="hero-parallax-image"
           style={{
             transform: `translate3d(0, ${parallaxOffset}px, 0)`
           }}
         >
-          {/* Inner animated living canopy: continuous Ken Burns slow zoom & pan */}
           <div className="hero-animated-canopy" />
         </div>
 
@@ -185,10 +214,10 @@ export default function HeroSection({ stats, onOpenApplication, onExploreAxes })
         <div className="hero-mist-drifter hero-mist-layer-1" />
         <div className="hero-mist-drifter hero-mist-layer-2" />
 
-        {/* Sunbeam Pulsing Light Ray from Dawn Horizon */}
+        {/* Sunbeam Light Ray */}
         <div className="hero-parallax-lightbeam" />
 
-        {/* Floating Organic Golden Morning Spores */}
+        {/* Floating Organic Golden Spores */}
         <div className="hero-particles-field">
           <span className="hero-particle p-1" />
           <span className="hero-particle p-2" />
@@ -198,13 +227,13 @@ export default function HeroSection({ stats, onOpenApplication, onExploreAxes })
           <span className="hero-particle p-6" />
         </div>
 
-        {/* Editorial Protective Gradient Overlay for Contrast */}
+        {/* Protective Gradient Overlay */}
         <div className="hero-parallax-overlay" />
       </div>
 
       <div className="container hero-container-relative">
         <div className="hero-editorial-grid">
-          {/* Left Column: Mission, Grand Editorial Title & CTAs */}
+          {/* Left Column: Mission, Editorial Title & CTAs */}
           <div className="hero-editorial-content">
             <div className="hero-kicker-strip">
               <span className="hero-kicker-tag">
@@ -254,7 +283,7 @@ export default function HeroSection({ stats, onOpenApplication, onExploreAxes })
               </a>
             </div>
 
-            {/* Impact Metric Strip - Animated Counters & Micro-Lift Cards */}
+            {/* Impact Metric Strip */}
             <div className="hero-metrics-grid">
               <div className="metric-box metric-box-animated" style={{ animationDelay: "0.1s" }}>
                 <span className="metric-box-number">+{countJeunes.toLocaleString(language === "fr" ? "fr-FR" : "en-US")}</span>
@@ -275,26 +304,34 @@ export default function HeroSection({ stats, onOpenApplication, onExploreAxes })
             </div>
           </div>
 
-          {/* Right Column: Prominent Visual Photography Composition with Animated Quote Carousel */}
+          {/* Right Column: Visual Photography Composition with Authentic Media */}
           <div className="hero-visual-composition">
             {/* Primary Large Image Frame */}
             <div className="hero-main-photo-frame">
-              <img 
-                src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=1000&auto=format&fit=crop&q=85" 
-                alt="Jeunes reporters et environnementalistes dans le Bassin du Congo" 
-                className="hero-main-photo" 
-              />
+              {heroImage ? (
+                <img 
+                  src={heroImage} 
+                  alt={heroImageCaption || t("heroPhotoTag")} 
+                  className="hero-main-photo" 
+                />
+              ) : (
+                <img 
+                  src="/assets/congo-basin-hero.jpg" 
+                  alt="Programme JEDDIAC - Bassin du Congo" 
+                  className="hero-main-photo" 
+                />
+              )}
               <div className="hero-photo-tag-overlay">
                 <MapPin size={13} />
-                <span>{t("heroPhotoTag")}</span>
+                <span>{heroImageLocation || t("heroPhotoTag")}</span>
               </div>
             </div>
 
-            {/* Secondary Floating Overlapping Card: 4 Rotating Testimonials Carousel */}
+            {/* Secondary Floating Overlapping Card: Testimonial Card */}
             <div 
               className="hero-floating-quote-card"
-              onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => setIsPaused(false)}
+              onMouseEnter={() => { if (hasMultipleQuotes) setIsPaused(true); }}
+              onMouseLeave={() => { if (hasMultipleQuotes) setIsPaused(false); }}
             >
               <div className="quote-card-header">
                 <span className="quote-badge">
@@ -302,74 +339,92 @@ export default function HeroSection({ stats, onOpenApplication, onExploreAxes })
                   {currentQuote.badge}
                 </span>
                 
-                {/* Carousel Controls */}
-                <div className="quote-carousel-nav">
-                  <button 
-                    onClick={prevQuote} 
-                    className="quote-nav-arrow"
-                    aria-label="Témoignage précédent"
-                  >
-                    <ChevronLeft size={15} />
-                  </button>
-                  <span className="quote-nav-counter">
-                    {activeQuote + 1}/{currentTestimonials.length}
-                  </span>
-                  <button 
-                    onClick={nextQuote} 
-                    className="quote-nav-arrow"
-                    aria-label="Témoignage suivant"
-                  >
-                    <ChevronRight size={15} />
-                  </button>
-                </div>
+                {/* Carousel Controls only rendered when there are multiple quotes */}
+                {hasMultipleQuotes && (
+                  <div className="quote-carousel-nav">
+                    <button 
+                      onClick={prevQuote} 
+                      className="quote-nav-arrow"
+                      aria-label="Témoignage précédent"
+                    >
+                      <ChevronLeft size={15} />
+                    </button>
+                    <span className="quote-nav-counter">
+                      {activeQuote + 1}/{currentTestimonials.length}
+                    </span>
+                    <button 
+                      onClick={nextQuote} 
+                      className="quote-nav-arrow"
+                      aria-label="Témoignage suivant"
+                    >
+                      <ChevronRight size={15} />
+                    </button>
+                  </div>
+                )}
               </div>
 
-              <blockquote className={`quote-text ${isFading ? "fade-out" : "fade-in"}`}>
+              <blockquote className={`quote-text ${hasMultipleQuotes && isFading ? "fade-out" : "fade-in"}`}>
                 {currentQuote.quote}
               </blockquote>
 
-              <div className={`quote-author-row ${isFading ? "fade-out" : "fade-in"}`}>
-                <img 
-                  src={currentQuote.avatar} 
-                  alt={currentQuote.author} 
-                  className="quote-avatar"
-                />
+              <div className={`quote-author-row ${hasMultipleQuotes && isFading ? "fade-out" : "fade-in"}`}>
+                {displayAvatar ? (
+                  <img 
+                    src={displayAvatar} 
+                    alt={displayAuthor} 
+                    className="quote-avatar"
+                  />
+                ) : (
+                  <div className="quote-avatar-fallback" aria-hidden="true">
+                    {initials}
+                  </div>
+                )}
                 <div>
-                  <h4 className="quote-author-name">{currentQuote.author}</h4>
-                  <p className="quote-author-title">{currentQuote.role}</p>
+                  <h4 className="quote-author-name">{displayAuthor}</h4>
+                  <p className="quote-author-title">{displayRole}</p>
                 </div>
               </div>
 
-              {/* Pagination Dots with Animated Progress Bar */}
-              <div className="quote-carousel-dots">
-                {currentTestimonials.map((t, idx) => {
-                  const isActive = idx === activeQuote;
-                  return (
-                    <button
-                      key={t.id}
-                      onClick={() => switchQuote(idx)}
-                      className={`quote-dot ${isActive ? "active" : ""}`}
-                      aria-label={`Aller au témoignage ${idx + 1}`}
-                      title={`${t.author} — ${t.role}`}
-                    >
-                      {isActive && (
-                        <span 
-                          key={`prog-${activeQuote}`}
-                          className={`quote-dot-progress ${isPaused ? "paused" : ""}`}
-                        />
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
+              {/* Pagination Dots with Animated Progress Bar only when multiple quotes */}
+              {hasMultipleQuotes && (
+                <div className="quote-carousel-dots">
+                  {currentTestimonials.map((t, idx) => {
+                    const isActive = idx === activeQuote;
+                    return (
+                      <button
+                        key={t.id}
+                        onClick={() => switchQuote(idx)}
+                        className={`quote-dot ${isActive ? "active" : ""}`}
+                        aria-label={`Aller au témoignage ${idx + 1}`}
+                        title={`${t.author} — ${t.role}`}
+                      >
+                        {isActive && (
+                          <span 
+                            key={`prog-${activeQuote}`}
+                            className={`quote-dot-progress ${isPaused ? "paused" : ""}`}
+                          />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             {/* Floating Live Dispatch Card */}
             <div className="hero-floating-status-pill">
               <span className="status-indicator-dot"></span>
               <div>
-                <strong>{t("heroStatusTitle")}</strong>
-                <span>{t("heroStatusDesc")}</span>
+                <strong>
+                  {latestDispatch
+                    ? (isEnglish && latestDispatch.categoryEn ? latestDispatch.categoryEn : (latestDispatch.category || t("heroStatusTitle")))
+                    : t("heroStatusTitle")}
+                </strong>
+                <span>
+                  {latestDispatch
+                    ? (isEnglish && latestDispatch.titleEn ? latestDispatch.titleEn : latestDispatch.title)
+                    : t("heroStatusDesc")}
+                </span>
               </div>
             </div>
           </div>

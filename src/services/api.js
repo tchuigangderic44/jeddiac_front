@@ -158,10 +158,13 @@ export const api = {
 
   // Admin Contacts
   getAdminContacts: (token, params = "") => request(`/admin/contacts${params}`, { token }),
-  markContactRead: (token, id) => request(`/admin/contacts/${id}/read`, {
+  getAdminContactDetails: (token, id) => request(`/admin/contacts/${id}`, { token }),
+  updateContactStatus: (token, id, payload) => request(`/admin/contacts/${id}/status`, {
     method: "PATCH",
     token,
+    body: JSON.stringify(payload),
   }),
+  markContactRead: (token, id) => request(`/admin/contacts/${id}`, { token }),
   deleteContact: (token, id) => request(`/admin/contacts/${id}`, {
     method: "DELETE",
     token,
@@ -176,6 +179,23 @@ export const api = {
 
   // Admin Users
   getAdminUsers: (token, params = "") => request(`/admin/users${params}`, { token }),
+  createUser: (token, payload) => {
+    const isFormData = typeof FormData !== "undefined" && payload instanceof FormData;
+    return request("/admin/users", {
+      method: "POST",
+      token,
+      body: isFormData ? payload : JSON.stringify(payload),
+    });
+  },
+  updateUser: (token, id, payload) => {
+    const isFormData = typeof FormData !== "undefined" && payload instanceof FormData;
+    return request(`/admin/users/${id}`, {
+      method: "PUT",
+      token,
+      body: isFormData ? payload : JSON.stringify(payload),
+    });
+  },
+  getAdminUserDetails: (token, id) => request(`/admin/users/${id}`, { token }),
   activateUser: (token, id) => request(`/admin/users/${id}/activate`, {
     method: "PATCH",
     token,

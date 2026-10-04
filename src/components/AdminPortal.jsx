@@ -35,7 +35,11 @@ import {
   Edit3,
   Power,
   MoreVertical,
-  AlertTriangle
+  AlertTriangle,
+  MessageSquare,
+  Building,
+  Phone,
+  Archive
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
@@ -117,6 +121,76 @@ export default function AdminPortal({ onClose }) {
     coverImagePreview: null,
     removeExistingImage: false
   });
+
+  // User / Member Management States
+  const [newUserOpen, setNewUserOpen] = useState(false);
+  const [userFormLangTab, setUserFormLangTab] = useState("fr"); // 'fr' | 'en'
+  const [userForm, setUserForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    password: "",
+    role: "member",
+    category: "journaliste",
+    linkedin: "",
+    metier: "",
+    metierEn: "",
+    pole: "Pôle Média & Climat",
+    poleEn: "Climate & Media Hub",
+    location: "Yaoundé, Cameroun",
+    country: "Cameroun",
+    bibliographie: "",
+    bibliographieEn: "",
+    conseil: "",
+    conseilEn: "",
+    contributions: "",
+    contributionsEn: "",
+    avatarFile: null,
+    avatarPreview: null
+  });
+
+  const [editUserOpen, setEditUserOpen] = useState(false);
+  const [editUserLangTab, setEditUserLangTab] = useState("fr");
+  const [editUserForm, setEditUserForm] = useState({
+    id: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    role: "member",
+    category: "journaliste",
+    linkedin: "",
+    metier: "",
+    metierEn: "",
+    pole: "",
+    poleEn: "",
+    location: "",
+    country: "",
+    bibliographie: "",
+    bibliographieEn: "",
+    conseil: "",
+    conseilEn: "",
+    contributions: "",
+    contributionsEn: "",
+    avatar: "",
+    avatarFile: null,
+    avatarPreview: null,
+    removeExistingAvatar: false
+  });
+
+  const [viewUserOpen, setViewUserOpen] = useState(false);
+  const [viewUserLangTab, setViewUserLangTab] = useState("fr");
+  const [selectedUserItem, setSelectedUserItem] = useState(null);
+
+  // Contact & Candidature Management States
+  const [viewContactOpen, setViewContactOpen] = useState(false);
+  const [selectedContactItem, setSelectedContactItem] = useState(null);
+  const [contactTypeFilter, setContactTypeFilter] = useState("all"); // 'all' | 'candidature' | 'contact'
+  const [contactStatusFilter, setContactStatusFilter] = useState("all"); // 'all' | 'new' | 'validated'
+  const [adminNotesDraft, setAdminNotesDraft] = useState("");
+  const [isSavingContactNotes, setIsSavingContactNotes] = useState(false);
+  const [isValidatingContact, setIsValidatingContact] = useState(false);
 
   // Action Menu Dropdown State
   const [activeActionMenuId, setActiveActionMenuId] = useState(null);
@@ -475,33 +549,314 @@ export default function AdminPortal({ onClose }) {
     });
   };
 
-  // Contact Actions
-  const handleMarkRead = async (id) => {
-    try {
-      await api.markContactRead(token, id);
-      loadAllAdminData();
-    } catch (err) {
-      alert("Erreur: " + err.message);
+  // Contact & Candidature Actions
+  const handleOpenViewContact = async (c) => {
+    setSelectedContactItem(c);
+    setAdminNotesDraft(c.adminNotes || "");
+    setViewContactOpen(true);
+    if (!c.isRead) {
+      try {
+        await api.markContactRead(token, c.id);
+        setContacts((prev) =>
+          prev.map((item) =>
+            item.id === c.id ? { ...item, isRead: true, status: item.status === "new" ? "read" : item.status } : item
+          )
+        );
+      } catch (err) {
+        console.error("Failed to mark contact read:", err);
+      }
     }
   };
 
-  const handleDeleteContact = (id) => {
+  const handleValidateContact = async (contactId) => {
+    if (!contactId || isValidatingContact) return;
+    setIsValidatingContact(true);
+    try {
+      const res = await api.updateContactStatus(token, contactId, { status: "validated", isRead: true });
+      const updated = res.data || res;
+      setContacts((prev) =>
+        prev.map((item) => (item.id === contactId ? { ...item, ...updated, status: "validated", isRead: true } : item))
+      );
+      if (selectedContactItem && selectedContactItem.id === contactId) {
+        setSelectedContactItem((prev) => ({ ...prev, ...updated, status: "validated", isRead: true }));
+      }
+    } catch (err) {
+      alert("Erreur lors de la validation: " + err.message);
+    } finally {
+      setIsValidatingContact(false);
+    }
+  };
+
+  const handleSaveContactNotes = async (contactId) => {
+    if (!contactId) return;
+    setIsSavingContactNotes(true);
+    try {
+      const res = await api.updateContactStatus(token, contactId, { adminNotes: adminNotesDraft });
+      const updated = res.data || res;
+      setContacts((prev) =>
+        prev.map((item) => (item.id === contactId ? { ...item, adminNotes: adminNotesDraft } : item))
+      );
+      if (selectedContactItem && selectedContactItem.id === contactId) {
+        setSelectedContactItem((prev) => ({ ...prev, adminNotes: adminNotesDraft }));
+      }
+    } catch (err) {
+      alert("Erreur: " + err.message);
+    } finally {
+      setIsSavingContactNotes(false);
+    }
+  };
+
+  const handleDeleteContact = (c) => {
+    const contactId = typeof c === "object" ? c.id : c;
+    const contactName = typeof c === "object" ? c.name : "";
     setConfirmModal({
       isOpen: true,
-      title: isEnglish ? "Delete Message?" : "Supprimer le message ?",
+      title: isEnglish ? "Delete Inquiry / Application?" : "Supprimer la candidature / message ?",
       message: isEnglish 
-        ? "Are you sure you want to delete this inquiry message?"
-        : "Voulez-vous vraiment supprimer ce message de contact ?",
+        ? `Are you sure you want to delete this submission${contactName ? ` from "${contactName}"` : ""}?`
+        : `Voulez-vous vraiment supprimer ce message${contactName ? ` de "${contactName}"` : ""} ?`,
       subMessage: isEnglish
-        ? "The sender details and message history will be permanently deleted."
-        : "Les détails de l'expéditeur et le contenu du message seront supprimés.",
+        ? "The contact details, application data and internal notes will be permanently removed."
+        : "Les coordonnées du candidat, les données du message et les notes internes seront supprimées.",
       confirmText: isEnglish ? "Yes, Delete" : "Oui, supprimer",
       cancelText: isEnglish ? "Cancel" : "Annuler",
       variant: "danger",
       icon: "trash",
       isProcessing: false,
       onConfirm: async () => {
-        await api.deleteContact(token, id);
+        await api.deleteContact(token, contactId);
+        if (selectedContactItem && selectedContactItem.id === contactId) {
+          setViewContactOpen(false);
+          setSelectedContactItem(null);
+        }
+        loadAllAdminData();
+      }
+    });
+  };
+
+  const getContactCategoryLabel = (category) => {
+    const map = {
+      jeune_reporter: isEnglish ? "Youth Reporter" : "Jeune Reporter",
+      journaliste_confirme: isEnglish ? "Senior Journalist" : "Journaliste Confirmé",
+      expert_climat: isEnglish ? "Climate Expert" : "Expert Climat & Scientifique",
+      medias_partenaires: isEnglish ? "Media Partner / Newsroom" : "Média Partenaire / Rédaction",
+      societe_civile_ong: isEnglish ? "Civil Society / NGO" : "Société Civile & ONG",
+      institutions_recherche: isEnglish ? "Research & Academia" : "Institution & Université",
+      autre: isEnglish ? "Other" : "Autre"
+    };
+    return map[category] || category || (isEnglish ? "General Inquiry" : "Prise de contact");
+  };
+
+  const getContactStatusBadge = (c) => {
+    const status = c.status || (c.isRead ? "read" : "new");
+    if (status === "validated") {
+      return (
+        <span className="badge badge-green-light" style={{ fontWeight: 700, fontSize: "0.74rem" }}>
+          ✓ {isEnglish ? "Validated" : "Validé"}
+        </span>
+      );
+    }
+    if (status === "new" || (!c.isRead && status !== "validated")) {
+      return (
+        <span className="badge badge-gold-light" style={{ fontWeight: 700, fontSize: "0.74rem" }}>
+          ● {isEnglish ? "New" : "Nouveau"}
+        </span>
+      );
+    }
+    return (
+      <span className="badge badge-forest-light" style={{ fontWeight: 700, fontSize: "0.74rem" }}>
+        {isEnglish ? "Processed" : "Traité"}
+      </span>
+    );
+  };
+
+  // User / Member Actions
+  const handleCreateUser = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append("firstName", userForm.firstName);
+      formData.append("lastName", userForm.lastName);
+      formData.append("email", userForm.email);
+      if (userForm.phone) formData.append("phone", userForm.phone);
+      if (userForm.password) formData.append("password", userForm.password);
+      formData.append("role", userForm.role || "member");
+      if (userForm.category) formData.append("category", userForm.category);
+      if (userForm.metier) formData.append("metier", userForm.metier);
+      if (userForm.metierEn) formData.append("metierEn", userForm.metierEn);
+      if (userForm.pole) formData.append("pole", userForm.pole);
+      if (userForm.poleEn) formData.append("poleEn", userForm.poleEn);
+      if (userForm.location) formData.append("location", userForm.location);
+      if (userForm.country) formData.append("country", userForm.country);
+      if (userForm.bibliographie) formData.append("bibliographie", userForm.bibliographie);
+      if (userForm.bibliographieEn) formData.append("bibliographieEn", userForm.bibliographieEn);
+      if (userForm.conseil) formData.append("conseil", userForm.conseil);
+      if (userForm.conseilEn) formData.append("conseilEn", userForm.conseilEn);
+      if (userForm.contributions) formData.append("contributions", userForm.contributions);
+      if (userForm.contributionsEn) formData.append("contributionsEn", userForm.contributionsEn);
+      if (userForm.linkedin) formData.append("linkedin", userForm.linkedin);
+      if (userForm.avatarFile) formData.append("avatar", userForm.avatarFile);
+
+      await api.createUser(token, formData);
+      setNewUserOpen(false);
+      setUserFormLangTab("fr");
+      setUserForm({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        password: "",
+        role: "member",
+        category: "journaliste",
+        linkedin: "",
+        metier: "",
+        metierEn: "",
+        pole: "Pôle Média & Climat",
+        poleEn: "Climate & Media Hub",
+        location: "Yaoundé, Cameroun",
+        country: "Cameroun",
+        bibliographie: "",
+        bibliographieEn: "",
+        conseil: "",
+        conseilEn: "",
+        contributions: "",
+        contributionsEn: "",
+        avatarFile: null,
+        avatarPreview: null
+      });
+      loadAllAdminData();
+    } catch (err) {
+      alert("Erreur: " + err.message);
+    }
+  };
+
+  const handleOpenEditUser = (userItem) => {
+    setEditUserForm({
+      id: userItem.id,
+      firstName: userItem.firstName || "",
+      lastName: userItem.lastName || "",
+      email: userItem.email || "",
+      phone: userItem.phone || "",
+      role: userItem.role || "member",
+      category: userItem.category || "journaliste",
+      linkedin: userItem.linkedin || "",
+      metier: userItem.metier || "",
+      metierEn: userItem.metierEn || "",
+      pole: userItem.pole || "",
+      poleEn: userItem.poleEn || "",
+      location: userItem.location || "",
+      country: userItem.country || "",
+      bibliographie: userItem.bibliographie || "",
+      bibliographieEn: userItem.bibliographieEn || "",
+      conseil: userItem.conseil || "",
+      conseilEn: userItem.conseilEn || "",
+      contributions: userItem.contributions || "",
+      contributionsEn: userItem.contributionsEn || "",
+      avatar: userItem.avatar || "",
+      avatarFile: null,
+      avatarPreview: userItem.avatar ? getMediaUrl(userItem.avatar) : null,
+      removeExistingAvatar: false
+    });
+    setEditUserLangTab("fr");
+    setEditUserOpen(true);
+  };
+
+  const handleUpdateUser = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append("firstName", editUserForm.firstName);
+      formData.append("lastName", editUserForm.lastName);
+      formData.append("email", editUserForm.email);
+      if (editUserForm.phone) formData.append("phone", editUserForm.phone);
+      formData.append("role", editUserForm.role || "member");
+      formData.append("category", editUserForm.category || "journaliste");
+      formData.append("metier", editUserForm.metier || "");
+      formData.append("metierEn", editUserForm.metierEn || "");
+      formData.append("pole", editUserForm.pole || "");
+      formData.append("poleEn", editUserForm.poleEn || "");
+      formData.append("location", editUserForm.location || "");
+      formData.append("country", editUserForm.country || "");
+      formData.append("bibliographie", editUserForm.bibliographie || "");
+      formData.append("bibliographieEn", editUserForm.bibliographieEn || "");
+      formData.append("conseil", editUserForm.conseil || "");
+      formData.append("conseilEn", editUserForm.conseilEn || "");
+      formData.append("contributions", editUserForm.contributions || "");
+      formData.append("contributionsEn", editUserForm.contributionsEn || "");
+      formData.append("linkedin", editUserForm.linkedin || "");
+
+      if (editUserForm.avatarFile) {
+        formData.append("avatar", editUserForm.avatarFile);
+      } else if (editUserForm.removeExistingAvatar) {
+        formData.append("avatar", "");
+      }
+
+      await api.updateUser(token, editUserForm.id, formData);
+      setEditUserOpen(false);
+      loadAllAdminData();
+    } catch (err) {
+      alert("Erreur: " + err.message);
+    }
+  };
+
+  const handleOpenViewUser = (u) => {
+    setSelectedUserItem(u);
+    setViewUserLangTab("fr");
+    setViewUserOpen(true);
+  };
+
+  const handleToggleUserStatus = (u) => {
+    const isCurrentlyActive = u.status === "active";
+    const name = `${u.firstName || ""} ${u.lastName || ""}`.trim() || u.email;
+
+    setConfirmModal({
+      isOpen: true,
+      title: isCurrentlyActive
+        ? (isEnglish ? "Deactivate Account?" : "Désactiver le compte ?")
+        : (isEnglish ? "Activate Account?" : "Activer le compte ?"),
+      message: isCurrentlyActive
+        ? (isEnglish ? `Do you want to deactivate ${name}'s account?` : `Voulez-vous désactiver le compte de ${name} ?`)
+        : (isEnglish ? `Do you want to activate ${name}'s account?` : `Voulez-vous activer le compte de ${name} ?`),
+      subMessage: isCurrentlyActive
+        ? (isEnglish ? "The member will no longer appear in the public directory." : "Ce membre ne sera plus visible sur le répertoire public.")
+        : (isEnglish ? "The profile will be visible in the public directory." : "Ce profil sera visible sur le répertoire public des membres."),
+      confirmText: isCurrentlyActive
+        ? (isEnglish ? "Yes, Deactivate" : "Oui, désactiver")
+        : (isEnglish ? "Yes, Activate" : "Oui, activer"),
+      cancelText: isEnglish ? "Cancel" : "Annuler",
+      variant: isCurrentlyActive ? "warning" : "success",
+      icon: isCurrentlyActive ? "power" : "check",
+      isProcessing: false,
+      onConfirm: async () => {
+        if (isCurrentlyActive) {
+          await api.deactivateUser(token, u.id);
+        } else {
+          await api.activateUser(token, u.id);
+        }
+        loadAllAdminData();
+      }
+    });
+  };
+
+  const handleDeleteUser = (u) => {
+    const name = `${u.firstName || ""} ${u.lastName || ""}`.trim() || u.email;
+
+    setConfirmModal({
+      isOpen: true,
+      title: isEnglish ? "Delete Member Account?" : "Supprimer le compte membre ?",
+      message: isEnglish 
+        ? `Are you sure you want to permanently delete ${name}?`
+        : `Voulez-vous vraiment supprimer définitivement le compte de ${name} ?`,
+      subMessage: isEnglish
+        ? "This action is irreversible. The account and profile will be deleted."
+        : "Cette action est irréversible. Toutes les données du profil seront supprimées.",
+      confirmText: isEnglish ? "Yes, Delete" : "Oui, supprimer",
+      cancelText: isEnglish ? "Cancel" : "Annuler",
+      variant: "danger",
+      icon: "trash",
+      isProcessing: false,
+      onConfirm: async () => {
+        await api.deleteUser(token, u.id);
         loadAllAdminData();
       }
     });
@@ -512,8 +867,47 @@ export default function AdminPortal({ onClose }) {
   const filteredArticles = articles.filter(a => !q || a.title?.toLowerCase().includes(q) || a.category?.toLowerCase().includes(q));
   const filteredNews = news.filter(n => !q || n.title?.toLowerCase().includes(q) || n.titleEn?.toLowerCase().includes(q) || n.category?.toLowerCase().includes(q) || n.categoryEn?.toLowerCase().includes(q) || n.tags?.toLowerCase().includes(q) || n.tagsEn?.toLowerCase().includes(q));
   const filteredAgendas = agendas.filter(ag => !q || ag.title?.toLowerCase().includes(q) || ag.location?.toLowerCase().includes(q) || ag.type?.toLowerCase().includes(q));
-  const filteredContacts = contacts.filter(c => !q || c.name?.toLowerCase().includes(q) || c.email?.toLowerCase().includes(q) || c.subject?.toLowerCase().includes(q));
-  const filteredUsers = usersList.filter(u => !q || u.firstName?.toLowerCase().includes(q) || u.lastName?.toLowerCase().includes(q) || u.email?.toLowerCase().includes(q));
+  const filteredContacts = contacts.filter((c) => {
+    // Type filter
+    if (contactTypeFilter !== "all") {
+      const cType = c.type || "contact";
+      if (cType !== contactTypeFilter) return false;
+    }
+    // Status filter
+    if (contactStatusFilter !== "all") {
+      const effStatus = c.status || (c.isRead ? "read" : "new");
+      if (contactStatusFilter === "new" && (effStatus !== "new" && c.isRead)) return false;
+      if (contactStatusFilter === "validated" && effStatus !== "validated") return false;
+    }
+    if (!q) return true;
+    return (
+      c.name?.toLowerCase().includes(q) ||
+      c.email?.toLowerCase().includes(q) ||
+      c.phone?.toLowerCase().includes(q) ||
+      c.subject?.toLowerCase().includes(q) ||
+      c.message?.toLowerCase().includes(q) ||
+      c.structureName?.toLowerCase().includes(q) ||
+      c.country?.toLowerCase().includes(q) ||
+      c.category?.toLowerCase().includes(q) ||
+      c.adminNotes?.toLowerCase().includes(q)
+    );
+  });
+  const filteredUsers = usersList.filter(u => {
+    if (!q) return true;
+    return (
+      u.firstName?.toLowerCase().includes(q) ||
+      u.lastName?.toLowerCase().includes(q) ||
+      u.email?.toLowerCase().includes(q) ||
+      u.metier?.toLowerCase().includes(q) ||
+      u.metierEn?.toLowerCase().includes(q) ||
+      u.pole?.toLowerCase().includes(q) ||
+      u.poleEn?.toLowerCase().includes(q) ||
+      u.category?.toLowerCase().includes(q) ||
+      u.location?.toLowerCase().includes(q) ||
+      u.country?.toLowerCase().includes(q) ||
+      u.role?.toLowerCase().includes(q)
+    );
+  });
 
   // ==========================================
   // VIEW: ADMIN AUTHENTICATION (Matching Brand)
@@ -1371,11 +1765,11 @@ export default function AdminPortal({ onClose }) {
                   </p>
                 </div>
 
-                <div className="dedicated-search-box" style={{ maxWidth: "320px" }}>
+                <div className="dedicated-search-box" style={{ maxWidth: "340px" }}>
                   <Search size={16} className="search-icon" />
                   <input
                     type="text"
-                    placeholder={isEnglish ? "Search applicants..." : "Rechercher un candidat..."}
+                    placeholder={isEnglish ? "Search applicants, email, structure..." : "Rechercher candidat, email, structure..."}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="dedicated-search-input"
@@ -1383,55 +1777,256 @@ export default function AdminPortal({ onClose }) {
                 </div>
               </div>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-                {filteredContacts.map((c) => (
-                  <div key={c.id} className="admin-contact-item">
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
-                      <div>
-                        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.4rem" }}>
-                          <span className={`badge ${c.isRead ? "badge-green-light" : "badge-gold-light"}`}>
-                            {c.isRead ? (isEnglish ? "Processed" : "Traité") : (isEnglish ? "New Submission" : "Nouveau Message")}
-                          </span>
-                          <span style={{ fontSize: "0.82rem", color: "#6A8278" }}>
-                            {new Date(c.createdAt).toLocaleDateString(isEnglish ? "en-US" : "fr-FR", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}
-                          </span>
-                        </div>
-                        <h3 style={{ fontSize: "1.2rem", fontWeight: 700, color: "#13221B", margin: "0.2rem 0" }}>
-                          {c.subject}
-                        </h3>
-                        <div style={{ fontSize: "0.86rem", color: "#5A7367", marginTop: "0.25rem" }}>
-                          {isEnglish ? "From" : "De"}: <strong>{c.name}</strong> ({c.email}) {c.phone && `· Tél: ${c.phone}`}
-                        </div>
-                      </div>
+              {/* Type & Status Filter Bar */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem", marginBottom: "1.25rem" }}>
+                {/* Type Tabs */}
+                <div className="modal-lang-tabs" style={{ margin: 0 }}>
+                  <button
+                    type="button"
+                    className={`modal-lang-tab-btn ${contactTypeFilter === "all" ? "active" : ""}`}
+                    onClick={() => setContactTypeFilter("all")}
+                  >
+                    {isEnglish ? "All Messages" : "Tous"} ({contacts.length})
+                  </button>
+                  <button
+                    type="button"
+                    className={`modal-lang-tab-btn ${contactTypeFilter === "candidature" ? "active" : ""}`}
+                    onClick={() => setContactTypeFilter("candidature")}
+                  >
+                    📝 {isEnglish ? "Applications" : "Candidatures"} ({contacts.filter(c => c.type === "candidature").length})
+                  </button>
+                  <button
+                    type="button"
+                    className={`modal-lang-tab-btn ${contactTypeFilter === "contact" ? "active" : ""}`}
+                    onClick={() => setContactTypeFilter("contact")}
+                  >
+                    💬 {isEnglish ? "Direct Inquiries" : "Contacts Directs"} ({contacts.filter(c => c.type !== "candidature").length})
+                  </button>
+                </div>
 
-                      <div style={{ display: "flex", gap: "0.5rem" }}>
-                        {!c.isRead && (
-                          <button
-                            onClick={() => handleMarkRead(c.id)}
-                            className="btn-action-read"
-                          >
-                            <Check size={14} />
-                            <span>{isEnglish ? "Mark Read" : "Marquer lu"}</span>
-                          </button>
-                        )}
-                        <button
-                          onClick={() => handleDeleteContact(c.id)}
-                          className="btn-action-delete"
-                        >
-                          <Trash2 size={15} />
-                        </button>
-                      </div>
-                    </div>
+                {/* Status Tabs */}
+                <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
+                  {[
+                    { id: "all", label: isEnglish ? "All Statuses" : "Tous statuts", count: contacts.length },
+                    { id: "new", label: isEnglish ? "New" : "Nouveaux", count: contacts.filter(c => !c.isRead || c.status === "new").length },
+                    { id: "validated", label: isEnglish ? "Validated" : "Validés", count: contacts.filter(c => c.status === "validated").length },
+                  ].map((st) => (
+                    <button
+                      key={st.id}
+                      type="button"
+                      onClick={() => setContactStatusFilter(st.id)}
+                      style={{
+                        padding: "0.35rem 0.75rem",
+                        borderRadius: "20px",
+                        fontSize: "0.78rem",
+                        fontWeight: contactStatusFilter === st.id ? 700 : 500,
+                        border: contactStatusFilter === st.id ? "1px solid #1E5128" : "1px solid #D9E3DE",
+                        background: contactStatusFilter === st.id ? "#1E5128" : "#FFFFFF",
+                        color: contactStatusFilter === st.id ? "#FFFFFF" : "#4A6356",
+                        cursor: "pointer",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "0.35rem",
+                        transition: "all 0.15s ease"
+                      }}
+                    >
+                      <span>{st.label}</span>
+                      <span style={{
+                        padding: "0.1rem 0.4rem",
+                        borderRadius: "10px",
+                        fontSize: "0.7rem",
+                        fontWeight: 700,
+                        background: contactStatusFilter === st.id ? "rgba(255,255,255,0.2)" : "#F0F4F2",
+                        color: contactStatusFilter === st.id ? "#FFFFFF" : "#5A7367"
+                      }}>
+                        {st.count}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-                    <div className="admin-contact-message">
-                      {c.message}
-                    </div>
-                  </div>
-                ))}
+              {/* Table */}
+              <div className="admin-card">
+                <div className="admin-table-wrap">
+                  <table className="admin-table">
+                    <thead>
+                      <tr>
+                        <th>{isEnglish ? "Type & Date" : "Type & Date"}</th>
+                        <th>{isEnglish ? "Applicant / Sender" : "Candidat / Expéditeur"}</th>
+                        <th>{isEnglish ? "Structure & Territory" : "Structure & Territoire"}</th>
+                        <th>{isEnglish ? "Subject & Message" : "Objet & Message"}</th>
+                        <th>{isEnglish ? "Status" : "Statut"}</th>
+                        <th style={{ textAlign: "right", paddingRight: "1.5rem" }}>{isEnglish ? "Actions" : "Actions"}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredContacts.map((c) => {
+                        const isCandidature = c.type === "candidature";
+                        const initials = c.name ? c.name.split(" ").map(p => p[0]).join("").slice(0, 2).toUpperCase() : "C";
+                        const dateFormatted = new Date(c.createdAt || Date.now()).toLocaleDateString(isEnglish ? "en-US" : "fr-FR", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit"
+                        });
+
+                        return (
+                          <tr key={c.id} style={{ background: !c.isRead ? "rgba(235, 178, 40, 0.04)" : "transparent" }}>
+                            {/* 1. Type & Date */}
+                            <td>
+                              <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem", alignItems: "flex-start" }}>
+                                <span className={`badge ${isCandidature ? "badge-forest-light" : "badge-purple-light"}`} style={{ fontSize: "0.72rem", padding: "0.15rem 0.55rem" }}>
+                                  {isCandidature ? (isEnglish ? "📝 Application" : "📝 Candidature") : (isEnglish ? "💬 Contact" : "💬 Contact direct")}
+                                </span>
+                                <span style={{ fontSize: "0.76rem", color: "#6A8278", whiteSpace: "nowrap" }}>
+                                  {dateFormatted}
+                                </span>
+                              </div>
+                            </td>
+
+                            {/* 2. Applicant / Sender */}
+                            <td style={{ fontWeight: 600, color: "#13221B" }}>
+                              <div className="member-avatar-cell">
+                                <div className="member-avatar-fallback" style={{ background: isCandidature ? "#E8F5E9" : "#F3E8FF", color: isCandidature ? "#1E5128" : "#7E22CE" }}>
+                                  {initials}
+                                </div>
+                                <div>
+                                  <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                                    <span style={{ color: "#13221B" }}>{c.name}</span>
+                                    {!c.isRead && (
+                                      <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#D97706", display: "inline-block" }} title={isEnglish ? "Unread" : "Non lu"}></span>
+                                    )}
+                                  </div>
+                                  <a href={`mailto:${c.email}`} style={{ fontSize: "0.78rem", color: "#2563EB", textDecoration: "none", display: "block" }}>
+                                    {c.email}
+                                  </a>
+                                  {c.phone && (
+                                    <a href={`tel:${c.phone}`} style={{ fontSize: "0.74rem", color: "#6A8278", textDecoration: "none", display: "block" }}>
+                                      📞 {c.phone}
+                                    </a>
+                                  )}
+                                </div>
+                              </div>
+                            </td>
+
+                            {/* 3. Structure & Territory */}
+                            <td>
+                              <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem", maxWidth: "200px" }}>
+                                {c.structureName && (
+                                  <span style={{ fontSize: "0.84rem", fontWeight: 600, color: "#13221B" }}>
+                                    🏢 {c.structureName}
+                                  </span>
+                                )}
+                                {c.country && (
+                                  <span style={{ fontSize: "0.78rem", color: "#4A6356" }}>
+                                    🌍 {c.country}
+                                  </span>
+                                )}
+                                {c.category && (
+                                  <span style={{ fontSize: "0.72rem", color: "#1E5128", fontWeight: 600 }}>
+                                    #{getContactCategoryLabel(c.category)}
+                                  </span>
+                                )}
+                                {!c.structureName && !c.country && !c.category && (
+                                  <span style={{ fontSize: "0.78rem", color: "#9CA3AF" }}>—</span>
+                                )}
+                              </div>
+                            </td>
+
+                            {/* 4. Subject & Message snippet */}
+                            <td>
+                              <div style={{ maxWidth: "300px" }}>
+                                <div style={{ fontSize: "0.86rem", fontWeight: 700, color: "#13221B", marginBottom: "0.2rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                  {c.subject || (isEnglish ? "(No subject)" : "(Sans objet)")}
+                                </div>
+                                <div style={{ fontSize: "0.78rem", color: "#5A7367", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                  {c.message}
+                                </div>
+                                {c.adminNotes && (
+                                  <div style={{ marginTop: "0.25rem" }}>
+                                    <span style={{ fontSize: "0.7rem", padding: "1px 6px", borderRadius: "4px", background: "rgba(37,99,235,0.08)", color: "#2563EB", fontWeight: 600 }}>
+                                      📌 {isEnglish ? "Admin Note" : "Note interne"}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+
+                            {/* 5. Status Badge */}
+                            <td>
+                              {getContactStatusBadge(c)}
+                            </td>
+
+                            {/* 6. Actions (3-dots action menu) */}
+                            <td style={{ textAlign: "right", position: "relative" }}>
+                              <div className="action-menu-container">
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setActiveActionMenuId(activeActionMenuId === c.id ? null : c.id);
+                                  }}
+                                  className={`btn-action-more ${activeActionMenuId === c.id ? "active" : ""}`}
+                                  aria-label={isEnglish ? "Actions menu" : "Menu d'actions"}
+                                  title={isEnglish ? "Actions" : "Options"}
+                                >
+                                  <MoreVertical size={16} />
+                                </button>
+
+                                {activeActionMenuId === c.id && (
+                                  <div 
+                                    className="action-dropdown-menu" 
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    {/* 1. VOIR LES DÉTAILS */}
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setActiveActionMenuId(null);
+                                        handleOpenViewContact(c);
+                                      }}
+                                      className="action-dropdown-item"
+                                    >
+                                      <Eye size={14} style={{ color: "#2563EB" }} />
+                                      <span>{isEnglish ? "View details" : "Voir les détails"}</span>
+                                    </button>
+
+                                    <div className="action-dropdown-divider"></div>
+
+                                    {/* 2. SUPPRIMER */}
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setActiveActionMenuId(null);
+                                        handleDeleteContact(c);
+                                      }}
+                                      className="action-dropdown-item text-danger"
+                                    >
+                                      <Trash2 size={14} />
+                                      <span>{isEnglish ? "Delete" : "Supprimer"}</span>
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
 
                 {filteredContacts.length === 0 && (
-                  <div className="admin-card" style={{ padding: "3rem", textAlign: "center", color: "#6A8278" }}>
-                    {isEnglish ? "No inquiries match your query." : "Aucune candidature ne correspond à votre recherche."}
+                  <div style={{ padding: "3.5rem 1.5rem", textAlign: "center", color: "#6A8278" }}>
+                    <MessageSquare size={36} style={{ margin: "0 auto 0.75rem", opacity: 0.35, color: "#1E5128" }} />
+                    <div style={{ fontSize: "1rem", fontWeight: 600, color: "#13221B", marginBottom: "0.25rem" }}>
+                      {isEnglish ? "No submissions found" : "Aucun message ou candidature"}
+                    </div>
+                    <p style={{ fontSize: "0.85rem", color: "#6A8278", margin: 0 }}>
+                      {isEnglish ? "Try modifying your search or filter criteria." : "Essayez de modifier votre recherche ou vos critères de filtre."}
+                    </p>
                   </div>
                 )}
               </div>
@@ -1505,15 +2100,30 @@ export default function AdminPortal({ onClose }) {
                   </p>
                 </div>
 
-                <div className="dedicated-search-box" style={{ maxWidth: "320px" }}>
-                  <Search size={16} className="search-icon" />
-                  <input
-                    type="text"
-                    placeholder={isEnglish ? "Filter users..." : "Filtrer les comptes..."}
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="dedicated-search-input"
-                  />
+                <div style={{ display: "flex", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+                  <div className="dedicated-search-box" style={{ maxWidth: "300px" }}>
+                    <Search size={16} className="search-icon" />
+                    <input
+                      type="text"
+                      placeholder={isEnglish ? "Filter users..." : "Filtrer les comptes..."}
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="dedicated-search-input"
+                    />
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setUserFormLangTab("fr");
+                      setNewUserOpen(true);
+                    }}
+                    className="btn btn-forest"
+                    style={{ gap: "0.4rem", whiteSpace: "nowrap" }}
+                  >
+                    <Plus size={16} />
+                    <span>{isEnglish ? "Add Member" : "Nouveau Membre"}</span>
+                  </button>
                 </div>
               </div>
 
@@ -1522,36 +2132,186 @@ export default function AdminPortal({ onClose }) {
                   <table className="admin-table">
                     <thead>
                       <tr>
-                        <th>{isEnglish ? "Member Name" : "Nom complet"}</th>
-                        <th>{isEnglish ? "Email" : "Email"}</th>
-                        <th>{isEnglish ? "Role" : "Rôle"}</th>
-                        <th>{isEnglish ? "Phone" : "Téléphone"}</th>
+                        <th>{isEnglish ? "Member / Profile" : "Membre / Profil"}</th>
+                        <th>{isEnglish ? "Role & Category" : "Rôle & Catégorie"}</th>
+                        <th>{isEnglish ? "Job & Pillar" : "Métier & Pôle"}</th>
+                        <th>{isEnglish ? "Location" : "Territoire"}</th>
                         <th>{isEnglish ? "Status" : "Statut"}</th>
+                        <th style={{ textAlign: "right", paddingRight: "1.5rem" }}>{isEnglish ? "Actions" : "Actions"}</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredUsers.map((u) => (
-                        <tr key={u.id}>
-                          <td style={{ fontWeight: 600, color: "#13221B" }}>
-                            {u.firstName} {u.lastName}
-                          </td>
-                          <td>{u.email}</td>
-                          <td>
-                            <span className={`badge ${u.role === "admin" ? "badge-gold-light" : "badge-green-light"}`}>
-                              {u.role === "admin" ? "Super Admin" : u.role}
-                            </span>
-                          </td>
-                          <td>{u.phone || "—"}</td>
-                          <td>
-                            <span className={`badge ${u.status === "active" ? "badge-green-light" : "badge-gold-light"}`}>
-                              {u.status === "active" ? (isEnglish ? "Active" : "Actif") : u.status}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
+                      {filteredUsers.map((u) => {
+                        const displayName = `${u.firstName || ""} ${u.lastName || ""}`.trim() || u.email;
+                        const jobTitle = (isEnglish && u.metierEn) ? u.metierEn : (u.metier || "—");
+                        const pillar = (isEnglish && u.poleEn) ? u.poleEn : (u.pole || "—");
+                        const territory = [u.location, u.country].filter(Boolean).join(" · ") || "—";
+                        const isBilingual = !!(u.metier && u.metierEn);
+                        const initials = `${u.firstName?.charAt(0) || ""}${u.lastName?.charAt(0) || ""}`.toUpperCase() || "J";
+
+                        return (
+                          <tr key={u.id}>
+                            <td style={{ fontWeight: 600, color: "#13221B" }}>
+                              <div className="member-avatar-cell">
+                                {u.avatar ? (
+                                  <img 
+                                    src={getMediaUrl(u.avatar)} 
+                                    alt={displayName} 
+                                    className="member-avatar-thumb"
+                                  />
+                                ) : (
+                                  <div className="member-avatar-fallback">
+                                    {initials}
+                                  </div>
+                                )}
+                                <div>
+                                  <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
+                                    <span>{displayName}</span>
+                                    {isBilingual && (
+                                      <span style={{ fontSize: "0.65rem", padding: "1px 5px", borderRadius: "4px", background: "rgba(30,81,40,0.12)", color: "#1E5128", fontWeight: 700, flexShrink: 0 }}>
+                                        FR/EN
+                                      </span>
+                                    )}
+                                  </div>
+                                  <span style={{ fontSize: "0.78rem", color: "#6A8278", display: "block" }}>
+                                    {u.email}
+                                  </span>
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem", alignItems: "flex-start" }}>
+                                <span className={`badge ${u.role === "admin" ? "badge-gold-light" : "badge-green-light"}`}>
+                                  {u.role === "admin" ? "Super Admin" : u.role}
+                                </span>
+                                {u.category && (
+                                  <span style={{ fontSize: "0.74rem", color: "#4A6356", fontWeight: 600 }}>
+                                    #{u.category}
+                                  </span>
+                                )}
+                              </div>
+                            </td>
+                            <td>
+                              <div style={{ maxWidth: "220px" }}>
+                                <div style={{ fontSize: "0.85rem", fontWeight: 600, color: "#13221B" }}>
+                                  {jobTitle}
+                                </div>
+                                <div style={{ fontSize: "0.76rem", color: "#5A7367" }}>
+                                  {pillar}
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <span style={{ fontSize: "0.82rem", color: "#4A6356" }}>
+                                {territory}
+                              </span>
+                            </td>
+                            <td>
+                              <span className={`badge ${u.status === "active" ? "badge-green-light" : "badge-gold-light"}`}>
+                                {u.status === "active" ? (isEnglish ? "Active" : "Actif") : (isEnglish ? "Deactivated" : "Désactivé")}
+                              </span>
+                            </td>
+                            <td style={{ textAlign: "right", position: "relative" }}>
+                              <div className="action-menu-container">
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setActiveActionMenuId(activeActionMenuId === u.id ? null : u.id);
+                                  }}
+                                  className={`btn-action-more ${activeActionMenuId === u.id ? "active" : ""}`}
+                                  aria-label={isEnglish ? "Actions menu" : "Menu d'actions"}
+                                  title={isEnglish ? "Actions" : "Options"}
+                                >
+                                  <MoreVertical size={16} />
+                                </button>
+
+                                {activeActionMenuId === u.id && (
+                                  <div 
+                                    className="action-dropdown-menu" 
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    {/* 1. VOIR */}
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setActiveActionMenuId(null);
+                                        handleOpenViewUser(u);
+                                      }}
+                                      className="action-dropdown-item"
+                                    >
+                                      <Eye size={14} style={{ color: "#2563EB" }} />
+                                      <span>{isEnglish ? "View profile" : "Voir le profil"}</span>
+                                    </button>
+
+                                    {/* 2. ÉDITER */}
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setActiveActionMenuId(null);
+                                        handleOpenEditUser(u);
+                                      }}
+                                      className="action-dropdown-item"
+                                    >
+                                      <Edit3 size={14} style={{ color: "#D97706" }} />
+                                      <span>{isEnglish ? "Edit member" : "Éditer le membre"}</span>
+                                    </button>
+
+                                    {/* 3. DÉSACTIVER / ACTIVER (sauf admin courant) */}
+                                    {u.role !== "admin" && (
+                                      u.status === "active" ? (
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            setActiveActionMenuId(null);
+                                            handleToggleUserStatus(u);
+                                          }}
+                                          className="action-dropdown-item"
+                                        >
+                                          <Power size={14} style={{ color: "#EA580C" }} />
+                                          <span>{isEnglish ? "Deactivate" : "Désactiver"}</span>
+                                        </button>
+                                      ) : (
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            setActiveActionMenuId(null);
+                                            handleToggleUserStatus(u);
+                                          }}
+                                          className="action-dropdown-item"
+                                        >
+                                          <CheckCircle size={14} style={{ color: "#059669" }} />
+                                          <span>{isEnglish ? "Activate" : "Activer"}</span>
+                                        </button>
+                                      )
+                                    )}
+
+                                    {u.role !== "admin" && <div className="action-dropdown-divider"></div>}
+
+                                    {/* 4. SUPPRIMER (sauf admin) */}
+                                    {u.role !== "admin" && (
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          setActiveActionMenuId(null);
+                                          handleDeleteUser(u);
+                                        }}
+                                        className="action-dropdown-item text-danger"
+                                      >
+                                        <Trash2 size={14} />
+                                        <span>{isEnglish ? "Delete" : "Supprimer"}</span>
+                                      </button>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
                       {filteredUsers.length === 0 && (
                         <tr>
-                          <td colSpan={5} style={{ textAlign: "center", color: "#6A8278", padding: "2.5rem" }}>
+                          <td colSpan={6} style={{ textAlign: "center", color: "#6A8278", padding: "2.5rem" }}>
                             {isEnglish ? "No accounts found." : "Aucun compte répertorié."}
                           </td>
                         </tr>
@@ -2693,6 +3453,1071 @@ export default function AdminPortal({ onClose }) {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* VIEW USER / MEMBER MODAL */}
+      {viewUserOpen && selectedUserItem && (
+        <div className="modal-overlay" onClick={() => setViewUserOpen(false)}>
+          <div className="modal-card article-modal-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "680px" }}>
+            <button 
+              className="modal-close-btn" 
+              onClick={() => setViewUserOpen(false)}
+              aria-label="Fermer"
+            >
+              <X size={20} />
+            </button>
+
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem", flexWrap: "wrap", gap: "0.5rem" }}>
+              <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap" }}>
+                <span className="badge badge-gold-light">
+                  {selectedUserItem.category || selectedUserItem.role || "Membre"}
+                </span>
+                <span className={`badge ${selectedUserItem.status === "active" ? "badge-green-light" : "badge-gold-light"}`}>
+                  {selectedUserItem.status === "active" ? (isEnglish ? "● Active Profile" : "● Profil Actif") : (isEnglish ? "○ Deactivated" : "○ Désactivé")}
+                </span>
+              </div>
+
+              {(selectedUserItem.metierEn || selectedUserItem.bibliographieEn) && (
+                <div className="modal-lang-tabs" style={{ margin: 0, padding: "2px" }}>
+                  <button
+                    type="button"
+                    className={`modal-lang-tab-btn ${viewUserLangTab === "fr" ? "active" : ""}`}
+                    onClick={() => setViewUserLangTab("fr")}
+                    style={{ padding: "0.3rem 0.75rem", fontSize: "0.78rem" }}
+                  >
+                    🇫🇷 FR
+                  </button>
+                  <button
+                    type="button"
+                    className={`modal-lang-tab-btn ${viewUserLangTab === "en" ? "active" : ""}`}
+                    onClick={() => setViewUserLangTab("en")}
+                    style={{ padding: "0.3rem 0.75rem", fontSize: "0.78rem" }}
+                  >
+                    🇬🇧 EN
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", gap: "1.25rem", marginBottom: "1.5rem", padding: "1.2rem", background: "#F4F7F5", borderRadius: "12px", border: "1px solid #D5E2DA" }}>
+              {selectedUserItem.avatar ? (
+                <img 
+                  src={getMediaUrl(selectedUserItem.avatar)} 
+                  alt={`${selectedUserItem.firstName} ${selectedUserItem.lastName}`} 
+                  style={{ width: "74px", height: "74px", borderRadius: "50%", objectFit: "cover", border: "2px solid #1E5128", flexShrink: 0 }} 
+                />
+              ) : (
+                <div style={{ width: "74px", height: "74px", borderRadius: "50%", background: "linear-gradient(135deg, #1E5128 0%, #2E5C46 100%)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.5rem", fontWeight: 800, flexShrink: 0 }}>
+                  {selectedUserItem.firstName?.charAt(0)}{selectedUserItem.lastName?.charAt(0)}
+                </div>
+              )}
+              <div>
+                <h2 style={{ fontSize: "1.5rem", color: "#13221B", margin: "0 0 0.25rem", fontFamily: "var(--font-serif)" }}>
+                  {selectedUserItem.firstName} {selectedUserItem.lastName}
+                </h2>
+                <p style={{ margin: "0 0 0.35rem", fontSize: "0.95rem", fontWeight: 600, color: "#1E5128" }}>
+                  {(viewUserLangTab === "en" && selectedUserItem.metierEn) ? selectedUserItem.metierEn : (selectedUserItem.metier || "Spécialiste JEDDIAC")}
+                </p>
+                <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", fontSize: "0.8rem", color: "#6A8278" }}>
+                  <span>✉️ {selectedUserItem.email}</span>
+                  {selectedUserItem.phone && <span>📞 {selectedUserItem.phone}</span>}
+                  {selectedUserItem.location && <span>📍 {selectedUserItem.location}</span>}
+                </div>
+              </div>
+            </div>
+
+            <div style={{ color: "#2B4036", lineHeight: "1.7", fontSize: "0.95rem" }}>
+              {((viewUserLangTab === "en" && selectedUserItem.bibliographieEn) || selectedUserItem.bibliographie) && (
+                <div style={{ marginBottom: "1.25rem" }}>
+                  <h4 style={{ fontSize: "0.88rem", textTransform: "uppercase", letterSpacing: "0.5px", color: "#1E5128", marginBottom: "0.4rem", fontWeight: 700 }}>
+                    {viewUserLangTab === "en" ? "Biography & Commitment" : "Biographie & Engagement"}
+                  </h4>
+                  <p style={{ margin: 0 }}>
+                    {(viewUserLangTab === "en" && selectedUserItem.bibliographieEn) ? selectedUserItem.bibliographieEn : selectedUserItem.bibliographie}
+                  </p>
+                </div>
+              )}
+
+              {((viewUserLangTab === "en" && selectedUserItem.conseilEn) || selectedUserItem.conseil) && (
+                <div style={{ marginBottom: "1.25rem", padding: "0.9rem", background: "rgba(30,81,40,0.06)", borderRadius: "8px", borderLeft: "3px solid #1E5128" }}>
+                  <h4 style={{ fontSize: "0.88rem", textTransform: "uppercase", letterSpacing: "0.5px", color: "#1E5128", marginBottom: "0.4rem", fontWeight: 700 }}>
+                    {viewUserLangTab === "en" ? "Mission & Advisory Role" : "Rôle Consultatif & Mission"}
+                  </h4>
+                  <p style={{ margin: 0 }}>
+                    {(viewUserLangTab === "en" && selectedUserItem.conseilEn) ? selectedUserItem.conseilEn : selectedUserItem.conseil}
+                  </p>
+                </div>
+              )}
+
+              {((viewUserLangTab === "en" && selectedUserItem.contributionsEn) || selectedUserItem.contributions) && (
+                <div style={{ marginBottom: "1.25rem" }}>
+                  <h4 style={{ fontSize: "0.88rem", textTransform: "uppercase", letterSpacing: "0.5px", color: "#1E5128", marginBottom: "0.4rem", fontWeight: 700 }}>
+                    {viewUserLangTab === "en" ? "Key Contributions & Initiatives" : "Contributions & Réalisations Clés"}
+                  </h4>
+                  <p style={{ margin: 0 }}>
+                    {(viewUserLangTab === "en" && selectedUserItem.contributionsEn) ? selectedUserItem.contributionsEn : selectedUserItem.contributions}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <div style={{ marginTop: "1.5rem", paddingTop: "1.25rem", borderTop: "1px solid #E5EBE7", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <button 
+                type="button" 
+                onClick={() => {
+                  setViewUserOpen(false);
+                  handleOpenEditUser(selectedUserItem);
+                }} 
+                className="btn-action-edit"
+              >
+                <Edit3 size={14} />
+                <span>{isEnglish ? "Edit this profile" : "Modifier ce profil"}</span>
+              </button>
+
+              <button onClick={() => setViewUserOpen(false)} className="btn btn-forest">
+                {isEnglish ? "Close" : "Fermer"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CREATE USER / MEMBER MODAL */}
+      {newUserOpen && (
+        <div className="modal-overlay" onClick={() => setNewUserOpen(false)}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "720px", maxHeight: "90vh", overflowY: "auto" }}>
+            <button 
+              onClick={() => setNewUserOpen(false)} 
+              className="modal-close-btn"
+              aria-label="Fermer"
+            >
+              <X size={20} />
+            </button>
+
+            <h3 style={{ fontSize: "1.6rem", fontFamily: "var(--font-serif)", fontWeight: 800, color: "#13221B", marginBottom: "0.4rem" }}>
+              {isEnglish ? "Add Network Member / Profile" : "Nouveau Membre du Réseau"}
+            </h3>
+            <p style={{ color: "#5A7367", fontSize: "0.9rem", marginBottom: "1.5rem" }}>
+              {isEnglish ? "Register a coordinator, journalist, expert or partner in the regional directory." : "Enregistrer un coordinateur, journaliste, expert ou partenaire dans le répertoire régional."}
+            </p>
+
+            <form onSubmit={handleCreateUser}>
+              {/* Profile Avatar Upload */}
+              <div className="form-group">
+                <label className="form-label" style={{ color: "#13221B" }}>
+                  {isEnglish ? "Profile Photo / Avatar" : "Photo de profil / Avatar"}
+                </label>
+
+                {userForm.avatarPreview ? (
+                  <div style={{ display: "flex", alignItems: "center", gap: "1rem", background: "#F4F7F5", padding: "0.75rem 1rem", borderRadius: "10px", border: "1px solid #D5E2DA" }}>
+                    <img 
+                      src={userForm.avatarPreview} 
+                      alt="Preview" 
+                      style={{ width: "64px", height: "64px", borderRadius: "50%", objectFit: "cover", border: "2px solid #1E5128" }} 
+                    />
+                    <div style={{ flex: 1 }}>
+                      <p style={{ margin: 0, fontWeight: 600, fontSize: "0.88rem", color: "#13221B" }}>
+                        {userForm.avatarFile?.name || "avatar.jpg"}
+                      </p>
+                      <span style={{ fontSize: "0.75rem", color: "#5A7367" }}>
+                        {isEnglish ? "Custom photo selected" : "Photo personnalisée sélectionnée"}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setUserForm({ ...userForm, avatarFile: null, avatarPreview: null })}
+                      className="btn-action-delete"
+                      title={isEnglish ? "Remove photo" : "Supprimer la photo"}
+                    >
+                      <X size={15} />
+                    </button>
+                  </div>
+                ) : (
+                  <div 
+                    style={{
+                      border: "2px dashed #9EBEAF",
+                      borderRadius: "10px",
+                      padding: "1.2rem",
+                      textAlign: "center",
+                      background: "#F4F7F5",
+                      cursor: "pointer",
+                      transition: "border-color 0.2s"
+                    }}
+                    onClick={() => document.getElementById("new-user-avatar-input")?.click()}
+                  >
+                    <Upload size={22} style={{ color: "#2E5C46", margin: "0 auto 0.4rem" }} />
+                    <p style={{ margin: 0, fontSize: "0.85rem", fontWeight: 600, color: "#13221B" }}>
+                      {isEnglish ? "Click to upload a profile photo (JPG, PNG, WebP)" : "Cliquer pour téléverser une photo de profil (JPG, PNG, WebP)"}
+                    </p>
+                    <p style={{ margin: "0.2rem 0 0", fontSize: "0.75rem", color: "#6A8278" }}>
+                      {isEnglish ? "Multipart Form-Data · Max 5MB" : "Support Form-Data multipart · Max 5 Mo"}
+                    </p>
+                  </div>
+                )}
+
+                <input 
+                  id="new-user-avatar-input"
+                  type="file" 
+                  accept="image/png, image/jpeg, image/jpg, image/webp"
+                  style={{ display: "none" }}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const previewUrl = URL.createObjectURL(file);
+                      setUserForm({ ...userForm, avatarFile: file, avatarPreview: previewUrl });
+                    }
+                  }}
+                />
+              </div>
+
+              {/* Identity & Contact Info */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                <div className="form-group">
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "First Name *" : "Prénom *"}</label>
+                  <input 
+                    type="text" 
+                    required 
+                    className="form-control" 
+                    value={userForm.firstName} 
+                    onChange={(e) => setUserForm({ ...userForm, firstName: e.target.value })} 
+                    placeholder="ex: Jean Marie"
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Last Name *" : "Nom *"}</label>
+                  <input 
+                    type="text" 
+                    required 
+                    className="form-control" 
+                    value={userForm.lastName} 
+                    onChange={(e) => setUserForm({ ...userForm, lastName: e.target.value })} 
+                    placeholder="ex: Kenfack"
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                <div className="form-group">
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Email *" : "Email *"}</label>
+                  <input 
+                    type="email" 
+                    required 
+                    className="form-control" 
+                    value={userForm.email} 
+                    onChange={(e) => setUserForm({ ...userForm, email: e.target.value })} 
+                    placeholder="ex: jm.kenfack@jeddiac.org"
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Phone" : "Téléphone"}</label>
+                  <input 
+                    type="tel" 
+                    className="form-control" 
+                    value={userForm.phone} 
+                    onChange={(e) => setUserForm({ ...userForm, phone: e.target.value })} 
+                    placeholder="+237 600 000 000"
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                <div className="form-group">
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "System Role" : "Rôle Système"}</label>
+                  <select 
+                    className="dedicated-select" 
+                    style={{ width: "100%" }}
+                    value={userForm.role} 
+                    onChange={(e) => setUserForm({ ...userForm, role: e.target.value })}
+                  >
+                    <option value="member">Membre / Journaliste</option>
+                    <option value="expert">Expert Scientifique</option>
+                    <option value="partner">Partenaire Institutionnel</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Category" : "Catégorie Répertoire"}</label>
+                  <select 
+                    className="dedicated-select" 
+                    style={{ width: "100%" }}
+                    value={userForm.category} 
+                    onChange={(e) => setUserForm({ ...userForm, category: e.target.value })}
+                  >
+                    <option value="direction">Coordination / Direction</option>
+                    <option value="journaliste">Journaliste / Reporter</option>
+                    <option value="expert">Expert / Scientifique</option>
+                    <option value="partenaire">Partenaire Institutionnel</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                <div className="form-group">
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Country" : "Pays"}</label>
+                  <select 
+                    className="dedicated-select" 
+                    style={{ width: "100%" }}
+                    value={userForm.country} 
+                    onChange={(e) => setUserForm({ ...userForm, country: e.target.value })}
+                  >
+                    <option value="Cameroun">Cameroun</option>
+                    <option value="RDC">RD Congo (RDC)</option>
+                    <option value="Congo">République du Congo</option>
+                    <option value="Gabon">Gabon</option>
+                    <option value="Afrique Centrale">Afrique Centrale (Régional)</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Location / City" : "Ville / Localisation"}</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    value={userForm.location} 
+                    onChange={(e) => setUserForm({ ...userForm, location: e.target.value })} 
+                    placeholder="ex: Yaoundé, Cameroun"
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "LinkedIn Profile URL" : "Lien Profil LinkedIn"}</label>
+                <input 
+                  type="url" 
+                  className="form-control" 
+                  value={userForm.linkedin} 
+                  onChange={(e) => setUserForm({ ...userForm, linkedin: e.target.value })} 
+                  placeholder="https://linkedin.com/in/profil"
+                />
+              </div>
+
+              {/* Language Switcher Tabs */}
+              <div className="modal-lang-tabs" style={{ marginTop: "1rem", marginBottom: "1.25rem" }}>
+                <button
+                  type="button"
+                  className={`modal-lang-tab-btn ${userFormLangTab === "fr" ? "active" : ""}`}
+                  onClick={() => setUserFormLangTab("fr")}
+                >
+                  🇫🇷 {isEnglish ? "French Profile (Required)" : "Profil Français (Obligatoire)"}
+                </button>
+                <button
+                  type="button"
+                  className={`modal-lang-tab-btn ${userFormLangTab === "en" ? "active" : ""}`}
+                  onClick={() => setUserFormLangTab("en")}
+                >
+                  🇬🇧 {isEnglish ? "English Profile (Optional)" : "Profil Anglais (Optionnel)"} {userForm.metierEn ? "✓" : ""}
+                </button>
+              </div>
+
+              {/* TAB FR */}
+              {userFormLangTab === "fr" && (
+                <>
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Job / Title (French) *" : "Métier / Titre (Français) *"}</label>
+                    <input 
+                      type="text" 
+                      required 
+                      className="form-control" 
+                      value={userForm.metier} 
+                      onChange={(e) => setUserForm({ ...userForm, metier: e.target.value })} 
+                      placeholder="ex: Conseillère Scientifique & Écologie Forestière"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Pillar / Hub (French)" : "Pôle d'intervention (Français)"}</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={userForm.pole} 
+                      onChange={(e) => setUserForm({ ...userForm, pole: e.target.value })} 
+                      placeholder="ex: Sciences & Biodiversité"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Biography (French) *" : "Biographie détaillée (Français) *"}</label>
+                    <textarea 
+                      required 
+                      rows={3} 
+                      className="form-control" 
+                      value={userForm.bibliographie} 
+                      onChange={(e) => setUserForm({ ...userForm, bibliographie: e.target.value })} 
+                      placeholder="Parcours académique, engagement écologique et expertise de terrain..."
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Mission & Advisory Role (French)" : "Mission & Rôle Consultatif (Français)"}</label>
+                    <textarea 
+                      rows={2} 
+                      className="form-control" 
+                      value={userForm.conseil} 
+                      onChange={(e) => setUserForm({ ...userForm, conseil: e.target.value })} 
+                      placeholder="Conseils aux rédactions juniors, encadrement pédagogique..."
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Deliverables & Contributions (French)" : "Réalisations & Contributions (Français)"}</label>
+                    <textarea 
+                      rows={2} 
+                      className="form-control" 
+                      value={userForm.contributions} 
+                      onChange={(e) => setUserForm({ ...userForm, contributions: e.target.value })} 
+                      placeholder="Coordination de guides, animation d'ateliers..."
+                    />
+                  </div>
+                </>
+              )}
+
+              {/* TAB EN */}
+              {userFormLangTab === "en" && (
+                <>
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Job / Title (English)" : "Métier / Titre (Anglais)"}</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={userForm.metierEn} 
+                      onChange={(e) => setUserForm({ ...userForm, metierEn: e.target.value })} 
+                      placeholder="e.g. Scientific Advisor & Forest Ecology"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Pillar / Hub (English)" : "Pôle d'intervention (Anglais)"}</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={userForm.poleEn} 
+                      onChange={(e) => setUserForm({ ...userForm, poleEn: e.target.value })} 
+                      placeholder="e.g. Sciences & Biodiversity"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Biography (English)" : "Biographie (Anglais)"}</label>
+                    <textarea 
+                      rows={3} 
+                      className="form-control" 
+                      value={userForm.bibliographieEn} 
+                      onChange={(e) => setUserForm({ ...userForm, bibliographieEn: e.target.value })} 
+                      placeholder="Academic journey, ecological commitment and field expertise..."
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Mission & Advisory Role (English)" : "Mission & Rôle Consultatif (Anglais)"}</label>
+                    <textarea 
+                      rows={2} 
+                      className="form-control" 
+                      value={userForm.conseilEn} 
+                      onChange={(e) => setUserForm({ ...userForm, conseilEn: e.target.value })} 
+                      placeholder="Junior newsrooms mentorship, scientific validation..."
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Deliverables & Contributions (English)" : "Réalisations & Contributions (Anglais)"}</label>
+                    <textarea 
+                      rows={2} 
+                      className="form-control" 
+                      value={userForm.contributionsEn} 
+                      onChange={(e) => setUserForm({ ...userForm, contributionsEn: e.target.value })} 
+                      placeholder="Handbooks validation, masterclasses facilitation..."
+                    />
+                  </div>
+                </>
+              )}
+
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.75rem", marginTop: "1.75rem", paddingTop: "1.25rem", borderTop: "1px solid #E5EBE7" }}>
+                <button type="button" onClick={() => setNewUserOpen(false)} className="btn btn-outline-forest">
+                  {isEnglish ? "Cancel" : "Annuler"}
+                </button>
+                <button type="submit" className="btn btn-forest">
+                  {isEnglish ? "Save Member" : "Enregistrer le membre"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* EDIT USER / MEMBER MODAL */}
+      {editUserOpen && (
+        <div className="modal-overlay" onClick={() => setEditUserOpen(false)}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "720px", maxHeight: "90vh", overflowY: "auto" }}>
+            <button 
+              onClick={() => setEditUserOpen(false)} 
+              className="modal-close-btn"
+              aria-label="Fermer"
+            >
+              <X size={20} />
+            </button>
+
+            <h3 style={{ fontSize: "1.6rem", fontFamily: "var(--font-serif)", fontWeight: 800, color: "#13221B", marginBottom: "0.4rem" }}>
+              {isEnglish ? "Edit Member Profile" : "Modifier le Profil Membre"}
+            </h3>
+            <p style={{ color: "#5A7367", fontSize: "0.9rem", marginBottom: "1.5rem" }}>
+              {isEnglish ? "Update member details, pillar assignments and bilingual information." : "Mettre à jour les informations, le pôle d'intervention et les textes bilingues."}
+            </p>
+
+            <form onSubmit={handleUpdateUser}>
+              {/* Profile Avatar Upload */}
+              <div className="form-group">
+                <label className="form-label" style={{ color: "#13221B" }}>
+                  {isEnglish ? "Profile Photo / Avatar" : "Photo de profil / Avatar"}
+                </label>
+
+                {editUserForm.avatarPreview ? (
+                  <div style={{ display: "flex", alignItems: "center", gap: "1rem", background: "#F4F7F5", padding: "0.75rem 1rem", borderRadius: "10px", border: "1px solid #D5E2DA" }}>
+                    <img 
+                      src={editUserForm.avatarPreview} 
+                      alt="Preview" 
+                      style={{ width: "64px", height: "64px", borderRadius: "50%", objectFit: "cover", border: "2px solid #1E5128" }} 
+                    />
+                    <div style={{ flex: 1 }}>
+                      <p style={{ margin: 0, fontWeight: 600, fontSize: "0.88rem", color: "#13221B" }}>
+                        {editUserForm.avatarFile?.name || "Photo actuelle"}
+                      </p>
+                      <span style={{ fontSize: "0.75rem", color: "#5A7367" }}>
+                        {editUserForm.avatarFile ? (isEnglish ? "New photo selected" : "Nouvelle photo sélectionnée") : (isEnglish ? "Current profile photo" : "Photo de profil actuelle")}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setEditUserForm({ ...editUserForm, avatarFile: null, avatarPreview: null, removeExistingAvatar: true })}
+                      className="btn-action-delete"
+                      title={isEnglish ? "Remove photo" : "Supprimer la photo"}
+                    >
+                      <X size={15} />
+                    </button>
+                  </div>
+                ) : (
+                  <div 
+                    style={{
+                      border: "2px dashed #9EBEAF",
+                      borderRadius: "10px",
+                      padding: "1.2rem",
+                      textAlign: "center",
+                      background: "#F4F7F5",
+                      cursor: "pointer",
+                      transition: "border-color 0.2s"
+                    }}
+                    onClick={() => document.getElementById("edit-user-avatar-input")?.click()}
+                  >
+                    <Upload size={22} style={{ color: "#2E5C46", margin: "0 auto 0.4rem" }} />
+                    <p style={{ margin: 0, fontSize: "0.85rem", fontWeight: 600, color: "#13221B" }}>
+                      {isEnglish ? "Click to change profile photo (JPG, PNG, WebP)" : "Cliquer pour modifier la photo de profil (JPG, PNG, WebP)"}
+                    </p>
+                    <p style={{ margin: "0.2rem 0 0", fontSize: "0.75rem", color: "#6A8278" }}>
+                      {isEnglish ? "Multipart Form-Data · Max 5MB" : "Support Form-Data multipart · Max 5 Mo"}
+                    </p>
+                  </div>
+                )}
+
+                <input 
+                  id="edit-user-avatar-input"
+                  type="file" 
+                  accept="image/png, image/jpeg, image/jpg, image/webp"
+                  style={{ display: "none" }}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const previewUrl = URL.createObjectURL(file);
+                      setEditUserForm({ ...editUserForm, avatarFile: file, avatarPreview: previewUrl, removeExistingAvatar: false });
+                    }
+                  }}
+                />
+              </div>
+
+              {/* Identity & Contact Info */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                <div className="form-group">
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "First Name *" : "Prénom *"}</label>
+                  <input 
+                    type="text" 
+                    required 
+                    className="form-control" 
+                    value={editUserForm.firstName} 
+                    onChange={(e) => setEditUserForm({ ...editUserForm, firstName: e.target.value })} 
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Last Name *" : "Nom *"}</label>
+                  <input 
+                    type="text" 
+                    required 
+                    className="form-control" 
+                    value={editUserForm.lastName} 
+                    onChange={(e) => setEditUserForm({ ...editUserForm, lastName: e.target.value })} 
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                <div className="form-group">
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Email *" : "Email *"}</label>
+                  <input 
+                    type="email" 
+                    required 
+                    className="form-control" 
+                    value={editUserForm.email} 
+                    onChange={(e) => setEditUserForm({ ...editUserForm, email: e.target.value })} 
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Phone" : "Téléphone"}</label>
+                  <input 
+                    type="tel" 
+                    className="form-control" 
+                    value={editUserForm.phone} 
+                    onChange={(e) => setEditUserForm({ ...editUserForm, phone: e.target.value })} 
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                <div className="form-group">
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "System Role" : "Rôle Système"}</label>
+                  <select 
+                    className="dedicated-select" 
+                    style={{ width: "100%" }}
+                    value={editUserForm.role} 
+                    onChange={(e) => setEditUserForm({ ...editUserForm, role: e.target.value })}
+                  >
+                    <option value="member">Membre / Journaliste</option>
+                    <option value="expert">Expert Scientifique</option>
+                    <option value="partner">Partenaire Institutionnel</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Category" : "Catégorie Répertoire"}</label>
+                  <select 
+                    className="dedicated-select" 
+                    style={{ width: "100%" }}
+                    value={editUserForm.category} 
+                    onChange={(e) => setEditUserForm({ ...editUserForm, category: e.target.value })}
+                  >
+                    <option value="direction">Coordination / Direction</option>
+                    <option value="journaliste">Journaliste / Reporter</option>
+                    <option value="expert">Expert / Scientifique</option>
+                    <option value="partenaire">Partenaire Institutionnel</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                <div className="form-group">
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Country" : "Pays"}</label>
+                  <select 
+                    className="dedicated-select" 
+                    style={{ width: "100%" }}
+                    value={editUserForm.country} 
+                    onChange={(e) => setEditUserForm({ ...editUserForm, country: e.target.value })}
+                  >
+                    <option value="Cameroun">Cameroun</option>
+                    <option value="RDC">RD Congo (RDC)</option>
+                    <option value="Congo">République du Congo</option>
+                    <option value="Gabon">Gabon</option>
+                    <option value="Afrique Centrale">Afrique Centrale (Régional)</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Location / City" : "Ville / Localisation"}</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    value={editUserForm.location} 
+                    onChange={(e) => setEditUserForm({ ...editUserForm, location: e.target.value })} 
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "LinkedIn Profile URL" : "Lien Profil LinkedIn"}</label>
+                <input 
+                  type="url" 
+                  className="form-control" 
+                  value={editUserForm.linkedin} 
+                  onChange={(e) => setEditUserForm({ ...editUserForm, linkedin: e.target.value })} 
+                />
+              </div>
+
+              {/* Language Switcher Tabs */}
+              <div className="modal-lang-tabs" style={{ marginTop: "1rem", marginBottom: "1.25rem" }}>
+                <button
+                  type="button"
+                  className={`modal-lang-tab-btn ${editUserLangTab === "fr" ? "active" : ""}`}
+                  onClick={() => setEditUserLangTab("fr")}
+                >
+                  🇫🇷 {isEnglish ? "French Profile (Required)" : "Profil Français (Obligatoire)"}
+                </button>
+                <button
+                  type="button"
+                  className={`modal-lang-tab-btn ${editUserLangTab === "en" ? "active" : ""}`}
+                  onClick={() => setEditUserLangTab("en")}
+                >
+                  🇬🇧 {isEnglish ? "English Profile (Optional)" : "Profil Anglais (Optionnel)"} {editUserForm.metierEn ? "✓" : ""}
+                </button>
+              </div>
+
+              {/* TAB FR */}
+              {editUserLangTab === "fr" && (
+                <>
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Job / Title (French) *" : "Métier / Titre (Français) *"}</label>
+                    <input 
+                      type="text" 
+                      required 
+                      className="form-control" 
+                      value={editUserForm.metier} 
+                      onChange={(e) => setEditUserForm({ ...editUserForm, metier: e.target.value })} 
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Pillar / Hub (French)" : "Pôle d'intervention (Français)"}</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={editUserForm.pole} 
+                      onChange={(e) => setEditUserForm({ ...editUserForm, pole: e.target.value })} 
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Biography (French) *" : "Biographie détaillée (Français) *"}</label>
+                    <textarea 
+                      required 
+                      rows={3} 
+                      className="form-control" 
+                      value={editUserForm.bibliographie} 
+                      onChange={(e) => setEditUserForm({ ...editUserForm, bibliographie: e.target.value })} 
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Mission & Advisory Role (French)" : "Mission & Rôle Consultatif (Français)"}</label>
+                    <textarea 
+                      rows={2} 
+                      className="form-control" 
+                      value={editUserForm.conseil} 
+                      onChange={(e) => setEditUserForm({ ...editUserForm, conseil: e.target.value })} 
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Deliverables & Contributions (French)" : "Réalisations & Contributions (Français)"}</label>
+                    <textarea 
+                      rows={2} 
+                      className="form-control" 
+                      value={editUserForm.contributions} 
+                      onChange={(e) => setEditUserForm({ ...editUserForm, contributions: e.target.value })} 
+                    />
+                  </div>
+                </>
+              )}
+
+              {/* TAB EN */}
+              {editUserLangTab === "en" && (
+                <>
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Job / Title (English)" : "Métier / Titre (Anglais)"}</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={editUserForm.metierEn} 
+                      onChange={(e) => setEditUserForm({ ...editUserForm, metierEn: e.target.value })} 
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Pillar / Hub (English)" : "Pôle d'intervention (Anglais)"}</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={editUserForm.poleEn} 
+                      onChange={(e) => setEditUserForm({ ...editUserForm, poleEn: e.target.value })} 
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Biography (English)" : "Biographie (Anglais)"}</label>
+                    <textarea 
+                      rows={3} 
+                      className="form-control" 
+                      value={editUserForm.bibliographieEn} 
+                      onChange={(e) => setEditUserForm({ ...editUserForm, bibliographieEn: e.target.value })} 
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Mission & Advisory Role (English)" : "Mission & Rôle Consultatif (Anglais)"}</label>
+                    <textarea 
+                      rows={2} 
+                      className="form-control" 
+                      value={editUserForm.conseilEn} 
+                      onChange={(e) => setEditUserForm({ ...editUserForm, conseilEn: e.target.value })} 
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Deliverables & Contributions (English)" : "Réalisations & Contributions (Anglais)"}</label>
+                    <textarea 
+                      rows={2} 
+                      className="form-control" 
+                      value={editUserForm.contributionsEn} 
+                      onChange={(e) => setEditUserForm({ ...editUserForm, contributionsEn: e.target.value })} 
+                    />
+                  </div>
+                </>
+              )}
+
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.75rem", marginTop: "1.75rem", paddingTop: "1.25rem", borderTop: "1px solid #E5EBE7" }}>
+                <button type="button" onClick={() => setEditUserOpen(false)} className="btn btn-outline-forest">
+                  {isEnglish ? "Cancel" : "Annuler"}
+                </button>
+                <button type="submit" className="btn btn-forest">
+                  {isEnglish ? "Save Changes" : "Enregistrer les modifications"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* VIEW CONTACT / CANDIDATURE MODAL */}
+      {viewContactOpen && selectedContactItem && (
+        <div className="modal-overlay" onClick={() => setViewContactOpen(false)}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "680px", maxHeight: "90vh", overflowY: "auto" }}>
+            <button 
+              className="modal-close-btn" 
+              onClick={() => setViewContactOpen(false)}
+              aria-label={isEnglish ? "Close" : "Fermer"}
+            >
+              <X size={20} />
+            </button>
+
+            {/* Header badges */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem", flexWrap: "wrap", gap: "0.5rem" }}>
+              <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap" }}>
+                <span className={`badge ${selectedContactItem.type === "candidature" ? "badge-forest-light" : "badge-purple-light"}`}>
+                  {selectedContactItem.type === "candidature" 
+                    ? (isEnglish ? "📝 Network Application" : "📝 Candidature Réseau")
+                    : (isEnglish ? "💬 Direct Inquiry" : "💬 Prise de Contact")}
+                </span>
+                {getContactStatusBadge(selectedContactItem)}
+              </div>
+              <span style={{ fontSize: "0.82rem", color: "#6A8278" }}>
+                {new Date(selectedContactItem.createdAt || Date.now()).toLocaleDateString(isEnglish ? "en-US" : "fr-FR", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit"
+                })}
+              </span>
+            </div>
+
+            {/* Applicant Summary Card */}
+            <div style={{ background: "#F4F8F5", borderRadius: "12px", padding: "1.25rem", border: "1px solid #D9E3DE", marginBottom: "1.25rem" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
+                <div>
+                  <h3 style={{ fontSize: "1.2rem", fontWeight: 700, color: "#13221B", margin: "0 0 0.5rem 0" }}>
+                    {selectedContactItem.name}
+                  </h3>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem", fontSize: "0.88rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "#2B4036" }}>
+                      <Mail size={15} style={{ color: "#1E5128", flexShrink: 0 }} />
+                      <a href={`mailto:${selectedContactItem.email}`} style={{ color: "#2563EB", textDecoration: "none", fontWeight: 600 }}>
+                        {selectedContactItem.email}
+                      </a>
+                    </div>
+                    {selectedContactItem.phone && (
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "#2B4036" }}>
+                        <Phone size={15} style={{ color: "#1E5128", flexShrink: 0 }} />
+                        <a href={`tel:${selectedContactItem.phone}`} style={{ color: "#2B4036", textDecoration: "none" }}>
+                          {selectedContactItem.phone}
+                        </a>
+                      </div>
+                    )}
+                    {selectedContactItem.structureName && (
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "#2B4036" }}>
+                        <Building size={15} style={{ color: "#1E5128", flexShrink: 0 }} />
+                        <span><strong>{isEnglish ? "Organization / Media" : "Structure / Média"}:</strong> {selectedContactItem.structureName}</span>
+                      </div>
+                    )}
+                    {selectedContactItem.country && (
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "#2B4036" }}>
+                        <Globe size={15} style={{ color: "#1E5128", flexShrink: 0 }} />
+                        <span><strong>{isEnglish ? "Country" : "Pays"}:</strong> {selectedContactItem.country}</span>
+                      </div>
+                    )}
+                    {selectedContactItem.category && (
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "#2B4036" }}>
+                        <Tag size={15} style={{ color: "#1E5128", flexShrink: 0 }} />
+                        <span><strong>{isEnglish ? "Category" : "Catégorie"}:</strong> {getContactCategoryLabel(selectedContactItem.category)}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Subject and Message Content */}
+            <div style={{ marginBottom: "1.5rem" }}>
+              <label style={{ fontSize: "0.78rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "#4A6356", display: "block", marginBottom: "0.35rem" }}>
+                {isEnglish ? "Subject" : "Objet du message"}
+              </label>
+              <h4 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#13221B", margin: "0 0 0.75rem 0" }}>
+                {selectedContactItem.subject || (isEnglish ? "(No subject provided)" : "(Aucun objet)")}
+              </h4>
+
+              <label style={{ fontSize: "0.78rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "#4A6356", display: "block", marginBottom: "0.35rem" }}>
+                {isEnglish ? "Message Content" : "Contenu de la demande / message"}
+              </label>
+              <div style={{
+                background: "#FFFFFF",
+                border: "1px solid #D9E3DE",
+                borderRadius: "10px",
+                padding: "1.1rem 1.25rem",
+                color: "#13221B",
+                fontSize: "0.92rem",
+                lineHeight: 1.6,
+                whiteSpace: "pre-wrap",
+                boxShadow: "inset 0 1px 3px rgba(0,0,0,0.02)"
+              }}>
+                {selectedContactItem.message}
+              </div>
+            </div>
+
+            {/* Validation & Automatic Notification Section */}
+            <div style={{
+              marginBottom: "1.5rem",
+              padding: "1.1rem 1.25rem",
+              borderRadius: "10px",
+              background: selectedContactItem.status === "validated" ? "#F0FDF4" : "#F4F8F5",
+              border: selectedContactItem.status === "validated" ? "1px solid #86EFAC" : "1px solid #D9E3DE"
+            }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
+                <div>
+                  <div style={{ fontSize: "0.95rem", fontWeight: 700, color: selectedContactItem.status === "validated" ? "#166534" : "#13221B", marginBottom: "0.2rem", display: "flex", alignItems: "center", gap: "0.45rem" }}>
+                    {selectedContactItem.status === "validated" ? (
+                      <>
+                        <CheckCircle size={18} style={{ color: "#16a34a" }} />
+                        <span>{isEnglish ? "Candidature Validated" : "Candidature Validée"}</span>
+                      </>
+                    ) : (
+                      <span>{isEnglish ? "Candidature Validation & Email Notification" : "Validation de la Candidature & Notification"}</span>
+                    )}
+                  </div>
+                  <p style={{ fontSize: "0.82rem", color: selectedContactItem.status === "validated" ? "#15803d" : "#5A7367", margin: 0 }}>
+                    {selectedContactItem.status === "validated"
+                      ? (isEnglish 
+                          ? "This application is officially validated. The confirmation email was automatically sent to the candidate."
+                          : "Ce dossier est validé. L'email de confirmation a été automatiquement envoyé au candidat.")
+                      : (isEnglish 
+                          ? "Clicking validate will mark this submission as validated and immediately send the automated confirmation email."
+                          : "Valider cette candidature enregistre le statut et transmet instantanément l'email de confirmation automatique.")}
+                  </p>
+                </div>
+
+                {selectedContactItem.status !== "validated" ? (
+                  <button
+                    type="button"
+                    onClick={() => handleValidateContact(selectedContactItem.id)}
+                    disabled={isValidatingContact}
+                    className="btn btn-forest"
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "0.45rem",
+                      padding: "0.6rem 1.25rem",
+                      fontWeight: 700,
+                      boxShadow: "0 2px 6px rgba(30,81,40,0.2)"
+                    }}
+                  >
+                    {isValidatingContact ? (
+                      <>
+                        <span className="btn-spinner-ring" style={{ width: "15px", height: "15px", borderWidth: "2px", borderColor: "rgba(255,255,255,0.3)", borderTopColor: "#fff" }}></span>
+                        <span>{isEnglish ? "Validating..." : "Validation en cours..."}</span>
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle size={16} />
+                        <span>{isEnglish ? "Validate Candidature" : "Valider la candidature"}</span>
+                      </>
+                    )}
+                  </button>
+                ) : (
+                  <span className="badge badge-green-light" style={{ padding: "0.4rem 0.85rem", fontSize: "0.82rem", fontWeight: 700 }}>
+                    ✓ {isEnglish ? "Confirmation Email Sent" : "Email envoyé automatiquement"}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Internal Admin Notes */}
+            <div style={{ marginBottom: "1.5rem" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.4rem" }}>
+                <label style={{ fontSize: "0.78rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "#4A6356" }}>
+                  📌 {isEnglish ? "Internal Notes (Admin Only)" : "Notes internes (Visibles uniquement par l'équipe)"}
+                </label>
+                {selectedContactItem.adminNotes && (
+                  <span style={{ fontSize: "0.74rem", color: "#059669", fontWeight: 600 }}>
+                    ✓ {isEnglish ? "Note recorded" : "Note enregistrée"}
+                  </span>
+                )}
+              </div>
+              <textarea
+                rows={3}
+                className="form-control"
+                placeholder={isEnglish ? "Add private notes on this applicant, interviews, evaluation or decision..." : "Ajouter des notes privées sur ce candidat, compte-rendu d'évaluation ou décision..."}
+                value={adminNotesDraft}
+                onChange={(e) => setAdminNotesDraft(e.target.value)}
+                style={{ fontSize: "0.88rem" }}
+              />
+              <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "0.5rem" }}>
+                <button
+                  type="button"
+                  onClick={() => handleSaveContactNotes(selectedContactItem.id)}
+                  disabled={isSavingContactNotes || adminNotesDraft === (selectedContactItem.adminNotes || "")}
+                  className="btn btn-outline-forest"
+                  style={{ fontSize: "0.8rem", padding: "0.35rem 0.85rem" }}
+                >
+                  {isSavingContactNotes ? (
+                    <span>{isEnglish ? "Saving..." : "Enregistrement..."}</span>
+                  ) : (
+                    <span>{isEnglish ? "Save Notes" : "Enregistrer la note"}</span>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Footer Actions */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid #E5EBE7", paddingTop: "1.25rem", marginTop: "1rem" }}>
+              <button
+                type="button"
+                onClick={() => handleDeleteContact(selectedContactItem)}
+                className="btn btn-outline-danger"
+                style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", fontSize: "0.85rem", color: "#DC2626", borderColor: "#FCA5A5" }}
+              >
+                <Trash2 size={15} />
+                <span>{isEnglish ? "Delete Inquiry" : "Supprimer"}</span>
+              </button>
+
+              <div style={{ display: "flex", gap: "0.75rem" }}>
+                <button
+                  type="button"
+                  onClick={() => setViewContactOpen(false)}
+                  className="btn btn-forest"
+                >
+                  {isEnglish ? "Close" : "Fermer"}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

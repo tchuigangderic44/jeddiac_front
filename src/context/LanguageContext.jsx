@@ -19,6 +19,14 @@ export const translations = {
     joinNetwork: "Rejoindre le Réseau",
     applyNow: "Candidater / Rejoindre le Réseau",
 
+    // Strategic Axes (Méthodologie & Cadre Opérationnel)
+    axesKicker: "Méthodologie & Cadre Opérationnel",
+    axesTitle: "Les 5 Piliers Stratégiques",
+    axesTitleHighlight: "du Programme",
+    axesSubtitle: "Une approche globale et structurée qui guide chaque jeune de l'alphabétisation climatique à la production médiatique professionnelle.",
+    axesKeyObjective: "Objectif Clé :",
+    axesJoinBtn: "Participer à cet axe",
+
     // Hero Section
     heroKickerTag: "Programme Régional Pilote · 2026–2027",
     heroKickerBadge: "Bassin du Congo",
@@ -164,6 +172,14 @@ export const translations = {
     navContact: "Contact",
     joinNetwork: "Join the Network",
     applyNow: "Apply / Join the Network",
+
+    // Strategic Axes (Methodology & Operational Framework)
+    axesKicker: "Methodology & Operational Framework",
+    axesTitle: "The 5 Strategic Pillars",
+    axesTitleHighlight: "of the Program",
+    axesSubtitle: "A comprehensive and structured approach guiding every youth from climate literacy to professional media production.",
+    axesKeyObjective: "Key Objective :",
+    axesJoinBtn: "Join this pillar",
 
     // Hero Section
     heroKickerTag: "Pilot Regional Program · 2026–2027",

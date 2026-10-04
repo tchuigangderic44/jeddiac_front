@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Mail, Phone, MapPin, Send, CheckCircle2, MessageSquare, Clock, Globe, ArrowRight } from "lucide-react";
 import { api } from "../services/api";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function ContactSection() {
+  const { isEnglish } = useLanguage();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -21,17 +23,30 @@ export default function ContactSection() {
     setError(null);
 
     try {
-      await api.submitContact(formData);
+      await api.submitContact({
+        ...formData,
+        type: formData.subject.toLowerCase().includes("candidature") ? "candidature" : "contact",
+        category: formData.subject.toLowerCase().includes("partenariat") 
+          ? "partenariat" 
+          : formData.subject.toLowerCase().includes("mentorat") 
+          ? "mentorat" 
+          : "information"
+      });
       setSubmitted(true);
       setFormData({
         name: "",
         email: "",
         phone: "",
-        subject: "Demande d'information générale",
+        subject: isEnglish ? "General inquiry" : "Demande d'information générale",
         message: "",
       });
     } catch (err) {
-      setError(err.message || "Erreur lors de l'envoi du message.");
+      setError(
+        err.message || 
+        (isEnglish 
+          ? "Error submitting your message. Please try again." 
+          : "Erreur lors de l'envoi du message.")
+      );
     } finally {
       setSubmitting(false);
     }
@@ -43,13 +58,17 @@ export default function ContactSection() {
         <div className="section-header">
           <div className="section-tag-pill">
             <MessageSquare size={16} />
-            <span>Coordination & Relations Partenaires</span>
+            <span>{isEnglish ? "Coordination & Partner Relations" : "Coordination & Relations Partenaires"}</span>
           </div>
           <h2 className="section-title-editorial">
-            Écrivez à la Coordination <span className="text-highlight-green">JEDDIAC</span>
+            {isEnglish ? "Write to the " : "Écrivez à la Coordination "}
+            <span className="text-highlight-green">JEDDIAC</span>
+            {isEnglish ? " Coordination" : ""}
           </h2>
           <p className="section-subtitle-editorial">
-            Une question sur la phase pilote, une proposition de mentorat ou une démarche de partenariat ? Notre équipe vous répond sous 48 heures.
+            {isEnglish 
+              ? "A question about the pilot phase, a mentoring proposal or a partnership inquiry? Our team responds within 48 hours."
+              : "Une question sur la phase pilote, une proposition de mentorat ou une démarche de partenariat ? Notre équipe vous répond sous 48 heures."}
           </p>
         </div>
 
@@ -58,11 +77,15 @@ export default function ContactSection() {
           <div className="contact-info-card">
             <div>
               <span className="badge badge-green-light" style={{ marginBottom: "1.2rem" }}>
-                Pôle Administratif & Technique
+                {isEnglish ? "Administrative & Technical Hub" : "Pôle Administratif & Technique"}
               </span>
-              <h3 className="contact-info-title">Secrétariat Général du Programme</h3>
+              <h3 className="contact-info-title">
+                {isEnglish ? "Programme General Secretariat" : "Secrétariat Général du Programme"}
+              </h3>
               <p className="contact-info-desc">
-                Basée à Yaoundé avec des relais régionaux à Douala, Libreville, Brazzaville et Kinshasa, la coordination JEDDIAC pilote le déploiement sur les 10 régions du Cameroun et les pays du Bassin du Congo.
+                {isEnglish 
+                  ? "Headquartered in Yaoundé with regional focal points in Douala, Libreville, Brazzaville and Kinshasa, JEDDIAC coordination steers deployment across 10 regions of Cameroon and Congo Basin countries."
+                  : "Basée à Yaoundé avec des relais régionaux à Douala, Libreville, Brazzaville et Kinshasa, la coordination JEDDIAC pilote le déploiement sur les 10 régions du Cameroun et les pays du Bassin du Congo."}
               </p>
 
               <div className="contact-details-list">
@@ -71,7 +94,7 @@ export default function ContactSection() {
                     <MapPin size={18} />
                   </div>
                   <div>
-                    <span className="contact-label">Siège de la Coordination</span>
+                    <span className="contact-label">{isEnglish ? "Headquarters" : "Siège de la Coordination"}</span>
                     <strong className="contact-value">Yaoundé, Cameroun · Bassin du Congo</strong>
                   </div>
                 </div>
@@ -81,7 +104,7 @@ export default function ContactSection() {
                     <Mail size={18} />
                   </div>
                   <div>
-                    <span className="contact-label">Courriel Officiel</span>
+                    <span className="contact-label">{isEnglish ? "Official Email" : "Courriel Officiel"}</span>
                     <strong className="contact-value">contact@jeddiac.org / jeddiac.contact@gmail.com</strong>
                   </div>
                 </div>
@@ -91,7 +114,7 @@ export default function ContactSection() {
                     <Phone size={18} />
                   </div>
                   <div>
-                    <span className="contact-label">Permanence Téléphonique</span>
+                    <span className="contact-label">{isEnglish ? "Phone Line" : "Permanence Téléphonique"}</span>
                     <strong className="contact-value">+237 670 00 00 00 / +237 690 00 00 00</strong>
                   </div>
                 </div>
@@ -101,8 +124,10 @@ export default function ContactSection() {
                     <Clock size={18} />
                   </div>
                   <div>
-                    <span className="contact-label">Disponibilité</span>
-                    <strong className="contact-value">Du Lundi au Vendredi : 08h30 – 17h30 (GMT+1)</strong>
+                    <span className="contact-label">{isEnglish ? "Availability" : "Disponibilité"}</span>
+                    <strong className="contact-value">
+                      {isEnglish ? "Monday to Friday: 08:30 AM – 05:30 PM (GMT+1)" : "Du Lundi au Vendredi : 08h30 – 17h30 (GMT+1)"}
+                    </strong>
                   </div>
                 </div>
               </div>
@@ -111,7 +136,7 @@ export default function ContactSection() {
             <div className="contact-info-footer">
               <div className="contact-partner-callout">
                 <strong>Revue AFRIVE</strong>
-                <span>Partenaire éditorial international & mentorat journalistique.</span>
+                <span>{isEnglish ? "International editorial partner & journalistic mentorship." : "Partenaire éditorial international & mentorat journalistique."}</span>
               </div>
             </div>
           </div>
@@ -121,21 +146,25 @@ export default function ContactSection() {
             {submitted ? (
               <div className="form-success-box">
                 <CheckCircle2 size={48} className="success-icon" />
-                <h3>Message transmis avec succès !</h3>
+                <h3>{isEnglish ? "Message Successfully Sent!" : "Message transmis avec succès !"}</h3>
                 <p>
-                  Merci pour votre prise de contact. Un membre de la coordination examinera votre demande et vous répondra dans les meilleurs délais.
+                  {isEnglish 
+                    ? "Thank you for reaching out. A coordination representative will review your inquiry and get back to you promptly."
+                    : "Merci pour votre prise de contact. Un membre de la coordination examinera votre demande et vous répondra dans les meilleurs délais."}
                 </p>
                 <button
                   onClick={() => setSubmitted(false)}
                   className="btn btn-forest"
                   style={{ marginTop: "1.5rem" }}
                 >
-                  Envoyer un autre message
+                  {isEnglish ? "Send Another Message" : "Envoyer un autre message"}
                 </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="contact-form">
-                <h3 className="form-card-title">Formulaire de Contact Direct</h3>
+                <h3 className="form-card-title">
+                  {isEnglish ? "Direct Contact Form" : "Formulaire de Contact Direct"}
+                </h3>
 
                 {error && (
                   <div className="form-error-alert">
@@ -145,11 +174,11 @@ export default function ContactSection() {
 
                 <div className="form-row-two-col">
                   <div className="form-group">
-                    <label className="form-label">Nom et Prénom *</label>
+                    <label className="form-label">{isEnglish ? "Full Name *" : "Nom et Prénom *"}</label>
                     <input
                       type="text"
                       required
-                      placeholder="Ex: Samuel Eto'o"
+                      placeholder={isEnglish ? "e.g. Samuel Eto'o" : "Ex: Samuel Eto'o"}
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       className="form-control-input"
@@ -157,7 +186,7 @@ export default function ContactSection() {
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label">Adresse Email *</label>
+                    <label className="form-label">{isEnglish ? "Email Address *" : "Adresse Email *"}</label>
                     <input
                       type="email"
                       required
@@ -171,7 +200,7 @@ export default function ContactSection() {
 
                 <div className="form-row-two-col">
                   <div className="form-group">
-                    <label className="form-label">Téléphone / WhatsApp</label>
+                    <label className="form-label">{isEnglish ? "Phone / WhatsApp" : "Téléphone / WhatsApp"}</label>
                     <input
                       type="tel"
                       placeholder="+237 ..."
@@ -182,28 +211,44 @@ export default function ContactSection() {
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label">Objet de la démarche *</label>
+                    <label className="form-label">{isEnglish ? "Inquiry Subject *" : "Objet de la démarche *"}</label>
                     <select
                       value={formData.subject}
                       onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                       className="form-control-input"
                     >
-                      <option value="Demande d'information générale">Information générale</option>
-                      <option value="Candidature d'un Club Média Scolaire">Candidature d'un club scolaire</option>
-                      <option value="Partenariat Radio Communautaire">Partenariat radio communautaire</option>
-                      <option value="Proposition de Mentorat Journalistique">Proposition de mentorat</option>
-                      <option value="Partenariat Institutionnel / Bailleurs">Partenariat institutionnel / Bailleurs</option>
-                      <option value="Autre">Autre demande</option>
+                      <option value="Demande d'information générale">
+                        {isEnglish ? "General Information" : "Information générale"}
+                      </option>
+                      <option value="Candidature d'un Club Média Scolaire">
+                        {isEnglish ? "School Media Club Application" : "Candidature d'un club scolaire"}
+                      </option>
+                      <option value="Partenariat Radio Communautaire">
+                        {isEnglish ? "Community Radio Partnership" : "Partenariat radio communautaire"}
+                      </option>
+                      <option value="Proposition de Mentorat Journalistique">
+                        {isEnglish ? "Journalistic Mentorship Proposal" : "Proposition de mentorat"}
+                      </option>
+                      <option value="Partenariat Institutionnel / Bailleurs">
+                        {isEnglish ? "Institutional / Donor Partnership" : "Partenariat institutionnel / Bailleurs"}
+                      </option>
+                      <option value="Autre">
+                        {isEnglish ? "Other Inquiry" : "Autre demande"}
+                      </option>
                     </select>
                   </div>
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Votre message ou projet *</label>
+                  <label className="form-label">{isEnglish ? "Your Message or Proposal *" : "Votre message ou projet *"}</label>
                   <textarea
                     rows={5}
                     required
-                    placeholder="Précisez votre établissement, votre région d'attache et vos attentes..."
+                    placeholder={
+                      isEnglish 
+                        ? "Specify your institution, region and expectations..." 
+                        : "Précisez votre établissement, votre région d'attache et vos attentes..."
+                    }
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     className="form-control-input"
@@ -217,11 +262,11 @@ export default function ContactSection() {
                   style={{ width: "100%", justifyContent: "center", padding: "1rem" }}
                 >
                   {submitting ? (
-                    <span>Transmission en cours...</span>
+                    <span>{isEnglish ? "Sending message..." : "Transmission en cours..."}</span>
                   ) : (
                     <>
                       <Send size={16} />
-                      <span>Envoyer le message</span>
+                      <span>{isEnglish ? "Send Message" : "Envoyer le message"}</span>
                     </>
                   )}
                 </button>

@@ -214,6 +214,24 @@ img {
   color: #13221B;
 }
 
+.badge-blue-light {
+  background: #EFF6FF;
+  color: #1D4ED8;
+  border: 1px solid rgba(29, 78, 216, 0.2);
+}
+
+.badge-purple-light {
+  background: #FAF5FF;
+  color: #7E22CE;
+  border: 1px solid rgba(126, 34, 206, 0.2);
+}
+
+.badge-gray-light {
+  background: #F3F4F6;
+  color: #4B5563;
+  border: 1px solid #E5E7EB;
+}
+
 /* Section Header Typography */
 .section-header {
   text-align: center;
@@ -1114,6 +1132,23 @@ img {
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid var(--color-gold-border);
+  flex-shrink: 0;
+}
+
+.quote-avatar-fallback {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--forest-primary, #0B3B24), var(--forest-dark, #062315));
+  color: #D4AF37;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.88rem;
+  border: 2px solid var(--color-gold-border, #E5C158);
+  flex-shrink: 0;
+  user-select: none;
 }
 
 .quote-author-name {
@@ -5550,5 +5585,65 @@ select.form-control {
   color: #13221B;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   font-weight: 700;
+}
+
+/* Member Avatar styling for admin and cards */
+.member-avatar-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.member-avatar-thumb {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid rgba(30, 81, 40, 0.15);
+}
+
+.member-avatar-fallback {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1E5128 0%, #2E5C46 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(30, 81, 40, 0.2);
+}
+
+.team-card-default-avatar {
+  width: 100%;
+  height: 240px;
+  background: linear-gradient(135deg, #13221B 0%, #1E5128 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  position: relative;
+}
+
+.team-card-default-initials {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  font-weight: 800;
+  font-family: var(--font-serif);
+  color: #F4D06F;
+  margin-bottom: 0.5rem;
 }
 
