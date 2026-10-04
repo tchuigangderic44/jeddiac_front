@@ -19,6 +19,7 @@ import AllNewsPage from "./pages/AllNewsPage";
 import AllProfilesPage from "./pages/AllProfilesPage";
 import AllArticlesPage from "./pages/AllArticlesPage";
 import AllAgendaPage from "./pages/AllAgendaPage";
+import AllPodcastsPage from "./pages/AllPodcastsPage";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { LanguageProvider, useLanguage } from "./context/LanguageContext";
 import { api } from "./services/api";
@@ -76,6 +77,9 @@ function AppContent() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else if (hash === "#agenda-complet" || hash === "#toutes-les-formations" || hash === "#masterclasses-toutes" || hash === "#sessions") {
       setCurrentView("all-agenda");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (hash === "#tous-les-podcasts" || hash === "#podcasts-tous" || hash === "#toutes-les-emissions" || hash === "#hub-audio") {
+      setCurrentView("all-podcasts");
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
       setCurrentView("home");
@@ -253,6 +257,10 @@ function AppContent() {
         />
       )}
 
+      {currentView === "all-podcasts" && (
+        <AllPodcastsPage onBackToHome={() => navigateToHomeSection("podcasts")} />
+      )}
+
       {currentView === "home" && (
         <>
           {/* Hero Showcase with Large Authentic Photography */}
@@ -302,7 +310,14 @@ function AppContent() {
           />
 
           {/* Youth Media & Audio Podcast Hub */}
-          <PodcastPlayer />
+          <PodcastPlayer 
+            onNavigateAllPodcasts={() => navigateTo(
+              "all-podcasts",
+              "#tous-les-podcasts",
+              isEnglish ? "Loading Junior Podcast & Audio Hub..." : "Chargement du Hub Audio & Podcasts...",
+              isEnglish ? "Accessing field dispatches and student investigations" : "Accès aux récits de terrain et enquêtes sonores de la jeunesse"
+            )}
+          />
 
           {/* Solution Journalism & Investigation Reports */}
           <ArticlesSection 

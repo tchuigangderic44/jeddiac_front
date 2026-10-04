@@ -39,7 +39,13 @@ import {
   MessageSquare,
   Building,
   Phone,
-  Archive
+  Archive,
+  Headphones,
+  Radio,
+  Play,
+  Pause,
+  Volume2,
+  VolumeX
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
@@ -67,6 +73,7 @@ export default function AdminPortal({ onClose }) {
   const [contacts, setContacts] = useState([]);
   const [newsletters, setNewsletters] = useState([]);
   const [usersList, setUsersList] = useState([]);
+  const [podcasts, setPodcasts] = useState([]);
   const [dataLoading, setDataLoading] = useState(false);
 
   // Modals for creating items
@@ -120,6 +127,56 @@ export default function AdminPortal({ onClose }) {
     coverImageFile: null,
     coverImagePreview: null,
     removeExistingImage: false
+  });
+
+  // Podcast Management States
+  const [podcastFilterTopic, setPodcastFilterTopic] = useState("all");
+  const [podcastFilterStatus, setPodcastFilterStatus] = useState("all");
+  const [newPodcastOpen, setNewPodcastOpen] = useState(false);
+  const [podcastFormLangTab, setPodcastFormLangTab] = useState("fr"); // 'fr' | 'en'
+  const [podcastForm, setPodcastForm] = useState({
+    title: "",
+    titleEn: "",
+    series: "Les Voix de la Durabilité · Épisode 01",
+    seriesEn: "Voices of Sustainability · Episode 01",
+    duration: "10:00",
+    author: "Club Média Lycée Leclerc, Yaoundé",
+    authorEn: "General Leclerc High School Media Club, Yaoundé",
+    topic: "Biodiversité & Forêts Primaires",
+    topicEn: "Biodiversity & Primary Forests",
+    description: "",
+    descriptionEn: "",
+    audioUrl: "",
+    order: 0,
+    cover: "",
+    coverFile: null,
+    coverPreview: null
+  });
+
+  const [viewPodcastOpen, setViewPodcastOpen] = useState(false);
+  const [viewPodcastLangTab, setViewPodcastLangTab] = useState("fr");
+  const [selectedPodcastItem, setSelectedPodcastItem] = useState(null);
+
+  const [editPodcastOpen, setEditPodcastOpen] = useState(false);
+  const [editPodcastLangTab, setEditPodcastLangTab] = useState("fr");
+  const [editPodcastForm, setEditPodcastForm] = useState({
+    id: "",
+    title: "",
+    titleEn: "",
+    series: "",
+    seriesEn: "",
+    duration: "",
+    author: "",
+    authorEn: "",
+    topic: "",
+    topicEn: "",
+    description: "",
+    descriptionEn: "",
+    audioUrl: "",
+    order: 0,
+    cover: "",
+    coverFile: null,
+    coverPreview: null
   });
 
   // User / Member Management States
@@ -258,14 +315,15 @@ export default function AdminPortal({ onClose }) {
   const loadAllAdminData = async () => {
     setDataLoading(true);
     try {
-      const [statsRes, articlesRes, newsRes, agendaRes, contactsRes, newsletterRes, usersRes] = await Promise.all([
+      const [statsRes, articlesRes, newsRes, agendaRes, contactsRes, newsletterRes, usersRes, podcastsRes] = await Promise.all([
         api.getAdminStats(token).catch(() => null),
         api.getAdminArticles(token, "?limit=100").catch(() => api.getArticles("?limit=50").catch(() => ({ values: [] }))),
         api.getAdminNews(token, "?limit=100").catch(() => api.getNews("?limit=50").catch(() => ({ values: [] }))),
         api.getAgendas("?limit=50").catch(() => ({ values: [] })),
         api.getAdminContacts(token, "?limit=50").catch(() => ({ data: [], values: [] })),
         api.getAdminNewsletters(token, "?limit=50").catch(() => ({ data: [], values: [] })),
-        api.getAdminUsers(token, "?limit=50").catch(() => ({ data: [], values: [] }))
+        api.getAdminUsers(token, "?limit=50").catch(() => ({ data: [], values: [] })),
+        api.getAdminPodcasts(token, "?limit=100").catch(() => api.getPodcasts("?limit=50").catch(() => ({ values: [] })))
       ]);
 
       if (statsRes) setStats(statsRes);
@@ -275,6 +333,7 @@ export default function AdminPortal({ onClose }) {
       if (contactsRes) setContacts(contactsRes.data || contactsRes.values || []);
       if (newsletterRes) setNewsletters(newsletterRes.data || newsletterRes.values || []);
       if (usersRes) setUsersList(usersRes.data || usersRes.values || []);
+      if (podcastsRes?.values) setPodcasts(podcastsRes.values);
     } catch (err) {
       console.error("Error loading admin data:", err);
     } finally {
@@ -500,6 +559,193 @@ export default function AdminPortal({ onClose }) {
         }
       });
     }
+  };
+
+  // ==========================================
+  // PODCAST ACTIONS (CRUD + STATUS TOGGLE)
+  // ==========================================
+  const handleCreatePodcast = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append("title", podcastForm.title);
+      if (podcastForm.titleEn) formData.append("titleEn", podcastForm.titleEn);
+      formData.append("series", podcastForm.series || "Les Voix de la Durabilité");
+      if (podcastForm.seriesEn) formData.append("seriesEn", podcastForm.seriesEn);
+      formData.append("duration", podcastForm.duration || "10:00");
+      formData.append("author", podcastForm.author || "Club Média Junior");
+      if (podcastForm.authorEn) formData.append("authorEn", podcastForm.authorEn);
+      formData.append("topic", podcastForm.topic || "Environnement & Climat");
+      if (podcastForm.topicEn) formData.append("topicEn", podcastForm.topicEn);
+      if (podcastForm.description) formData.append("description", podcastForm.description);
+      if (podcastForm.descriptionEn) formData.append("descriptionEn", podcastForm.descriptionEn);
+      if (podcastForm.audioUrl) formData.append("audioUrl", podcastForm.audioUrl);
+      formData.append("order", String(podcastForm.order || 0));
+      if (podcastForm.coverFile) {
+        formData.append("cover", podcastForm.coverFile);
+      } else if (podcastForm.cover) {
+        formData.append("cover", podcastForm.cover);
+      }
+
+      await api.createPodcast(token, formData);
+      setNewPodcastOpen(false);
+      setPodcastFormLangTab("fr");
+      setPodcastForm({
+        title: "",
+        titleEn: "",
+        series: "Les Voix de la Durabilité · Épisode 01",
+        seriesEn: "Voices of Sustainability · Episode 01",
+        duration: "10:00",
+        author: "Club Média Lycée Leclerc, Yaoundé",
+        authorEn: "General Leclerc High School Media Club, Yaoundé",
+        topic: "Biodiversité & Forêts Primaires",
+        topicEn: "Biodiversity & Primary Forests",
+        description: "",
+        descriptionEn: "",
+        audioUrl: "",
+        order: 0,
+        cover: "",
+        coverFile: null,
+        coverPreview: null
+      });
+      loadAllAdminData();
+    } catch (err) {
+      alert("Erreur: " + err.message);
+    }
+  };
+
+  const handleOpenViewPodcast = (item) => {
+    setSelectedPodcastItem(item);
+    setViewPodcastLangTab(isEnglish ? "en" : "fr");
+    setViewPodcastOpen(true);
+  };
+
+  const handleOpenEditPodcast = (item) => {
+    setEditPodcastLangTab("fr");
+    setEditPodcastForm({
+      id: item.id,
+      title: item.title || "",
+      titleEn: item.titleEn || "",
+      series: item.series || "",
+      seriesEn: item.seriesEn || "",
+      duration: item.duration || "",
+      author: item.author || "",
+      authorEn: item.authorEn || "",
+      topic: item.topic || "",
+      topicEn: item.topicEn || "",
+      description: item.description || "",
+      descriptionEn: item.descriptionEn || "",
+      audioUrl: item.audioUrl || "",
+      order: item.order ?? 0,
+      cover: item.cover || item.coverImage || "",
+      coverFile: null,
+      coverPreview: null
+    });
+    setEditPodcastOpen(true);
+  };
+
+  const handleUpdatePodcast = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append("title", editPodcastForm.title);
+      if (editPodcastForm.titleEn) formData.append("titleEn", editPodcastForm.titleEn);
+      formData.append("series", editPodcastForm.series || "");
+      if (editPodcastForm.seriesEn) formData.append("seriesEn", editPodcastForm.seriesEn);
+      formData.append("duration", editPodcastForm.duration || "");
+      formData.append("author", editPodcastForm.author || "");
+      if (editPodcastForm.authorEn) formData.append("authorEn", editPodcastForm.authorEn);
+      formData.append("topic", editPodcastForm.topic || "");
+      if (editPodcastForm.topicEn) formData.append("topicEn", editPodcastForm.topicEn);
+      if (editPodcastForm.description !== undefined) formData.append("description", editPodcastForm.description);
+      if (editPodcastForm.descriptionEn !== undefined) formData.append("descriptionEn", editPodcastForm.descriptionEn);
+      if (editPodcastForm.audioUrl !== undefined) formData.append("audioUrl", editPodcastForm.audioUrl);
+      formData.append("order", String(editPodcastForm.order ?? 0));
+      if (editPodcastForm.coverFile) {
+        formData.append("cover", editPodcastForm.coverFile);
+      } else if (editPodcastForm.cover) {
+        formData.append("cover", editPodcastForm.cover);
+      }
+
+      await api.updatePodcast(token, editPodcastForm.id, formData);
+      setEditPodcastOpen(false);
+      loadAllAdminData();
+    } catch (err) {
+      alert("Erreur: " + err.message);
+    }
+  };
+
+  const handleTogglePodcastStatus = (item) => {
+    const isCurrentlyActive = item.status === "active";
+    const title = item?.title ? `« ${item.title} »` : (isEnglish ? "this podcast" : "ce podcast");
+
+    if (isCurrentlyActive) {
+      setConfirmModal({
+        isOpen: true,
+        title: isEnglish ? "Deactivate Podcast?" : "Désactiver le podcast ?",
+        message: isEnglish 
+          ? `Do you want to deactivate ${title}?`
+          : `Voulez-vous désactiver le podcast ${title} ?`,
+        subMessage: isEnglish
+          ? "It will no longer appear on the public player or podcast hub. You can reactivate it at any time from this dashboard."
+          : "Il ne sera plus audible ni affiché sur le lecteur public. Vous pourrez le réactiver à tout moment depuis ce tableau de bord.",
+        confirmText: isEnglish ? "Yes, Deactivate" : "Oui, désactiver",
+        cancelText: isEnglish ? "Cancel" : "Annuler",
+        variant: "warning",
+        icon: "power",
+        isProcessing: false,
+        onConfirm: async () => {
+          await api.deactivatePodcast(token, item.id);
+          loadAllAdminData();
+        }
+      });
+    } else {
+      setConfirmModal({
+        isOpen: true,
+        title: isEnglish ? "Activate Podcast?" : "Activer le podcast ?",
+        message: isEnglish 
+          ? `Do you want to activate ${title}?`
+          : `Voulez-vous activer le podcast ${title} ?`,
+        subMessage: isEnglish
+          ? "It will immediately become playable and visible to all visitors on the public audio hub."
+          : "Il sera immédiatement visible et écoutable par tous les visiteurs sur le hub audio public.",
+        confirmText: isEnglish ? "Yes, Activate" : "Oui, activer",
+        cancelText: isEnglish ? "Cancel" : "Annuler",
+        variant: "success",
+        icon: "check",
+        isProcessing: false,
+        onConfirm: async () => {
+          await api.activatePodcast(token, item.id);
+          loadAllAdminData();
+        }
+      });
+    }
+  };
+
+  const handleDeletePodcast = (target) => {
+    const item = typeof target === "object" ? target : podcasts.find(p => p.id === target);
+    const title = item?.title ? `« ${item.title} »` : (isEnglish ? "this podcast" : "ce podcast");
+
+    setConfirmModal({
+      isOpen: true,
+      title: isEnglish ? "Delete Podcast?" : "Supprimer le podcast ?",
+      message: isEnglish 
+        ? `Are you sure you want to permanently delete ${title}?`
+        : `Voulez-vous vraiment supprimer définitivement ${title} ?`,
+      subMessage: isEnglish
+        ? "This action is irreversible. The podcast record and media links will be permanently removed from the server."
+        : "Cette action est irréversible. L'émission ainsi que ses liens médias associés seront définitivement supprimés.",
+      confirmText: isEnglish ? "Yes, Delete" : "Oui, supprimer",
+      cancelText: isEnglish ? "Cancel" : "Annuler",
+      variant: "danger",
+      icon: "trash",
+      isProcessing: false,
+      onConfirm: async () => {
+        const idToDelete = item?.id || target;
+        await api.deletePodcast(token, idToDelete);
+        loadAllAdminData();
+      }
+    });
   };
 
   // Agenda Actions
@@ -867,6 +1113,34 @@ export default function AdminPortal({ onClose }) {
   const filteredArticles = articles.filter(a => !q || a.title?.toLowerCase().includes(q) || a.category?.toLowerCase().includes(q));
   const filteredNews = news.filter(n => !q || n.title?.toLowerCase().includes(q) || n.titleEn?.toLowerCase().includes(q) || n.category?.toLowerCase().includes(q) || n.categoryEn?.toLowerCase().includes(q) || n.tags?.toLowerCase().includes(q) || n.tagsEn?.toLowerCase().includes(q));
   const filteredAgendas = agendas.filter(ag => !q || ag.title?.toLowerCase().includes(q) || ag.location?.toLowerCase().includes(q) || ag.type?.toLowerCase().includes(q));
+  const podcastTopics = [
+    "all",
+    ...new Set(
+      podcasts
+        .map((p) => (isEnglish && p.topicEn ? p.topicEn : p.topic))
+        .filter(Boolean)
+    )
+  ];
+  const filteredPodcasts = podcasts.filter((p) => {
+    const itemTopic = (isEnglish && p.topicEn) ? p.topicEn : p.topic;
+    if (podcastFilterTopic !== "all" && itemTopic !== podcastFilterTopic && p.topic !== podcastFilterTopic && p.topicEn !== podcastFilterTopic) {
+      return false;
+    }
+    if (podcastFilterStatus !== "all" && p.status !== podcastFilterStatus) {
+      return false;
+    }
+    if (!q) return true;
+    return (
+      p.title?.toLowerCase().includes(q) ||
+      p.titleEn?.toLowerCase().includes(q) ||
+      p.series?.toLowerCase().includes(q) ||
+      p.seriesEn?.toLowerCase().includes(q) ||
+      p.author?.toLowerCase().includes(q) ||
+      p.authorEn?.toLowerCase().includes(q) ||
+      p.topic?.toLowerCase().includes(q) ||
+      p.topicEn?.toLowerCase().includes(q)
+    );
+  });
   const filteredContacts = contacts.filter((c) => {
     // Type filter
     if (contactTypeFilter !== "all") {
@@ -1149,6 +1423,17 @@ export default function AdminPortal({ onClose }) {
             <span className="admin-nav-badge">{agendas.length}</span>
           </div>
 
+          <div
+            onClick={() => { setActiveTab("podcasts"); setMobileSidebarOpen(false); }}
+            className={`admin-nav-item ${activeTab === "podcasts" ? "active" : ""}`}
+          >
+            <div className="admin-nav-item-content">
+              <Headphones size={18} />
+              <span>{isEnglish ? "Podcasts & Audio" : "Podcasts & Émissions"}</span>
+            </div>
+            <span className="admin-nav-badge">{podcasts.length}</span>
+          </div>
+
           <div className="admin-sidebar-section-title" style={{ marginTop: "1.2rem" }}>
             {isEnglish ? "Engagements & Users" : "Relations & Membres"}
           </div>
@@ -1221,6 +1506,10 @@ export default function AdminPortal({ onClose }) {
                     <Plus size={16} />
                     <span>{isEnglish ? "New Session" : "Nouvelle Session"}</span>
                   </button>
+                  <button onClick={() => setNewPodcastOpen(true)} className="btn btn-outline-forest btn-sm">
+                    <Plus size={16} />
+                    <span>{isEnglish ? "New Podcast" : "Nouveau Podcast"}</span>
+                  </button>
                 </div>
               </div>
 
@@ -1283,6 +1572,18 @@ export default function AdminPortal({ onClose }) {
                   <div className="admin-kpi-sub">
                     <Users size={14} />
                     <span>{isEnglish ? "Audience reached" : "Lecteurs engagés"}</span>
+                  </div>
+                </div>
+
+                <div className="admin-kpi-card" onClick={() => setActiveTab("podcasts")} style={{ cursor: "pointer" }}>
+                  <div className="admin-kpi-top">
+                    <span className="admin-kpi-label">{isEnglish ? "Audio Hub & Podcasts" : "Podcasts & Émissions"}</span>
+                    <div className="admin-kpi-icon-wrap"><Headphones size={18} /></div>
+                  </div>
+                  <div className="admin-kpi-val">{podcasts.length}</div>
+                  <div className="admin-kpi-sub" style={{ color: "#166534" }}>
+                    <Radio size={14} />
+                    <span>{isEnglish ? "Active audio programs" : "Émissions audio publiées"}</span>
                   </div>
                 </div>
               </div>
@@ -1740,6 +2041,268 @@ export default function AdminPortal({ onClose }) {
                         <tr>
                           <td colSpan={5} style={{ textAlign: "center", color: "#6A8278", padding: "2.5rem" }}>
                             {isEnglish ? "No sessions found." : "Aucune session trouvée."}
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB: PODCASTS */}
+          {activeTab === "podcasts" && (
+            <div>
+              <div className="admin-page-header">
+                <div>
+                  <h1 className="admin-page-title">
+                    {isEnglish ? "Junior Audio Hub & Podcasts" : "Hub Audio & Podcasts Juniors"}
+                  </h1>
+                  <p className="admin-page-subtitle">
+                    {isEnglish 
+                      ? "Manage student audio reports, investigative podcasts, and community radio broadcasts."
+                      : "Gérez les émissions sonores, podcasts d'investigation et magazines des radios scolaires et communautaires."}
+                  </p>
+                </div>
+                <button onClick={() => setNewPodcastOpen(true)} className="btn btn-forest">
+                  <Plus size={18} />
+                  <span>{isEnglish ? "New Podcast" : "Nouveau Podcast"}</span>
+                </button>
+              </div>
+
+              <div className="admin-card">
+                <div className="admin-card-header" style={{ flexWrap: "wrap", gap: "1rem" }}>
+                  <div className="dedicated-search-box" style={{ maxWidth: "340px", flex: 1 }}>
+                    <Search size={16} className="search-icon" />
+                    <input
+                      type="text"
+                      placeholder={isEnglish ? "Filter podcasts by title, author, topic..." : "Filtrer les podcasts par titre, auteur, thème..."}
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="dedicated-search-input"
+                    />
+                  </div>
+
+                  <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", alignItems: "center" }}>
+                    {/* Status Filter */}
+                    <select
+                      value={podcastFilterStatus}
+                      onChange={(e) => setPodcastFilterStatus(e.target.value)}
+                      style={{
+                        padding: "0.45rem 0.85rem",
+                        borderRadius: "8px",
+                        border: "1px solid #D5E0D5",
+                        fontSize: "0.85rem",
+                        color: "#13221B",
+                        backgroundColor: "#FFFFFF"
+                      }}
+                    >
+                      <option value="all">{isEnglish ? "All statuses" : "Tous les statuts"}</option>
+                      <option value="active">{isEnglish ? "Active only" : "Actifs uniquement"}</option>
+                      <option value="suspended">{isEnglish ? "Suspended only" : "Désactivés uniquement"}</option>
+                    </select>
+
+                    {/* Topic Filter */}
+                    <select
+                      value={podcastFilterTopic}
+                      onChange={(e) => setPodcastFilterTopic(e.target.value)}
+                      style={{
+                        padding: "0.45rem 0.85rem",
+                        borderRadius: "8px",
+                        border: "1px solid #D5E0D5",
+                        fontSize: "0.85rem",
+                        color: "#13221B",
+                        backgroundColor: "#FFFFFF"
+                      }}
+                    >
+                      <option value="all">{isEnglish ? "All topics" : "Toutes les thématiques"}</option>
+                      {podcastTopics.filter(t => t !== "all").map(top => (
+                        <option key={top} value={top}>{top}</option>
+                      ))}
+                    </select>
+
+                    <span className="results-counter-pill">
+                      <strong>{filteredPodcasts.length}</strong> {isEnglish ? "podcasts listed" : "émissions listées"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="admin-table-wrap">
+                  <table className="admin-table">
+                    <thead>
+                      <tr>
+                        <th>{isEnglish ? "Podcast / Episode" : "Émission / Épisode"}</th>
+                        <th>{isEnglish ? "Series" : "Série"}</th>
+                        <th>{isEnglish ? "Topic" : "Thématique"}</th>
+                        <th>{isEnglish ? "Media Club / Author" : "Club Média / Auteur"}</th>
+                        <th>{isEnglish ? "Duration" : "Durée"}</th>
+                        <th>{isEnglish ? "Status" : "Statut"}</th>
+                        <th style={{ textAlign: "right", paddingRight: "1.5rem" }}>{isEnglish ? "Actions" : "Actions"}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredPodcasts.map((pod) => {
+                        const tableTitle = (isEnglish && pod.titleEn) ? pod.titleEn : pod.title;
+                        const tableSeries = (isEnglish && pod.seriesEn) ? pod.seriesEn : pod.series;
+                        const tableTopic = (isEnglish && pod.topicEn) ? pod.topicEn : pod.topic;
+                        const tableAuthor = (isEnglish && pod.authorEn) ? pod.authorEn : pod.author;
+                        const hasBilingual = !!(pod.title && pod.titleEn);
+                        const coverImg = getMediaUrl(pod.cover || pod.coverImage);
+
+                        return (
+                          <tr key={pod.id}>
+                            <td style={{ fontWeight: 600, color: "#13221B", maxWidth: "280px" }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                                {coverImg ? (
+                                  <img 
+                                    src={coverImg} 
+                                    alt={tableTitle} 
+                                    style={{ width: "42px", height: "42px", borderRadius: "8px", objectFit: "cover", flexShrink: 0 }} 
+                                  />
+                                ) : (
+                                  <div style={{ width: "42px", height: "42px", borderRadius: "8px", background: "#E8EFEA", display: "flex", alignItems: "center", justifyContent: "center", color: "#5A7367", flexShrink: 0 }}>
+                                    <Headphones size={18} />
+                                  </div>
+                                )}
+                                <div>
+                                  <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
+                                    <span>{tableTitle}</span>
+                                    {hasBilingual && (
+                                      <span style={{ fontSize: "0.65rem", padding: "1px 5px", borderRadius: "4px", background: "rgba(30,81,40,0.12)", color: "#1E5128", fontWeight: 700, flexShrink: 0 }}>
+                                        FR/EN
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <span style={{ fontSize: "0.85rem", color: "#5A7367", fontWeight: 500 }}>
+                                {tableSeries}
+                              </span>
+                            </td>
+                            <td>
+                              <span className="badge badge-green-light">{tableTopic}</span>
+                            </td>
+                            <td>
+                              <span style={{ fontSize: "0.85rem", color: "#5A7367" }}>{tableAuthor}</span>
+                            </td>
+                            <td>
+                              <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", color: "#5A7367", fontSize: "0.85rem" }}>
+                                <Clock size={13} />
+                                <span>{pod.duration}</span>
+                              </div>
+                            </td>
+                            <td>
+                              <span className={`badge ${pod.status === "active" ? "badge-green-light" : "badge-gold-light"}`}>
+                                {pod.status === "active" ? (isEnglish ? "Active" : "Actif") : (isEnglish ? "Suspended" : "Désactivé")}
+                              </span>
+                            </td>
+                            <td style={{ textAlign: "right", position: "relative" }}>
+                              <div className="action-menu-container">
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setActiveActionMenuId(activeActionMenuId === pod.id ? null : pod.id);
+                                  }}
+                                  className={`btn-action-more ${activeActionMenuId === pod.id ? "active" : ""}`}
+                                  aria-label={isEnglish ? "Actions menu" : "Menu d'actions"}
+                                  title={isEnglish ? "Actions" : "Options"}
+                                >
+                                  <MoreVertical size={16} />
+                                </button>
+
+                                {activeActionMenuId === pod.id && (
+                                  <div 
+                                    className="action-dropdown-menu" 
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    {/* 1. VOIR */}
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setActiveActionMenuId(null);
+                                        handleOpenViewPodcast(pod);
+                                      }}
+                                      className="action-dropdown-item"
+                                    >
+                                      <Eye size={14} style={{ color: "#2563EB" }} />
+                                      <span>{isEnglish ? "View details" : "Voir les détails"}</span>
+                                    </button>
+
+                                    {/* 2. ÉDITER */}
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setActiveActionMenuId(null);
+                                        handleOpenEditPodcast(pod);
+                                      }}
+                                      className="action-dropdown-item"
+                                    >
+                                      <Edit3 size={14} style={{ color: "#D97706" }} />
+                                      <span>{isEnglish ? "Edit podcast" : "Éditer l'émission"}</span>
+                                    </button>
+
+                                    {/* 3. DÉSACTIVER / ACTIVER */}
+                                    {pod.status === "active" ? (
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          setActiveActionMenuId(null);
+                                          handleTogglePodcastStatus(pod);
+                                        }}
+                                        className="action-dropdown-item"
+                                      >
+                                        <Power size={14} style={{ color: "#EA580C" }} />
+                                        <span>{isEnglish ? "Deactivate" : "Désactiver"}</span>
+                                      </button>
+                                    ) : (
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          setActiveActionMenuId(null);
+                                          handleTogglePodcastStatus(pod);
+                                        }}
+                                        className="action-dropdown-item"
+                                      >
+                                        <CheckCircle size={14} style={{ color: "#059669" }} />
+                                        <span>{isEnglish ? "Activate" : "Activer"}</span>
+                                      </button>
+                                    )}
+
+                                    <div className="action-dropdown-divider"></div>
+
+                                    {/* 4. SUPPRIMER */}
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setActiveActionMenuId(null);
+                                        handleDeletePodcast(pod);
+                                      }}
+                                      className="action-dropdown-item text-danger"
+                                    >
+                                      <Trash2 size={14} />
+                                      <span>{isEnglish ? "Delete" : "Supprimer"}</span>
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                      {filteredPodcasts.length === 0 && (
+                        <tr>
+                          <td colSpan={7} style={{ textAlign: "center", color: "#6A8278", padding: "3rem 1rem" }}>
+                            <Headphones size={36} style={{ color: "#9ca3af", margin: "0 auto 0.75rem", display: "block" }} />
+                            <p style={{ fontWeight: 600, color: "#111827", marginBottom: "0.25rem" }}>
+                              {isEnglish ? "No podcasts found" : "Aucun podcast trouvé"}
+                            </p>
+                            <span style={{ fontSize: "0.85rem" }}>
+                              {isEnglish ? "Try modifying your search or filters." : "Modifiez vos filtres ou créez votre premier podcast."}
+                            </span>
                           </td>
                         </tr>
                       )}
@@ -3373,6 +3936,779 @@ export default function AdminPortal({ onClose }) {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ======================================================== */}
+      {/* CREATE PODCAST MODAL */}
+      {/* ======================================================== */}
+      {newPodcastOpen && (
+        <div className="modal-overlay" onClick={() => setNewPodcastOpen(false)}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "680px" }}>
+            <button 
+              onClick={() => setNewPodcastOpen(false)} 
+              className="modal-close-btn"
+              aria-label="Fermer"
+            >
+              <X size={20} />
+            </button>
+
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.3rem" }}>
+              <div style={{ width: "36px", height: "36px", borderRadius: "8px", background: "rgba(30, 81, 40, 0.12)", color: "#1E5128", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Headphones size={20} />
+              </div>
+              <h3 style={{ fontSize: "1.5rem", fontFamily: "var(--font-serif)", fontWeight: 800, color: "#13221B", margin: 0 }}>
+                {isEnglish ? "Publish a Podcast Episode" : "Publier une Émission Audio / Podcast"}
+              </h3>
+            </div>
+            <p style={{ color: "#5A7367", fontSize: "0.88rem", marginBottom: "1.25rem" }}>
+              {isEnglish 
+                ? "Add a student vox pop, investigative report, or thematic audio broadcast in French and English." 
+                : "Ajoutez un reportage audio, micro-trottoir ou émission radiophonique junior bilingue."}
+            </p>
+
+            {/* Language Switcher Tabs */}
+            <div className="modal-lang-tabs" style={{ display: "flex", gap: "0.5rem", marginBottom: "1.25rem", borderBottom: "1px solid #E8EFEA", paddingBottom: "0.5rem" }}>
+              <button
+                type="button"
+                onClick={() => setPodcastFormLangTab("fr")}
+                className={`lang-tab-btn ${podcastFormLangTab === "fr" ? "active" : ""}`}
+                style={{
+                  padding: "0.4rem 1rem",
+                  borderRadius: "6px",
+                  border: "none",
+                  fontWeight: 600,
+                  fontSize: "0.85rem",
+                  cursor: "pointer",
+                  background: podcastFormLangTab === "fr" ? "#1E5128" : "transparent",
+                  color: podcastFormLangTab === "fr" ? "#FFFFFF" : "#5A7367"
+                }}
+              >
+                🇫🇷 Français {podcastForm.title ? "✓" : "*"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setPodcastFormLangTab("en")}
+                className={`lang-tab-btn ${podcastFormLangTab === "en" ? "active" : ""}`}
+                style={{
+                  padding: "0.4rem 1rem",
+                  borderRadius: "6px",
+                  border: "none",
+                  fontWeight: 600,
+                  fontSize: "0.85rem",
+                  cursor: "pointer",
+                  background: podcastFormLangTab === "en" ? "#1E5128" : "transparent",
+                  color: podcastFormLangTab === "en" ? "#FFFFFF" : "#5A7367"
+                }}
+              >
+                🇬🇧 English {podcastForm.titleEn ? "✓" : ""}
+              </button>
+            </div>
+
+            <form onSubmit={handleCreatePodcast}>
+              {podcastFormLangTab === "fr" ? (
+                <>
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>
+                      Titre de l'émission (Français) *
+                    </label>
+                    <input 
+                      type="text" 
+                      required 
+                      className="form-control" 
+                      value={podcastForm.title} 
+                      onChange={(e) => setPodcastForm({ ...podcastForm, title: e.target.value })} 
+                      placeholder="ex: Les gardiens silencieux du Bassin du Congo"
+                    />
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>
+                        Série / Rubrique (Français)
+                      </label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={podcastForm.series} 
+                        onChange={(e) => setPodcastForm({ ...podcastForm, series: e.target.value })} 
+                        placeholder="ex: Les Voix de la Durabilité · Épisode 01"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>
+                        Thématique (Français)
+                      </label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={podcastForm.topic} 
+                        onChange={(e) => setPodcastForm({ ...podcastForm, topic: e.target.value })} 
+                        placeholder="ex: Biodiversité & Forêts Primaires"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>
+                      Club Média / Auteur (Français)
+                    </label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={podcastForm.author} 
+                      onChange={(e) => setPodcastForm({ ...podcastForm, author: e.target.value })} 
+                      placeholder="ex: Club Média Lycée Leclerc, Yaoundé"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>
+                      Description & Résumé (Français)
+                    </label>
+                    <textarea 
+                      className="form-control" 
+                      rows={3}
+                      value={podcastForm.description} 
+                      onChange={(e) => setPodcastForm({ ...podcastForm, description: e.target.value })} 
+                      placeholder="Une immersion sonore au cœur de la forêt équatoriale..."
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>
+                      Episode Title (English)
+                    </label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={podcastForm.titleEn} 
+                      onChange={(e) => setPodcastForm({ ...podcastForm, titleEn: e.target.value })} 
+                      placeholder="e.g. The Silent Guardians of the Congo Basin"
+                    />
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>
+                        Series / Show (English)
+                      </label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={podcastForm.seriesEn} 
+                        onChange={(e) => setPodcastForm({ ...podcastForm, seriesEn: e.target.value })} 
+                        placeholder="e.g. Voices of Sustainability · Episode 01"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>
+                        Topic / Category (English)
+                      </label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={podcastForm.topicEn} 
+                        onChange={(e) => setPodcastForm({ ...podcastForm, topicEn: e.target.value })} 
+                        placeholder="e.g. Biodiversity & Primary Forests"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>
+                      Media Club / Author (English)
+                    </label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={podcastForm.authorEn} 
+                      onChange={(e) => setPodcastForm({ ...podcastForm, authorEn: e.target.value })} 
+                      placeholder="e.g. General Leclerc High School Media Club, Yaoundé"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>
+                      Audio Summary & Description (English)
+                    </label>
+                    <textarea 
+                      className="form-control" 
+                      rows={3}
+                      value={podcastForm.descriptionEn} 
+                      onChange={(e) => setPodcastForm({ ...podcastForm, descriptionEn: e.target.value })} 
+                      placeholder="A sonic immersion in the heart of the equatorial forest..."
+                    />
+                  </div>
+                </>
+              )}
+
+              {/* Common Technical Parameters */}
+              <div style={{ background: "#F7FAF8", padding: "1rem", borderRadius: "10px", marginTop: "1rem", marginBottom: "1rem", border: "1px solid #E8EFEA" }}>
+                <span style={{ fontSize: "0.8rem", fontWeight: 700, color: "#1E5128", textTransform: "uppercase", letterSpacing: "0.05em", display: "block", marginBottom: "0.75rem" }}>
+                  {isEnglish ? "Audio File & Media Settings" : "Paramètres Audio & Médias"}
+                </span>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                  <div className="form-group" style={{ marginBottom: "0.75rem" }}>
+                    <label className="form-label" style={{ color: "#13221B", fontSize: "0.85rem" }}>
+                      {isEnglish ? "Duration (MM:SS)" : "Durée (ex: 08:45)"}
+                    </label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={podcastForm.duration} 
+                      onChange={(e) => setPodcastForm({ ...podcastForm, duration: e.target.value })} 
+                      placeholder="10:00"
+                    />
+                  </div>
+
+                  <div className="form-group" style={{ marginBottom: "0.75rem" }}>
+                    <label className="form-label" style={{ color: "#13221B", fontSize: "0.85rem" }}>
+                      {isEnglish ? "Display Order" : "Ordre de priorité"}
+                    </label>
+                    <input 
+                      type="number" 
+                      className="form-control" 
+                      value={podcastForm.order} 
+                      onChange={(e) => setPodcastForm({ ...podcastForm, order: parseInt(e.target.value, 10) || 0 })} 
+                      placeholder="1"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group" style={{ marginBottom: "0.75rem" }}>
+                  <label className="form-label" style={{ color: "#13221B", fontSize: "0.85rem" }}>
+                    {isEnglish ? "Direct Audio URL (MP3 / OGG / Streaming Link)" : "URL du flux audio (MP3 / OGG / Lien direct)"}
+                  </label>
+                  <input 
+                    type="url" 
+                    className="form-control" 
+                    value={podcastForm.audioUrl} 
+                    onChange={(e) => setPodcastForm({ ...podcastForm, audioUrl: e.target.value })} 
+                    placeholder="https://actions.google.com/sounds/v1/nature/forest_birds_singing.ogg"
+                  />
+                </div>
+
+                <div className="form-group" style={{ marginBottom: 0 }}>
+                  <label className="form-label" style={{ color: "#13221B", fontSize: "0.85rem" }}>
+                    {isEnglish ? "Cover Artwork (Upload File or URL)" : "Illustration de couverture (Fichier ou URL)"}
+                  </label>
+                  <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          setPodcastForm({
+                            ...podcastForm,
+                            coverFile: file,
+                            coverPreview: URL.createObjectURL(file)
+                          });
+                        }
+                      }}
+                      className="form-control" 
+                      style={{ flex: 1 }}
+                    />
+                    <input 
+                      type="text" 
+                      placeholder={isEnglish ? "Or image URL..." : "Ou URL directe..."}
+                      value={podcastForm.cover} 
+                      onChange={(e) => setPodcastForm({ ...podcastForm, cover: e.target.value })} 
+                      className="form-control" 
+                      style={{ flex: 1 }}
+                    />
+                  </div>
+
+                  {(podcastForm.coverPreview || podcastForm.cover) && (
+                    <div style={{ marginTop: "0.5rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                      <img 
+                        src={podcastForm.coverPreview || getMediaUrl(podcastForm.cover)} 
+                        alt="Preview" 
+                        style={{ width: "48px", height: "48px", borderRadius: "8px", objectFit: "cover" }} 
+                      />
+                      <span style={{ fontSize: "0.8rem", color: "#1E5128" }}>✓ {isEnglish ? "Cover ready" : "Aperçu de la pochette"}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="modal-actions" style={{ display: "flex", justifyContent: "flex-end", gap: "0.75rem", marginTop: "1.5rem" }}>
+                <button 
+                  type="button" 
+                  onClick={() => setNewPodcastOpen(false)} 
+                  className="btn btn-outline"
+                >
+                  {isEnglish ? "Cancel" : "Annuler"}
+                </button>
+                <button type="submit" className="btn btn-forest">
+                  <Headphones size={16} />
+                  <span>{isEnglish ? "Publish Podcast" : "Publier l'émission"}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ======================================================== */}
+      {/* EDIT PODCAST MODAL */}
+      {/* ======================================================== */}
+      {editPodcastOpen && (
+        <div className="modal-overlay" onClick={() => setEditPodcastOpen(false)}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "680px" }}>
+            <button 
+              onClick={() => setEditPodcastOpen(false)} 
+              className="modal-close-btn"
+              aria-label="Fermer"
+            >
+              <X size={20} />
+            </button>
+
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.3rem" }}>
+              <div style={{ width: "36px", height: "36px", borderRadius: "8px", background: "rgba(217, 119, 6, 0.12)", color: "#D97706", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Edit3 size={20} />
+              </div>
+              <h3 style={{ fontSize: "1.5rem", fontFamily: "var(--font-serif)", fontWeight: 800, color: "#13221B", margin: 0 }}>
+                {isEnglish ? "Edit Podcast Episode" : "Modifier l'Émission Audio"}
+              </h3>
+            </div>
+            <p style={{ color: "#5A7367", fontSize: "0.88rem", marginBottom: "1.25rem" }}>
+              {isEnglish 
+                ? "Update episode titles, media links, and bilingual descriptions." 
+                : "Mettez à jour les informations, fichiers médias et descriptions bilingues."}
+            </p>
+
+            {/* Language Switcher Tabs */}
+            <div className="modal-lang-tabs" style={{ display: "flex", gap: "0.5rem", marginBottom: "1.25rem", borderBottom: "1px solid #E8EFEA", paddingBottom: "0.5rem" }}>
+              <button
+                type="button"
+                onClick={() => setEditPodcastLangTab("fr")}
+                className={`lang-tab-btn ${editPodcastLangTab === "fr" ? "active" : ""}`}
+                style={{
+                  padding: "0.4rem 1rem",
+                  borderRadius: "6px",
+                  border: "none",
+                  fontWeight: 600,
+                  fontSize: "0.85rem",
+                  cursor: "pointer",
+                  background: editPodcastLangTab === "fr" ? "#1E5128" : "transparent",
+                  color: editPodcastLangTab === "fr" ? "#FFFFFF" : "#5A7367"
+                }}
+              >
+                🇫🇷 Français {editPodcastForm.title ? "✓" : "*"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setEditPodcastLangTab("en")}
+                className={`lang-tab-btn ${editPodcastLangTab === "en" ? "active" : ""}`}
+                style={{
+                  padding: "0.4rem 1rem",
+                  borderRadius: "6px",
+                  border: "none",
+                  fontWeight: 600,
+                  fontSize: "0.85rem",
+                  cursor: "pointer",
+                  background: editPodcastLangTab === "en" ? "#1E5128" : "transparent",
+                  color: editPodcastLangTab === "en" ? "#FFFFFF" : "#5A7367"
+                }}
+              >
+                🇬🇧 English {editPodcastForm.titleEn ? "✓" : ""}
+              </button>
+            </div>
+
+            <form onSubmit={handleUpdatePodcast}>
+              {editPodcastLangTab === "fr" ? (
+                <>
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>
+                      Titre de l'émission (Français) *
+                    </label>
+                    <input 
+                      type="text" 
+                      required 
+                      className="form-control" 
+                      value={editPodcastForm.title} 
+                      onChange={(e) => setEditPodcastForm({ ...editPodcastForm, title: e.target.value })} 
+                    />
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>
+                        Série / Rubrique (Français)
+                      </label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={editPodcastForm.series} 
+                        onChange={(e) => setEditPodcastForm({ ...editPodcastForm, series: e.target.value })} 
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>
+                        Thématique (Français)
+                      </label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={editPodcastForm.topic} 
+                        onChange={(e) => setEditPodcastForm({ ...editPodcastForm, topic: e.target.value })} 
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>
+                      Club Média / Auteur (Français)
+                    </label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={editPodcastForm.author} 
+                      onChange={(e) => setEditPodcastForm({ ...editPodcastForm, author: e.target.value })} 
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>
+                      Description & Résumé (Français)
+                    </label>
+                    <textarea 
+                      className="form-control" 
+                      rows={3}
+                      value={editPodcastForm.description} 
+                      onChange={(e) => setEditPodcastForm({ ...editPodcastForm, description: e.target.value })} 
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>
+                      Episode Title (English)
+                    </label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={editPodcastForm.titleEn} 
+                      onChange={(e) => setEditPodcastForm({ ...editPodcastForm, titleEn: e.target.value })} 
+                    />
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>
+                        Series / Show (English)
+                      </label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={editPodcastForm.seriesEn} 
+                        onChange={(e) => setEditPodcastForm({ ...editPodcastForm, seriesEn: e.target.value })} 
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>
+                        Topic / Category (English)
+                      </label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={editPodcastForm.topicEn} 
+                        onChange={(e) => setEditPodcastForm({ ...editPodcastForm, topicEn: e.target.value })} 
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>
+                      Media Club / Author (English)
+                    </label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={editPodcastForm.authorEn} 
+                      onChange={(e) => setEditPodcastForm({ ...editPodcastForm, authorEn: e.target.value })} 
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>
+                      Audio Summary & Description (English)
+                    </label>
+                    <textarea 
+                      className="form-control" 
+                      rows={3}
+                      value={editPodcastForm.descriptionEn} 
+                      onChange={(e) => setEditPodcastForm({ ...editPodcastForm, descriptionEn: e.target.value })} 
+                    />
+                  </div>
+                </>
+              )}
+
+              {/* Common Technical Parameters */}
+              <div style={{ background: "#F7FAF8", padding: "1rem", borderRadius: "10px", marginTop: "1rem", marginBottom: "1rem", border: "1px solid #E8EFEA" }}>
+                <span style={{ fontSize: "0.8rem", fontWeight: 700, color: "#1E5128", textTransform: "uppercase", letterSpacing: "0.05em", display: "block", marginBottom: "0.75rem" }}>
+                  {isEnglish ? "Audio File & Media Settings" : "Paramètres Audio & Médias"}
+                </span>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                  <div className="form-group" style={{ marginBottom: "0.75rem" }}>
+                    <label className="form-label" style={{ color: "#13221B", fontSize: "0.85rem" }}>
+                      {isEnglish ? "Duration (MM:SS)" : "Durée (ex: 08:45)"}
+                    </label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={editPodcastForm.duration} 
+                      onChange={(e) => setEditPodcastForm({ ...editPodcastForm, duration: e.target.value })} 
+                    />
+                  </div>
+
+                  <div className="form-group" style={{ marginBottom: "0.75rem" }}>
+                    <label className="form-label" style={{ color: "#13221B", fontSize: "0.85rem" }}>
+                      {isEnglish ? "Display Order" : "Ordre de priorité"}
+                    </label>
+                    <input 
+                      type="number" 
+                      className="form-control" 
+                      value={editPodcastForm.order} 
+                      onChange={(e) => setEditPodcastForm({ ...editPodcastForm, order: parseInt(e.target.value, 10) || 0 })} 
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group" style={{ marginBottom: "0.75rem" }}>
+                  <label className="form-label" style={{ color: "#13221B", fontSize: "0.85rem" }}>
+                    {isEnglish ? "Direct Audio URL (MP3 / OGG / Streaming Link)" : "URL du flux audio (MP3 / OGG / Lien direct)"}
+                  </label>
+                  <input 
+                    type="url" 
+                    className="form-control" 
+                    value={editPodcastForm.audioUrl} 
+                    onChange={(e) => setEditPodcastForm({ ...editPodcastForm, audioUrl: e.target.value })} 
+                  />
+                </div>
+
+                <div className="form-group" style={{ marginBottom: 0 }}>
+                  <label className="form-label" style={{ color: "#13221B", fontSize: "0.85rem" }}>
+                    {isEnglish ? "Cover Artwork (Upload File or URL)" : "Illustration de couverture (Fichier ou URL)"}
+                  </label>
+                  <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          setEditPodcastForm({
+                            ...editPodcastForm,
+                            coverFile: file,
+                            coverPreview: URL.createObjectURL(file)
+                          });
+                        }
+                      }}
+                      className="form-control" 
+                      style={{ flex: 1 }}
+                    />
+                    <input 
+                      type="text" 
+                      placeholder={isEnglish ? "Or image URL..." : "Ou URL directe..."}
+                      value={editPodcastForm.cover} 
+                      onChange={(e) => setEditPodcastForm({ ...editPodcastForm, cover: e.target.value })} 
+                      className="form-control" 
+                      style={{ flex: 1 }}
+                    />
+                  </div>
+
+                  {(editPodcastForm.coverPreview || editPodcastForm.cover) && (
+                    <div style={{ marginTop: "0.5rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                      <img 
+                        src={editPodcastForm.coverPreview || getMediaUrl(editPodcastForm.cover)} 
+                        alt="Preview" 
+                        style={{ width: "48px", height: "48px", borderRadius: "8px", objectFit: "cover" }} 
+                      />
+                      <span style={{ fontSize: "0.8rem", color: "#1E5128" }}>✓ {isEnglish ? "Cover selected" : "Pochette active"}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="modal-actions" style={{ display: "flex", justifyContent: "flex-end", gap: "0.75rem", marginTop: "1.5rem" }}>
+                <button 
+                  type="button" 
+                  onClick={() => setEditPodcastOpen(false)} 
+                  className="btn btn-outline"
+                >
+                  {isEnglish ? "Cancel" : "Annuler"}
+                </button>
+                <button type="submit" className="btn btn-forest">
+                  <Check size={16} />
+                  <span>{isEnglish ? "Save Changes" : "Enregistrer les modifications"}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ======================================================== */}
+      {/* VIEW PODCAST DETAILS MODAL */}
+      {/* ======================================================== */}
+      {viewPodcastOpen && selectedPodcastItem && (
+        <div className="modal-overlay" onClick={() => setViewPodcastOpen(false)}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "680px" }}>
+            <button 
+              onClick={() => setViewPodcastOpen(false)} 
+              className="modal-close-btn"
+              aria-label="Fermer"
+            >
+              <X size={20} />
+            </button>
+
+            {/* Media Player Showcase Preview */}
+            <div style={{
+              display: "flex",
+              gap: "1.25rem",
+              background: "linear-gradient(135deg, #13221B 0%, #1E5128 100%)",
+              borderRadius: "14px",
+              padding: "1.25rem",
+              color: "#ffffff",
+              marginBottom: "1.5rem"
+            }}>
+              <img 
+                src={getMediaUrl(selectedPodcastItem.cover || selectedPodcastItem.coverImage)} 
+                alt={selectedPodcastItem.title} 
+                style={{ width: "110px", height: "110px", borderRadius: "10px", objectFit: "cover", flexShrink: 0, boxShadow: "0 8px 16px rgba(0,0,0,0.3)" }} 
+              />
+              <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                <div>
+                  <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", alignItems: "center", marginBottom: "0.35rem" }}>
+                    <span className="badge badge-green-light" style={{ fontSize: "0.72rem" }}>
+                      {viewPodcastLangTab === "en" ? (selectedPodcastItem.topicEn || selectedPodcastItem.topic) : selectedPodcastItem.topic}
+                    </span>
+                    <span style={{ fontSize: "0.75rem", color: "#A3D9B1" }}>
+                      {selectedPodcastItem.duration}
+                    </span>
+                    <span className={`badge ${selectedPodcastItem.status === "active" ? "badge-green-light" : "badge-gold-light"}`} style={{ fontSize: "0.7rem" }}>
+                      {selectedPodcastItem.status === "active" ? (isEnglish ? "Active" : "Actif") : (isEnglish ? "Suspended" : "Désactivé")}
+                    </span>
+                  </div>
+
+                  <h4 style={{ fontSize: "1.15rem", fontWeight: 700, margin: "0 0 0.25rem 0", color: "#FFFFFF", lineHeight: 1.3 }}>
+                    {viewPodcastLangTab === "en" ? (selectedPodcastItem.titleEn || selectedPodcastItem.title) : selectedPodcastItem.title}
+                  </h4>
+                  <p style={{ fontSize: "0.82rem", color: "#D5E0D5", margin: 0 }}>
+                    {viewPodcastLangTab === "en" ? (selectedPodcastItem.seriesEn || selectedPodcastItem.series) : selectedPodcastItem.series} · <em>{viewPodcastLangTab === "en" ? (selectedPodcastItem.authorEn || selectedPodcastItem.author) : selectedPodcastItem.author}</em>
+                  </p>
+                </div>
+
+                {selectedPodcastItem.audioUrl && (
+                  <audio 
+                    controls 
+                    src={selectedPodcastItem.audioUrl} 
+                    style={{ width: "100%", height: "36px", marginTop: "0.75rem" }} 
+                  />
+                )}
+              </div>
+            </div>
+
+            {/* Language Switcher Tabs */}
+            <div className="modal-lang-tabs" style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem", borderBottom: "1px solid #E8EFEA", paddingBottom: "0.5rem" }}>
+              <button
+                type="button"
+                onClick={() => setViewPodcastLangTab("fr")}
+                className={`lang-tab-btn ${viewPodcastLangTab === "fr" ? "active" : ""}`}
+                style={{
+                  padding: "0.35rem 0.85rem",
+                  borderRadius: "6px",
+                  border: "none",
+                  fontWeight: 600,
+                  fontSize: "0.8rem",
+                  cursor: "pointer",
+                  background: viewPodcastLangTab === "fr" ? "#1E5128" : "transparent",
+                  color: viewPodcastLangTab === "fr" ? "#FFFFFF" : "#5A7367"
+                }}
+              >
+                🇫🇷 Vue Français
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewPodcastLangTab("en")}
+                className={`lang-tab-btn ${viewPodcastLangTab === "en" ? "active" : ""}`}
+                style={{
+                  padding: "0.35rem 0.85rem",
+                  borderRadius: "6px",
+                  border: "none",
+                  fontWeight: 600,
+                  fontSize: "0.8rem",
+                  cursor: "pointer",
+                  background: viewPodcastLangTab === "en" ? "#1E5128" : "transparent",
+                  color: viewPodcastLangTab === "en" ? "#FFFFFF" : "#5A7367"
+                }}
+              >
+                🇬🇧 English View
+              </button>
+            </div>
+
+            <div style={{ background: "#F7FAF8", padding: "1rem", borderRadius: "10px", marginBottom: "1.5rem" }}>
+              <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5A7367", textTransform: "uppercase", display: "block", marginBottom: "0.5rem" }}>
+                {isEnglish ? "Episode Synopsis & Notes" : "Synopsis & Note d'intention"}
+              </span>
+              <p style={{ fontSize: "0.9rem", color: "#13221B", lineHeight: 1.6, margin: 0 }}>
+                {viewPodcastLangTab === "en" 
+                  ? (selectedPodcastItem.descriptionEn || selectedPodcastItem.description || "No English description provided.") 
+                  : (selectedPodcastItem.description || "Aucune description fournie.")}
+              </p>
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.75rem", flexWrap: "wrap", paddingTop: "0.5rem", borderTop: "1px solid #E8EFEA" }}>
+              <div style={{ display: "flex", gap: "0.5rem" }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setViewPodcastOpen(false);
+                    handleOpenEditPodcast(selectedPodcastItem);
+                  }}
+                  className="btn btn-outline btn-sm"
+                  style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}
+                >
+                  <Edit3 size={14} />
+                  <span>{isEnglish ? "Edit" : "Modifier"}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setViewPodcastOpen(false);
+                    handleTogglePodcastStatus(selectedPodcastItem);
+                  }}
+                  className="btn btn-outline btn-sm"
+                  style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}
+                >
+                  <Power size={14} />
+                  <span>{selectedPodcastItem.status === "active" ? (isEnglish ? "Deactivate" : "Désactiver") : (isEnglish ? "Activate" : "Activer")}</span>
+                </button>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setViewPodcastOpen(false);
+                  handleDeletePodcast(selectedPodcastItem);
+                }}
+                className="btn btn-action-delete"
+                style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}
+              >
+                <Trash2 size={14} />
+                <span>{isEnglish ? "Delete" : "Supprimer"}</span>
+              </button>
+            </div>
           </div>
         </div>
       )}

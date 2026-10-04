@@ -3,7 +3,16 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 export const getMediaUrl = (pathOrUrl) => {
   if (!pathOrUrl) return "";
-  if (pathOrUrl.startsWith("http://") || pathOrUrl.startsWith("https://") || pathOrUrl.startsWith("data:")) {
+  if (
+    pathOrUrl.startsWith("http://") || 
+    pathOrUrl.startsWith("https://") || 
+    pathOrUrl.startsWith("data:") ||
+    pathOrUrl.startsWith("blob:")
+  ) {
+    return pathOrUrl;
+  }
+  // Local static audio in frontend public folder
+  if (pathOrUrl.startsWith("/audio/")) {
     return pathOrUrl;
   }
   const cleanBase = API_BASE_URL.replace(/\/$/, "");
@@ -51,6 +60,8 @@ export const api = {
   getAgendaDetails: (idOrSlug) => request(`/agenda/${idOrSlug}`),
   getMissions: () => request("/missions"),
   getMembers: () => request("/members"),
+  getPodcasts: (params = "") => request(`/podcasts${params}`),
+  getPodcastDetails: (idOrSlug) => request(`/podcasts/${idOrSlug}`),
   
   // Interactions
   submitContact: (payload) => request("/contact", {
@@ -174,6 +185,46 @@ export const api = {
   getAdminNewsletters: (token, params = "") => request(`/admin/newsletter${params}`, { token }),
   deleteNewsletter: (token, id) => request(`/admin/newsletter/${id}`, {
     method: "DELETE",
+    token,
+  }),
+
+  // Admin Podcasts
+  getAdminPodcasts: (token, params = "") => request(`/admin/podcasts${params}`, { token }),
+  createPodcast: (token, payload) => {
+    const isFormData = typeof FormData !== "undefined" && payload instanceof FormData;
+    return request("/admin/podcasts", {
+      method: "POST",
+      token,
+      body: isFormData ? payload : JSON.stringify(payload),
+    });
+  },
+  updatePodcast: (token, id, payload) => {
+    const isFormData = typeof FormData !== "undefined" && payload instanceof FormData;
+    return request(`/admin/podcasts/${id}`, {
+      method: "PUT",
+      token,
+      body: isFormData ? payload : JSON.stringify(payload),
+    });
+  },
+  deletePodcast: (token, id) => request(`/admin/podcasts/${id}`, {
+    method: "DELETE",
+    token,
+  }),
+  getAdminPodcastDetails: (token, id) => request(`/admin/podcasts/${id}`, { token }),
+  suspendPodcast: (token, id) => request(`/admin/podcasts/${id}/suspend`, {
+    method: "PATCH",
+    token,
+  }),
+  reactivatePodcast: (token, id) => request(`/admin/podcasts/${id}/reactivate`, {
+    method: "PATCH",
+    token,
+  }),
+  deactivatePodcast: (token, id) => request(`/admin/podcasts/${id}/deactivate`, {
+    method: "PATCH",
+    token,
+  }),
+  activatePodcast: (token, id) => request(`/admin/podcasts/${id}/activate`, {
+    method: "PATCH",
     token,
   }),
 
