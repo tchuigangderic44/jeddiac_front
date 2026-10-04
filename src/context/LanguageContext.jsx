@@ -27,6 +27,19 @@ export const translations = {
     axesKeyObjective: "Objectif Clé :",
     axesJoinBtn: "Participer à cet axe",
 
+    // Territories (Ancrage Géographique & Écosystèmes)
+    territoriesKicker: "Ancrage Géographique & Écosystèmes",
+    territoriesTitle: "Territoires d'Intervention &",
+    territoriesTitleHighlight: "Bassin du Congo",
+    territoriesSubtitle: "Du cœur de la forêt tropicale aux rives des fleuves et zones sahéliennes, JEDDIAC connecte les jeunes voix de 6 pays d'Afrique Centrale.",
+    territoryPilotTag: "Pilote",
+    territoryCoverageLabel: "Couverture Territoriale",
+    territoryYouthLabel: "Jeunesse Cible",
+    territoryFocusLabel: "Priorités Écologiques :",
+    territoryHubsLabel: "Pôles & Hubs Relais :",
+    territoryJoinBtn: "Rejoindre le pôle",
+    territoryPhotoCaption: "Écosystème préservé ·",
+
     // Hero Section
     heroKickerTag: "Programme Régional Pilote · 2026–2027",
     heroKickerBadge: "Bassin du Congo",
@@ -180,6 +193,19 @@ export const translations = {
     axesSubtitle: "A comprehensive and structured approach guiding every youth from climate literacy to professional media production.",
     axesKeyObjective: "Key Objective :",
     axesJoinBtn: "Join this pillar",
+
+    // Territories (Geographical Footprint & Ecosystems)
+    territoriesKicker: "Geographical Footprint & Ecosystems",
+    territoriesTitle: "Target Territories &",
+    territoriesTitleHighlight: "Congo Basin",
+    territoriesSubtitle: "From the heart of the tropical rainforest to riverbanks and Sahelian zones, JEDDIAC connects youth voices across 6 Central African nations.",
+    territoryPilotTag: "Pilot",
+    territoryCoverageLabel: "Territorial Coverage",
+    territoryYouthLabel: "Target Youth",
+    territoryFocusLabel: "Ecological Priorities :",
+    territoryHubsLabel: "Regional Hubs & Outposts :",
+    territoryJoinBtn: "Join the hub of",
+    territoryPhotoCaption: "Preserved Ecosystem ·",
 
     // Hero Section
     heroKickerTag: "Pilot Regional Program · 2026–2027",
