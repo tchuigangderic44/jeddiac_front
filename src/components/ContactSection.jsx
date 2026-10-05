@@ -25,7 +25,7 @@ export default function ContactSection() {
     try {
       await api.submitContact({
         ...formData,
-        type: formData.subject.toLowerCase().includes("candidature") ? "candidature" : "contact",
+        type: "contact",
         category: formData.subject.toLowerCase().includes("partenariat") 
           ? "partenariat" 
           : formData.subject.toLowerCase().includes("mentorat") 
@@ -178,7 +178,7 @@ export default function ContactSection() {
                     <input
                       type="text"
                       required
-                      placeholder={isEnglish ? "e.g. Samuel Eto'o" : "Ex: Samuel Eto'o"}
+                      placeholder={isEnglish ? "e.g. Samuel Lobe" : "Ex: Samuel Lobe"}
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       className="form-control-input"
@@ -220,8 +220,8 @@ export default function ContactSection() {
                       <option value="Demande d'information générale">
                         {isEnglish ? "General Information" : "Information générale"}
                       </option>
-                      <option value="Candidature d'un Club Média Scolaire">
-                        {isEnglish ? "School Media Club Application" : "Candidature d'un club scolaire"}
+                      <option value="Renseignement pour Club Média Scolaire">
+                        {isEnglish ? "School Media Club Inquiry" : "Renseignement pour club scolaire"}
                       </option>
                       <option value="Partenariat Radio Communautaire">
                         {isEnglish ? "Community Radio Partnership" : "Partenariat radio communautaire"}

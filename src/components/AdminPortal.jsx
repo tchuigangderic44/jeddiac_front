@@ -913,6 +913,25 @@ export default function AdminPortal({ onClose }) {
     }
   };
 
+  const handleMarkContactProcessed = async (contactId, nextStatus = "processed") => {
+    if (!contactId || isValidatingContact) return;
+    setIsValidatingContact(true);
+    try {
+      const res = await api.updateContactStatus(token, contactId, { status: nextStatus, isRead: true });
+      const updated = res.data || res;
+      setContacts((prev) =>
+        prev.map((item) => (item.id === contactId ? { ...item, ...updated, status: nextStatus, isRead: true } : item))
+      );
+      if (selectedContactItem && selectedContactItem.id === contactId) {
+        setSelectedContactItem((prev) => ({ ...prev, ...updated, status: nextStatus, isRead: true }));
+      }
+    } catch (err) {
+      alert(isEnglish ? "Error updating contact: " + err.message : "Erreur lors de la mise à jour: " + err.message);
+    } finally {
+      setIsValidatingContact(false);
+    }
+  };
+
   const handleSaveContactNotes = async (contactId) => {
     if (!contactId) return;
     setIsSavingContactNotes(true);
@@ -974,15 +993,16 @@ export default function AdminPortal({ onClose }) {
   };
 
   const getContactStatusBadge = (c) => {
+    const isCandidature = c.type === "candidature";
     const status = c.status || (c.isRead ? "read" : "new");
-    if (status === "validated") {
+    if (status === "validated" || status === "processed") {
       return (
         <span className="badge badge-green-light" style={{ fontWeight: 700, fontSize: "0.74rem" }}>
-          ✓ {isEnglish ? "Validated" : "Validé"}
+          ✓ {isCandidature ? (isEnglish ? "Validated" : "Validé") : (isEnglish ? "Processed" : "Traité")}
         </span>
       );
     }
-    if (status === "new" || (!c.isRead && status !== "validated")) {
+    if (status === "new" || (!c.isRead && status !== "validated" && status !== "processed")) {
       return (
         <span className="badge badge-gold-light" style={{ fontWeight: 700, fontSize: "0.74rem" }}>
           ● {isEnglish ? "New" : "Nouveau"}
@@ -991,7 +1011,7 @@ export default function AdminPortal({ onClose }) {
     }
     return (
       <span className="badge badge-forest-light" style={{ fontWeight: 700, fontSize: "0.74rem" }}>
-        {isEnglish ? "Processed" : "Traité"}
+        {isEnglish ? "Read" : "Lu"}
       </span>
     );
   };
@@ -1248,7 +1268,7 @@ export default function AdminPortal({ onClose }) {
     if (contactStatusFilter !== "all") {
       const effStatus = c.status || (c.isRead ? "read" : "new");
       if (contactStatusFilter === "new" && (effStatus !== "new" && c.isRead)) return false;
-      if (contactStatusFilter === "validated" && effStatus !== "validated") return false;
+      if (contactStatusFilter === "validated" && effStatus !== "validated" && effStatus !== "processed") return false;
     }
     if (!q) return true;
     return (
@@ -1658,17 +1678,24 @@ export default function AdminPortal({ onClose }) {
                 </div>
               </div>
 
-              {/* Quick Table: Recent Inquiries */}
+              {/* Quick Table: Recent Inquiries & Applications */}
               <div className="admin-card">
                 <div className="admin-card-header">
-                  <h3 className="admin-card-title">
-                    {isEnglish ? "Recent Inquiries & Program Applications" : "Dernières Candidatures & Prises de Contact"}
-                  </h3>
+                  <div>
+                    <h3 className="admin-card-title">
+                      {isEnglish ? "Recent Inquiries & Program Applications" : "Dernières Candidatures & Prises de Contact"}
+                    </h3>
+                    <p style={{ margin: "0.2rem 0 0 0", fontSize: "0.82rem", color: "#6A8278" }}>
+                      {isEnglish
+                        ? "Latest incoming submissions from youth media candidates and direct public inquiries."
+                        : "Derniers flux reçus : candidatures au réseau des jeunes médias et prises de contact direct."}
+                    </p>
+                  </div>
                   <button 
                     onClick={() => setActiveTab("contacts")} 
                     className="btn btn-outline-forest btn-sm"
                   >
-                    <span>{isEnglish ? "View all messages" : "Voir tous les messages"}</span>
+                    <span>{isEnglish ? "View all submissions" : "Voir tous les messages"}</span>
                     <ChevronRight size={14} />
                   </button>
                 </div>
@@ -1677,43 +1704,171 @@ export default function AdminPortal({ onClose }) {
                   <table className="admin-table">
                     <thead>
                       <tr>
-                        <th>{isEnglish ? "Date" : "Date"}</th>
-                        <th>{isEnglish ? "Applicant" : "Expéditeur"}</th>
-                        <th>{isEnglish ? "Contact" : "Email & Tél"}</th>
-                        <th>{isEnglish ? "Subject" : "Objet"}</th>
+                        <th>{isEnglish ? "Type & Date" : "Type & Date"}</th>
+                        <th>{isEnglish ? "Applicant / Sender" : "Candidat / Expéditeur"}</th>
+                        <th>{isEnglish ? "Structure & Territory" : "Structure & Territoire"}</th>
+                        <th>{isEnglish ? "Subject & Message" : "Objet & Message"}</th>
                         <th>{isEnglish ? "Status" : "Statut"}</th>
-                        <th>{isEnglish ? "Actions" : "Actions"}</th>
+                        <th style={{ textAlign: "right", paddingRight: "1.25rem" }}>{isEnglish ? "Actions" : "Actions"}</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {contacts.slice(0, 5).map((c) => (
-                        <tr key={c.id}>
-                          <td>{new Date(c.createdAt).toLocaleDateString(isEnglish ? "en-US" : "fr-FR")}</td>
-                          <td style={{ fontWeight: 600, color: "#13221B" }}>{c.name}</td>
-                          <td>{c.email} {c.phone ? `(${c.phone})` : ""}</td>
-                          <td>{c.subject}</td>
-                          <td>
-                            <span className={`badge ${c.isRead ? "badge-green-light" : "badge-gold-light"}`}>
-                              {c.isRead ? (isEnglish ? "Processed" : "Traité") : (isEnglish ? "New" : "Nouveau")}
-                            </span>
-                          </td>
-                          <td>
-                            {!c.isRead && (
-                              <button
-                                onClick={() => handleMarkRead(c.id)}
-                                className="btn-action-read"
-                              >
-                                <Check size={13} />
-                                <span>{isEnglish ? "Mark Read" : "Marquer lu"}</span>
-                              </button>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
+                      {contacts.slice(0, 5).map((c) => {
+                        const isCandidature = c.type === "candidature";
+                        const initials = c.name ? c.name.split(" ").map(p => p[0]).join("").slice(0, 2).toUpperCase() : "C";
+                        const dateFormatted = new Date(c.createdAt || Date.now()).toLocaleDateString(isEnglish ? "en-US" : "fr-FR", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric"
+                        });
+
+                        return (
+                          <tr key={c.id} style={{ background: !c.isRead ? "rgba(235, 178, 40, 0.04)" : "transparent" }}>
+                            {/* 1. Type & Date */}
+                            <td>
+                              <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem", alignItems: "flex-start" }}>
+                                <span className={`badge ${isCandidature ? "badge-forest-light" : "badge-purple-light"}`} style={{ fontSize: "0.72rem", padding: "0.15rem 0.55rem" }}>
+                                  {isCandidature ? (isEnglish ? "📝 Application" : "📝 Candidature") : (isEnglish ? "💬 Contact" : "💬 Contact direct")}
+                                </span>
+                                <span style={{ fontSize: "0.75rem", color: "#6A8278", whiteSpace: "nowrap" }}>
+                                  {dateFormatted}
+                                </span>
+                              </div>
+                            </td>
+
+                            {/* 2. Applicant / Sender */}
+                            <td style={{ fontWeight: 600, color: "#13221B" }}>
+                              <div className="member-avatar-cell">
+                                <div className="member-avatar-fallback" style={{ background: isCandidature ? "#E8F5E9" : "#F3E8FF", color: isCandidature ? "#1E5128" : "#7E22CE" }}>
+                                  {initials}
+                                </div>
+                                <div>
+                                  <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                                    <span style={{ color: "#13221B" }}>{c.name}</span>
+                                    {!c.isRead && (
+                                      <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#D97706", display: "inline-block" }} title={isEnglish ? "Unread" : "Non lu"}></span>
+                                    )}
+                                  </div>
+                                  <a href={`mailto:${c.email}`} style={{ fontSize: "0.78rem", color: "#2563EB", textDecoration: "none", display: "block" }}>
+                                    {c.email}
+                                  </a>
+                                  {c.phone && (
+                                    <span style={{ fontSize: "0.74rem", color: "#6A8278", display: "block" }}>
+                                      📞 {c.phone}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            </td>
+
+                            {/* 3. Structure & Territory */}
+                            <td>
+                              <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem", maxWidth: "190px" }}>
+                                {c.structureName && (
+                                  <span style={{ fontSize: "0.82rem", fontWeight: 600, color: "#13221B", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                    🏢 {c.structureName}
+                                  </span>
+                                )}
+                                {c.country && (
+                                  <span style={{ fontSize: "0.76rem", color: "#4A6356" }}>
+                                    🌍 {c.country}
+                                  </span>
+                                )}
+                                {c.category && (
+                                  <span style={{ fontSize: "0.72rem", color: "#1E5128", fontWeight: 600 }}>
+                                    #{getContactCategoryLabel(c.category)}
+                                  </span>
+                                )}
+                                {!c.structureName && !c.country && !c.category && (
+                                  <span style={{ fontSize: "0.78rem", color: "#9CA3AF" }}>—</span>
+                                )}
+                              </div>
+                            </td>
+
+                            {/* 4. Subject & Message snippet */}
+                            <td>
+                              <div style={{ maxWidth: "260px" }}>
+                                <div style={{ fontSize: "0.85rem", fontWeight: 700, color: "#13221B", marginBottom: "0.15rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                  {c.subject || (isEnglish ? "(No subject)" : "(Sans objet)")}
+                                </div>
+                                <div style={{ fontSize: "0.78rem", color: "#5A7367", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                  {c.message}
+                                </div>
+                                {c.adminNotes && (
+                                  <div style={{ marginTop: "0.2rem" }}>
+                                    <span style={{ fontSize: "0.68rem", padding: "1px 5px", borderRadius: "4px", background: "rgba(37,99,235,0.08)", color: "#2563EB", fontWeight: 600 }}>
+                                      📌 {isEnglish ? "Admin Note" : "Note interne"}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+
+                            {/* 5. Status Badge */}
+                            <td>
+                              {getContactStatusBadge(c)}
+                            </td>
+
+                            {/* 6. Actions */}
+                            <td style={{ textAlign: "right", whiteSpace: "nowrap" }}>
+                              <div style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem" }}>
+                                <button
+                                  type="button"
+                                  onClick={() => handleOpenViewContact(c)}
+                                  className="btn btn-outline-forest btn-sm"
+                                  style={{ padding: "0.3rem 0.65rem", fontSize: "0.76rem", display: "inline-flex", alignItems: "center", gap: "0.3rem" }}
+                                  title={isEnglish ? "View details" : "Voir les détails"}
+                                >
+                                  <Eye size={13} />
+                                  <span>{isEnglish ? "Details" : "Détails"}</span>
+                                </button>
+
+                                {/* Action contextuelle selon Candidature ou Contact Direct */}
+                                {isCandidature && c.status !== "validated" && (
+                                  <button
+                                    type="button"
+                                    onClick={() => handleValidateContact(c.id)}
+                                    disabled={isValidatingContact}
+                                    className="btn btn-forest btn-sm"
+                                    style={{ padding: "0.3rem 0.65rem", fontSize: "0.76rem", display: "inline-flex", alignItems: "center", gap: "0.3rem" }}
+                                    title={isEnglish ? "Validate candidature" : "Valider la candidature"}
+                                  >
+                                    <CheckCircle size={13} />
+                                    <span>{isEnglish ? "Validate" : "Valider"}</span>
+                                  </button>
+                                )}
+
+                                {!isCandidature && (
+                                  <button
+                                    type="button"
+                                    onClick={() => handleMarkContactProcessed(c.id, (c.status === "processed" || c.status === "validated") ? "read" : "processed")}
+                                    disabled={isValidatingContact}
+                                    className={`btn btn-sm ${c.status === "processed" || c.status === "validated" ? "btn-outline" : "btn-forest"}`}
+                                    style={{ padding: "0.3rem 0.65rem", fontSize: "0.76rem", display: "inline-flex", alignItems: "center", gap: "0.3rem" }}
+                                    title={
+                                      (c.status === "processed" || c.status === "validated")
+                                        ? (isEnglish ? "Mark as unprocessed" : "Marquer comme non traité")
+                                        : (isEnglish ? "Mark as processed" : "Marquer comme traité")
+                                    }
+                                  >
+                                    <CheckCircle size={13} />
+                                    <span>
+                                      {(c.status === "processed" || c.status === "validated")
+                                        ? (isEnglish ? "Reopen" : "Rouvrir")
+                                        : (isEnglish ? "Process" : "Traiter")}
+                                    </span>
+                                  </button>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
                       {contacts.length === 0 && (
                         <tr>
-                          <td colSpan={6} style={{ textAlign: "center", color: "#6A8278", padding: "2rem" }}>
-                            {isEnglish ? "No inquiries received yet." : "Aucun message pour le moment."}
+                          <td colSpan={6} style={{ textAlign: "center", color: "#6A8278", padding: "2.5rem 1rem" }}>
+                            <MessageSquare size={32} style={{ margin: "0 auto 0.5rem", opacity: 0.35, color: "#1E5128" }} />
+                            <div>{isEnglish ? "No inquiries or applications received yet." : "Aucun message ou candidature reçu pour le moment."}</div>
                           </td>
                         </tr>
                       )}
@@ -2471,7 +2626,15 @@ export default function AdminPortal({ onClose }) {
                   {[
                     { id: "all", label: isEnglish ? "All Statuses" : "Tous statuts", count: contacts.length },
                     { id: "new", label: isEnglish ? "New" : "Nouveaux", count: contacts.filter(c => !c.isRead || c.status === "new").length },
-                    { id: "validated", label: isEnglish ? "Validated" : "Validés", count: contacts.filter(c => c.status === "validated").length },
+                    { 
+                      id: "validated", 
+                      label: contactTypeFilter === "candidature" 
+                        ? (isEnglish ? "Validated" : "Validées") 
+                        : contactTypeFilter === "contact" 
+                        ? (isEnglish ? "Processed" : "Traités") 
+                        : (isEnglish ? "Processed / Validated" : "Traités / Validés"), 
+                      count: contacts.filter(c => c.status === "validated" || c.status === "processed").length 
+                    },
                   ].map((st) => (
                     <button
                       key={st.id}
@@ -2654,6 +2817,41 @@ export default function AdminPortal({ onClose }) {
                                       <Eye size={14} style={{ color: "#2563EB" }} />
                                       <span>{isEnglish ? "View details" : "Voir les détails"}</span>
                                     </button>
+
+                                    {/* Action rapide : Valider (Candidature) ou Marquer traité (Contact direct) */}
+                                    {c.type === "candidature" && c.status !== "validated" && (
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          setActiveActionMenuId(null);
+                                          handleValidateContact(c.id);
+                                        }}
+                                        className="action-dropdown-item"
+                                        style={{ color: "#166534" }}
+                                      >
+                                        <CheckCircle size={14} />
+                                        <span>{isEnglish ? "Validate candidature" : "Valider la candidature"}</span>
+                                      </button>
+                                    )}
+
+                                    {c.type !== "candidature" && (
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          setActiveActionMenuId(null);
+                                          handleMarkContactProcessed(c.id, (c.status === "processed" || c.status === "validated") ? "read" : "processed");
+                                        }}
+                                        className="action-dropdown-item"
+                                        style={{ color: (c.status === "processed" || c.status === "validated") ? "#6A8278" : "#166534" }}
+                                      >
+                                        <CheckCircle size={14} />
+                                        <span>
+                                          {(c.status === "processed" || c.status === "validated")
+                                            ? (isEnglish ? "Mark as unprocessed" : "Marquer comme non traité")
+                                            : (isEnglish ? "Mark as processed" : "Marquer comme traité")}
+                                        </span>
+                                      </button>
+                                    )}
 
                                     <div className="action-dropdown-divider"></div>
 
@@ -6263,71 +6461,169 @@ export default function AdminPortal({ onClose }) {
               </div>
             </div>
 
-            {/* Validation & Automatic Notification Section */}
-            <div style={{
-              marginBottom: "1.5rem",
-              padding: "1.1rem 1.25rem",
-              borderRadius: "10px",
-              background: selectedContactItem.status === "validated" ? "#F0FDF4" : "#F4F8F5",
-              border: selectedContactItem.status === "validated" ? "1px solid #86EFAC" : "1px solid #D9E3DE"
-            }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
-                <div>
-                  <div style={{ fontSize: "0.95rem", fontWeight: 700, color: selectedContactItem.status === "validated" ? "#166534" : "#13221B", marginBottom: "0.2rem", display: "flex", alignItems: "center", gap: "0.45rem" }}>
-                    {selectedContactItem.status === "validated" ? (
-                      <>
-                        <CheckCircle size={18} style={{ color: "#16a34a" }} />
-                        <span>{isEnglish ? "Candidature Validated" : "Candidature Validée"}</span>
-                      </>
+            {/* Validation (Candidature) ou Traitement (Contact direct) */}
+            {(() => {
+              const isCandidature = selectedContactItem.type === "candidature";
+              const isProcessed = selectedContactItem.status === "processed" || (!isCandidature && selectedContactItem.status === "validated");
+              const isValidated = selectedContactItem.status === "validated";
+
+              if (isCandidature) {
+                return (
+                  <div style={{
+                    marginBottom: "1.5rem",
+                    padding: "1.1rem 1.25rem",
+                    borderRadius: "10px",
+                    background: isValidated ? "#F0FDF4" : "#F4F8F5",
+                    border: isValidated ? "1px solid #86EFAC" : "1px solid #D9E3DE"
+                  }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
+                      <div>
+                        <div style={{ fontSize: "0.95rem", fontWeight: 700, color: isValidated ? "#166534" : "#13221B", marginBottom: "0.2rem", display: "flex", alignItems: "center", gap: "0.45rem" }}>
+                          {isValidated ? (
+                            <>
+                              <CheckCircle size={18} style={{ color: "#16a34a" }} />
+                              <span>{isEnglish ? "Candidature Validated" : "Candidature Validée"}</span>
+                            </>
+                          ) : (
+                            <span>{isEnglish ? "Candidature Validation & Email Notification" : "Validation de la Candidature & Notification"}</span>
+                          )}
+                        </div>
+                        <p style={{ fontSize: "0.82rem", color: isValidated ? "#15803d" : "#5A7367", margin: 0 }}>
+                          {isValidated
+                            ? (isEnglish 
+                                ? "This application is officially validated. The confirmation email was automatically sent to the candidate."
+                                : "Ce dossier est validé. L'email de confirmation a été automatiquement envoyé au candidat.")
+                            : (isEnglish 
+                                ? "Clicking validate will mark this submission as validated and immediately send the automated confirmation email."
+                                : "Valider cette candidature enregistre le statut et transmet instantanément l'email de confirmation automatique.")}
+                        </p>
+                      </div>
+
+                      {!isValidated ? (
+                        <button
+                          type="button"
+                          onClick={() => handleValidateContact(selectedContactItem.id)}
+                          disabled={isValidatingContact}
+                          className="btn btn-forest"
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "0.45rem",
+                            padding: "0.6rem 1.25rem",
+                            fontWeight: 700,
+                            boxShadow: "0 2px 6px rgba(30,81,40,0.2)"
+                          }}
+                        >
+                          {isValidatingContact ? (
+                            <>
+                              <span className="btn-spinner-ring" style={{ width: "15px", height: "15px", borderWidth: "2px", borderColor: "rgba(255,255,255,0.3)", borderTopColor: "#fff" }}></span>
+                              <span>{isEnglish ? "Validating..." : "Validation en cours..."}</span>
+                            </>
+                          ) : (
+                            <>
+                              <CheckCircle size={16} />
+                              <span>{isEnglish ? "Validate Candidature" : "Valider la candidature"}</span>
+                            </>
+                          )}
+                        </button>
+                      ) : (
+                        <span className="badge badge-green-light" style={{ padding: "0.4rem 0.85rem", fontSize: "0.82rem", fontWeight: 700 }}>
+                          ✓ {isEnglish ? "Confirmation Email Sent" : "Email envoyé automatiquement"}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                );
+              }
+
+              // Cas Contact Direct : Traitement sans validation de candidature ni email de validation
+              return (
+                <div style={{
+                  marginBottom: "1.5rem",
+                  padding: "1.1rem 1.25rem",
+                  borderRadius: "10px",
+                  background: isProcessed ? "#F0FDF4" : "#F4F8F5",
+                  border: isProcessed ? "1px solid #86EFAC" : "1px solid #D9E3DE"
+                }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
+                    <div>
+                      <div style={{ fontSize: "0.95rem", fontWeight: 700, color: isProcessed ? "#166534" : "#13221B", marginBottom: "0.2rem", display: "flex", alignItems: "center", gap: "0.45rem" }}>
+                        {isProcessed ? (
+                          <>
+                            <CheckCircle size={18} style={{ color: "#16a34a" }} />
+                            <span>{isEnglish ? "Inquiry Processed" : "Prise de Contact Traitée"}</span>
+                          </>
+                        ) : (
+                          <span>{isEnglish ? "Inquiry Processing & Follow-up" : "Traitement & Suivi du Message"}</span>
+                        )}
+                      </div>
+                      <p style={{ fontSize: "0.82rem", color: isProcessed ? "#15803d" : "#5A7367", margin: 0 }}>
+                        {isProcessed
+                          ? (isEnglish 
+                              ? "This inquiry has been marked as processed. Follow-up or response was completed."
+                              : "Ce message a été marqué comme traité par l'équipe. Le suivi ou la réponse a été apporté.")
+                          : (isEnglish 
+                              ? "Mark this inquiry as processed once a response or action has been completed."
+                              : "Marquez cette prise de contact comme traitée dès qu'une réponse ou un suivi a été réalisé.")}
+                      </p>
+                    </div>
+
+                    {!isProcessed ? (
+                      <button
+                        type="button"
+                        onClick={() => handleMarkContactProcessed(selectedContactItem.id, "processed")}
+                        disabled={isValidatingContact}
+                        className="btn btn-forest"
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "0.45rem",
+                          padding: "0.6rem 1.25rem",
+                          fontWeight: 700,
+                          boxShadow: "0 2px 6px rgba(30,81,40,0.2)"
+                        }}
+                      >
+                        {isValidatingContact ? (
+                          <>
+                            <span className="btn-spinner-ring" style={{ width: "15px", height: "15px", borderWidth: "2px", borderColor: "rgba(255,255,255,0.3)", borderTopColor: "#fff" }}></span>
+                            <span>{isEnglish ? "Updating..." : "Mise à jour..."}</span>
+                          </>
+                        ) : (
+                          <>
+                            <CheckCircle size={16} />
+                            <span>{isEnglish ? "Mark as Processed" : "Marquer comme traité"}</span>
+                          </>
+                        )}
+                      </button>
                     ) : (
-                      <span>{isEnglish ? "Candidature Validation & Email Notification" : "Validation de la Candidature & Notification"}</span>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+                        <span className="badge badge-green-light" style={{ padding: "0.4rem 0.85rem", fontSize: "0.82rem", fontWeight: 700 }}>
+                          ✓ {isEnglish ? "Processed" : "Traité"}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleMarkContactProcessed(selectedContactItem.id, "read")}
+                          disabled={isValidatingContact}
+                          style={{
+                            padding: "0.35rem 0.75rem",
+                            borderRadius: "6px",
+                            fontSize: "0.78rem",
+                            fontWeight: 600,
+                            border: "1px solid #D9E3DE",
+                            background: "#FFFFFF",
+                            color: "#4A6356",
+                            cursor: "pointer"
+                          }}
+                          title={isEnglish ? "Unmark as processed" : "Annuler le marquage"}
+                        >
+                          {isEnglish ? "Reopen" : "Rouvrir"}
+                        </button>
+                      </div>
                     )}
                   </div>
-                  <p style={{ fontSize: "0.82rem", color: selectedContactItem.status === "validated" ? "#15803d" : "#5A7367", margin: 0 }}>
-                    {selectedContactItem.status === "validated"
-                      ? (isEnglish 
-                          ? "This application is officially validated. The confirmation email was automatically sent to the candidate."
-                          : "Ce dossier est validé. L'email de confirmation a été automatiquement envoyé au candidat.")
-                      : (isEnglish 
-                          ? "Clicking validate will mark this submission as validated and immediately send the automated confirmation email."
-                          : "Valider cette candidature enregistre le statut et transmet instantanément l'email de confirmation automatique.")}
-                  </p>
                 </div>
-
-                {selectedContactItem.status !== "validated" ? (
-                  <button
-                    type="button"
-                    onClick={() => handleValidateContact(selectedContactItem.id)}
-                    disabled={isValidatingContact}
-                    className="btn btn-forest"
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: "0.45rem",
-                      padding: "0.6rem 1.25rem",
-                      fontWeight: 700,
-                      boxShadow: "0 2px 6px rgba(30,81,40,0.2)"
-                    }}
-                  >
-                    {isValidatingContact ? (
-                      <>
-                        <span className="btn-spinner-ring" style={{ width: "15px", height: "15px", borderWidth: "2px", borderColor: "rgba(255,255,255,0.3)", borderTopColor: "#fff" }}></span>
-                        <span>{isEnglish ? "Validating..." : "Validation en cours..."}</span>
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircle size={16} />
-                        <span>{isEnglish ? "Validate Candidature" : "Valider la candidature"}</span>
-                      </>
-                    )}
-                  </button>
-                ) : (
-                  <span className="badge badge-green-light" style={{ padding: "0.4rem 0.85rem", fontSize: "0.82rem", fontWeight: 700 }}>
-                    ✓ {isEnglish ? "Confirmation Email Sent" : "Email envoyé automatiquement"}
-                  </span>
-                )}
-              </div>
-            </div>
+              );
+            })()}
 
             {/* Internal Admin Notes */}
             <div style={{ marginBottom: "1.5rem" }}>
