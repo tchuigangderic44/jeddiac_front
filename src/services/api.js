@@ -87,6 +87,11 @@ export const api = {
 
   // Admin Management
   getAdminStats: (token) => request("/admin/stats", { token }),
+  updateOverviewStats: (token, payload) => request("/admin/overview-stats", {
+    method: "PUT",
+    token,
+    body: JSON.stringify(payload),
+  }),
 
   // Admin News
   getAdminNews: (token, params = "") => request(`/admin/news${params}`, { token }),

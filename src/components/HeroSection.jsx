@@ -61,17 +61,27 @@ export default function HeroSection({ stats, onOpenApplication, onExploreAxes })
   const [isPaused, setIsPaused] = useState(false);
 
   // Dynamic data from API
+  const [apiMetrics, setApiMetrics] = useState(stats || null);
   const [leaderData, setLeaderData] = useState(null);
   const [heroImage, setHeroImage] = useState(null);
   const [heroImageCaption, setHeroImageCaption] = useState(null);
   const [heroImageLocation, setHeroImageLocation] = useState(null);
   const [latestDispatch, setLatestDispatch] = useState(null);
 
-  // Animated counters
-  const countJeunes = useAnimatedCounter(stats?.journalistesCibles || 20000, 2000);
-  const countPartenaires = useAnimatedCounter(stats?.structuresPartenaires || 90, 1600);
-  const countRegions = useAnimatedCounter(stats?.regionsCameroun || 10, 1400);
-  const countPays = useAnimatedCounter(stats?.paysAfriqueCentrale || 6, 1200);
+  useEffect(() => {
+    if (stats) setApiMetrics((prev) => ({ ...(prev || {}), ...stats }));
+  }, [stats]);
+
+  // Animated counters directly driven by API metrics
+  const targetJeunes = apiMetrics?.journalistesCibles ?? stats?.journalistesCibles ?? 20000;
+  const targetPartenaires = apiMetrics?.structuresPartenaires ?? stats?.structuresPartenaires ?? 90;
+  const targetRegions = apiMetrics?.regionsCameroun ?? stats?.regionsCameroun ?? 10;
+  const targetPays = apiMetrics?.paysAfriqueCentrale ?? stats?.paysAfriqueCentrale ?? 6;
+
+  const countJeunes = useAnimatedCounter(targetJeunes, 2000);
+  const countPartenaires = useAnimatedCounter(targetPartenaires, 1600);
+  const countRegions = useAnimatedCounter(targetRegions, 1400);
+  const countPays = useAnimatedCounter(targetPays, 1200);
 
   const currentTestimonials = TESTIMONIALS[language] || TESTIMONIALS.fr;
   const currentQuote = currentTestimonials[activeQuote] || currentTestimonials[0];
@@ -94,9 +104,17 @@ export default function HeroSection({ stats, onOpenApplication, onExploreAxes })
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Fetch API data for member profile, authentic hero image and latest dispatch
+  // Fetch API data for live overview metrics, member profile, authentic hero image and latest dispatch
   useEffect(() => {
     let isMounted = true;
+
+    // Load live overview & impact metrics directly from API
+    api.getOverviewStats()
+      .then((res) => {
+        if (!isMounted || !res) return;
+        setApiMetrics(res);
+      })
+      .catch((err) => console.warn("Hero overview metrics load err:", err.message));
 
     // Load leader details from API (avatar, title)
     api.getMembers()
@@ -287,19 +305,27 @@ export default function HeroSection({ stats, onOpenApplication, onExploreAxes })
             <div className="hero-metrics-grid">
               <div className="metric-box metric-box-animated" style={{ animationDelay: "0.1s" }}>
                 <span className="metric-box-number">+{countJeunes.toLocaleString(language === "fr" ? "fr-FR" : "en-US")}</span>
-                <span className="metric-box-label">{t("metricYouth")}</span>
+                <span className="metric-box-label">
+                  {(isEnglish ? apiMetrics?.labelYouthEn : apiMetrics?.labelYouthFr) || t("metricYouth")}
+                </span>
               </div>
               <div className="metric-box metric-box-animated" style={{ animationDelay: "0.2s" }}>
                 <span className="metric-box-number">{countPartenaires}</span>
-                <span className="metric-box-label">{t("metricPartners")}</span>
+                <span className="metric-box-label">
+                  {(isEnglish ? apiMetrics?.labelPartnersEn : apiMetrics?.labelPartnersFr) || t("metricPartners")}
+                </span>
               </div>
               <div className="metric-box metric-box-animated" style={{ animationDelay: "0.3s" }}>
                 <span className="metric-box-number">{countRegions}</span>
-                <span className="metric-box-label">{t("metricRegions")}</span>
+                <span className="metric-box-label">
+                  {(isEnglish ? apiMetrics?.labelRegionsEn : apiMetrics?.labelRegionsFr) || t("metricRegions")}
+                </span>
               </div>
               <div className="metric-box metric-box-animated" style={{ animationDelay: "0.4s" }}>
                 <span className="metric-box-number">{countPays}</span>
-                <span className="metric-box-label">{t("metricCountries")}</span>
+                <span className="metric-box-label">
+                  {(isEnglish ? apiMetrics?.labelCountriesEn : apiMetrics?.labelCountriesFr) || t("metricCountries")}
+                </span>
               </div>
             </div>
           </div>

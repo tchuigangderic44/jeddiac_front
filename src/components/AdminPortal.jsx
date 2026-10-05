@@ -240,6 +240,26 @@ export default function AdminPortal({ onClose }) {
   const [isSavingContactNotes, setIsSavingContactNotes] = useState(false);
   const [isValidatingContact, setIsValidatingContact] = useState(false);
 
+  // Public Hero Impact Metrics States
+  const [heroMetrics, setHeroMetrics] = useState({
+    journalistesCibles: 20000,
+    structuresPartenaires: 90,
+    regionsCameroun: 10,
+    paysAfriqueCentrale: 6,
+    labelYouthFr: "Jeunes mobilisés",
+    labelYouthEn: "Youth mobilized",
+    labelPartnersFr: "Clubs & radios partenaires",
+    labelPartnersEn: "Partner clubs & radios",
+    labelRegionsFr: "Régions couvertes",
+    labelRegionsEn: "Covered regions",
+    labelCountriesFr: "Pays du Bassin",
+    labelCountriesEn: "Congo Basin countries"
+  });
+  const [metricsModalOpen, setMetricsModalOpen] = useState(false);
+  const [metricsForm, setMetricsForm] = useState({ ...heroMetrics });
+  const [isSavingMetrics, setIsSavingMetrics] = useState(false);
+  const [metricsFormLangTab, setMetricsFormLangTab] = useState("fr"); // 'fr' | 'en'
+
   // Action Menu Dropdown State
   const [activeActionMenuId, setActiveActionMenuId] = useState(null);
 
@@ -348,17 +368,22 @@ export default function AdminPortal({ onClose }) {
   const loadAllAdminData = async () => {
     setDataLoading(true);
     try {
-      const [statsRes, newsRes, agendaRes, contactsRes, newsletterRes, usersRes, podcastsRes] = await Promise.all([
+      const [statsRes, newsRes, agendaRes, contactsRes, newsletterRes, usersRes, podcastsRes, overviewStatsRes] = await Promise.all([
         api.getAdminStats(token).catch(() => null),
         api.getAdminNews(token, "?limit=100").catch(() => api.getNews("?limit=50").catch(() => ({ values: [] }))),
         api.getAdminAgendas(token, "?limit=100").catch(() => api.getAgendas("?limit=50").catch(() => ({ values: [] }))),
         api.getAdminContacts(token, "?limit=50").catch(() => ({ data: [], values: [] })),
         api.getAdminNewsletters(token, "?limit=50").catch(() => ({ data: [], values: [] })),
         api.getAdminUsers(token, "?limit=50").catch(() => ({ data: [], values: [] })),
-        api.getAdminPodcasts(token, "?limit=100").catch(() => api.getPodcasts("?limit=50").catch(() => ({ values: [] })))
+        api.getAdminPodcasts(token, "?limit=100").catch(() => api.getPodcasts("?limit=50").catch(() => ({ values: [] }))),
+        api.getOverviewStats().catch(() => null)
       ]);
 
       if (statsRes) setStats(statsRes);
+      if (overviewStatsRes) {
+        setHeroMetrics((prev) => ({ ...prev, ...overviewStatsRes }));
+        setMetricsForm((prev) => ({ ...prev, ...overviewStatsRes }));
+      }
       if (newsRes?.values) setNews(newsRes.values);
       if (agendaRes?.values) setAgendas(agendaRes.values);
       if (contactsRes) setContacts(contactsRes.data || contactsRes.values || []);
@@ -929,6 +954,22 @@ export default function AdminPortal({ onClose }) {
       alert(isEnglish ? "Error updating contact: " + err.message : "Erreur lors de la mise à jour: " + err.message);
     } finally {
       setIsValidatingContact(false);
+    }
+  };
+
+  const handleSaveHeroMetrics = async (e) => {
+    e.preventDefault();
+    setIsSavingMetrics(true);
+    try {
+      const res = await api.updateOverviewStats(token, metricsForm);
+      const updated = res.data || res;
+      setHeroMetrics((prev) => ({ ...prev, ...updated }));
+      setMetricsModalOpen(false);
+      alert(isEnglish ? "Hero impact metrics updated successfully!" : "Indicateurs d'impact du site public mis à jour avec succès !");
+    } catch (err) {
+      alert(isEnglish ? "Error updating metrics: " + err.message : "Erreur lors de la mise à jour: " + err.message);
+    } finally {
+      setIsSavingMetrics(false);
     }
   };
 
@@ -1674,6 +1715,84 @@ export default function AdminPortal({ onClose }) {
                   <div className="admin-kpi-sub" style={{ color: "#166534" }}>
                     <Radio size={14} />
                     <span>{isEnglish ? "Active audio programs" : "Émissions audio publiées"}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Public Hero Impact Metrics Card */}
+              <div className="admin-card" style={{ marginBottom: "1.75rem" }}>
+                <div className="admin-card-header">
+                  <div>
+                    <h3 className="admin-card-title" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                      <TrendingUp size={18} style={{ color: "#1E5128" }} />
+                      <span>{isEnglish ? "Hero Impact Metrics (Live on Landing Page)" : "Indicateurs d'Impact & Chiffres Clés (Hero du Site Public)"}</span>
+                    </h3>
+                    <p style={{ margin: "0.2rem 0 0 0", fontSize: "0.82rem", color: "#6A8278" }}>
+                      {isEnglish 
+                        ? "These 4 metrics are queried by the API and displayed dynamically inside the 'hero-metrics-grid' on the homepage."
+                        : "Ces 4 indicateurs proviennent directement de l'API et sont affichés en temps réel dans la bande 'hero-metrics-grid' de la page d'accueil."}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMetricsForm({ ...heroMetrics });
+                      setMetricsModalOpen(true);
+                    }}
+                    className="btn btn-outline-forest btn-sm"
+                  >
+                    <Edit3 size={14} />
+                    <span>{isEnglish ? "Edit Impact Metrics" : "Modifier les indicateurs"}</span>
+                  </button>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem", padding: "1.25rem" }}>
+                  <div style={{ background: "#F4F8F5", padding: "1rem 1.25rem", borderRadius: "10px", border: "1px solid #D9E3DE" }}>
+                    <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "#4A6356", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.25rem" }}>
+                      {isEnglish ? (heroMetrics.labelYouthEn || "Youth mobilized") : (heroMetrics.labelYouthFr || "Jeunes mobilisés")}
+                    </div>
+                    <div style={{ fontSize: "1.6rem", fontWeight: 800, color: "#13221B" }}>
+                      +{Number(heroMetrics.journalistesCibles || 20000).toLocaleString(isEnglish ? "en-US" : "fr-FR")}
+                    </div>
+                    <div style={{ fontSize: "0.72rem", color: "#6A8278", marginTop: "0.2rem" }}>
+                      API: <code>journalistesCibles</code>
+                    </div>
+                  </div>
+
+                  <div style={{ background: "#F4F8F5", padding: "1rem 1.25rem", borderRadius: "10px", border: "1px solid #D9E3DE" }}>
+                    <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "#4A6356", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.25rem" }}>
+                      {isEnglish ? (heroMetrics.labelPartnersEn || "Partner clubs & radios") : (heroMetrics.labelPartnersFr || "Clubs & radios partenaires")}
+                    </div>
+                    <div style={{ fontSize: "1.6rem", fontWeight: 800, color: "#13221B" }}>
+                      {heroMetrics.structuresPartenaires || 90}
+                    </div>
+                    <div style={{ fontSize: "0.72rem", color: "#6A8278", marginTop: "0.2rem" }}>
+                      API: <code>structuresPartenaires</code>
+                    </div>
+                  </div>
+
+                  <div style={{ background: "#F4F8F5", padding: "1rem 1.25rem", borderRadius: "10px", border: "1px solid #D9E3DE" }}>
+                    <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "#4A6356", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.25rem" }}>
+                      {isEnglish ? (heroMetrics.labelRegionsEn || "Covered regions") : (heroMetrics.labelRegionsFr || "Régions couvertes")}
+                    </div>
+                    <div style={{ fontSize: "1.6rem", fontWeight: 800, color: "#13221B" }}>
+                      {heroMetrics.regionsCameroun || 10}
+                    </div>
+                    <div style={{ fontSize: "0.72rem", color: "#6A8278", marginTop: "0.2rem" }}>
+                      API: <code>regionsCameroun</code>
+                    </div>
+                  </div>
+
+                  <div style={{ background: "#F4F8F5", padding: "1rem 1.25rem", borderRadius: "10px", border: "1px solid #D9E3DE" }}>
+                    <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "#4A6356", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.25rem" }}>
+                      {isEnglish ? (heroMetrics.labelCountriesEn || "Congo Basin countries") : (heroMetrics.labelCountriesFr || "Pays du Bassin")}
+                    </div>
+                    <div style={{ fontSize: "1.6rem", fontWeight: 800, color: "#13221B" }}>
+                      {heroMetrics.paysAfriqueCentrale || 6}
+                    </div>
+                    <div style={{ fontSize: "0.72rem", color: "#6A8278", marginTop: "0.2rem" }}>
+                      API: <code>paysAfriqueCentrale</code>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -6754,6 +6873,287 @@ export default function AdminPortal({ onClose }) {
                 )}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+      {/* MODALE : ÉDITION DES INDICATEURS HERO DU SITE PUBLIC */}
+      {metricsModalOpen && (
+        <div className="modal-overlay" onClick={() => setMetricsModalOpen(false)}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "680px" }}>
+            <button
+              type="button"
+              onClick={() => setMetricsModalOpen(false)}
+              className="modal-close-btn"
+              aria-label={isEnglish ? "Close" : "Fermer"}
+            >
+              <X size={20} />
+            </button>
+
+            <h3 style={{ fontSize: "1.6rem", fontFamily: "var(--font-serif)", fontWeight: 800, color: "#13221B", marginBottom: "0.4rem" }}>
+              {isEnglish ? "Edit Hero Impact Metrics" : "Modifier les Indicateurs d'Impact (Hero)"}
+            </h3>
+            <p style={{ color: "#5A7367", fontSize: "0.9rem", marginBottom: "1.25rem" }}>
+              {isEnglish 
+                ? "Update the numbers and titles queried by the API and displayed in the hero metrics grid."
+                : "Mettez à jour les chiffres et intitulés diffusés par l'API dans le hero du site public."}
+            </p>
+
+            {/* Bilingual Tab Switcher */}
+            <div className="modal-lang-tabs" style={{ marginBottom: "1.25rem" }}>
+              <button 
+                type="button" 
+                className={`modal-lang-tab-btn ${metricsFormLangTab === "fr" ? "active" : ""}`}
+                onClick={() => setMetricsFormLangTab("fr")}
+              >
+                <span>🇫🇷</span>
+                <span>{isEnglish ? "French Version (FR)" : "Version Française (FR)"}</span>
+              </button>
+              <button 
+                type="button" 
+                className={`modal-lang-tab-btn ${metricsFormLangTab === "en" ? "active" : ""}`}
+                onClick={() => setMetricsFormLangTab("en")}
+              >
+                <span>🇬🇧</span>
+                <span>{isEnglish ? "English Version (EN)" : "Version Anglaise (EN)"}</span>
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveHeroMetrics}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                {/* 1. Jeunes mobilisés */}
+                <div style={{ background: "#F8FAF9", padding: "1.1rem", borderRadius: "12px", border: "1px solid #E2E8F0" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+                    <label className="form-label" style={{ fontWeight: 700, margin: 0, color: "#13221B" }}>
+                      1. {isEnglish ? "Youth Mobilized" : "Jeunes Mobilisés"}
+                    </label>
+                    <span style={{ fontSize: "0.75rem", color: "#6A8278", background: "#E8F0EB", padding: "0.15rem 0.5rem", borderRadius: "4px" }}>
+                      {isEnglish ? "Prefix '+' auto" : "Préfixe '+' automatique"}
+                    </span>
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: "0.85rem" }}>
+                    <div>
+                      <label style={{ fontSize: "0.78rem", color: "#4A6356", display: "block", marginBottom: "0.3rem", fontWeight: 600 }}>
+                        {isEnglish ? "Number (value) *" : "Chiffre (valeur) *"}
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={metricsForm.journalistesCibles}
+                        onChange={(e) => setMetricsForm({ ...metricsForm, journalistesCibles: Number(e.target.value) })}
+                        className="form-control"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "0.78rem", color: "#4A6356", display: "block", marginBottom: "0.3rem", fontWeight: 600 }}>
+                        {metricsFormLangTab === "fr" ? "Intitulé (FR) *" : "Label (EN) *"}
+                      </label>
+                      {metricsFormLangTab === "fr" ? (
+                        <input
+                          type="text"
+                          value={metricsForm.labelYouthFr || ""}
+                          onChange={(e) => setMetricsForm({ ...metricsForm, labelYouthFr: e.target.value })}
+                          className="form-control"
+                          placeholder="Jeunes mobilisés"
+                          required
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={metricsForm.labelYouthEn || ""}
+                          onChange={(e) => setMetricsForm({ ...metricsForm, labelYouthEn: e.target.value })}
+                          className="form-control"
+                          placeholder="Youth mobilized"
+                          required
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. Structures partenaires */}
+                <div style={{ background: "#F8FAF9", padding: "1.1rem", borderRadius: "12px", border: "1px solid #E2E8F0" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+                    <label className="form-label" style={{ fontWeight: 700, margin: 0, color: "#13221B" }}>
+                      2. {isEnglish ? "Partner Clubs & Radios" : "Clubs & Radios Partenaires"}
+                    </label>
+                    <span style={{ fontSize: "0.75rem", color: "#6A8278", background: "#E8F0EB", padding: "0.15rem 0.5rem", borderRadius: "4px" }}>
+                      {isEnglish ? "Prefix '+' auto" : "Préfixe '+' automatique"}
+                    </span>
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: "0.85rem" }}>
+                    <div>
+                      <label style={{ fontSize: "0.78rem", color: "#4A6356", display: "block", marginBottom: "0.3rem", fontWeight: 600 }}>
+                        {isEnglish ? "Number (value) *" : "Chiffre (valeur) *"}
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={metricsForm.structuresPartenaires}
+                        onChange={(e) => setMetricsForm({ ...metricsForm, structuresPartenaires: Number(e.target.value) })}
+                        className="form-control"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "0.78rem", color: "#4A6356", display: "block", marginBottom: "0.3rem", fontWeight: 600 }}>
+                        {metricsFormLangTab === "fr" ? "Intitulé (FR) *" : "Label (EN) *"}
+                      </label>
+                      {metricsFormLangTab === "fr" ? (
+                        <input
+                          type="text"
+                          value={metricsForm.labelPartnersFr || ""}
+                          onChange={(e) => setMetricsForm({ ...metricsForm, labelPartnersFr: e.target.value })}
+                          className="form-control"
+                          placeholder="Clubs & radios partenaires"
+                          required
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={metricsForm.labelPartnersEn || ""}
+                          onChange={(e) => setMetricsForm({ ...metricsForm, labelPartnersEn: e.target.value })}
+                          className="form-control"
+                          placeholder="Partner clubs & radios"
+                          required
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. Régions couvertes */}
+                <div style={{ background: "#F8FAF9", padding: "1.1rem", borderRadius: "12px", border: "1px solid #E2E8F0" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+                    <label className="form-label" style={{ fontWeight: 700, margin: 0, color: "#13221B" }}>
+                      3. {isEnglish ? "Covered Regions" : "Régions Couvertes"}
+                    </label>
+                    <span style={{ fontSize: "0.75rem", color: "#6A8278", background: "#E8F0EB", padding: "0.15rem 0.5rem", borderRadius: "4px" }}>
+                      {isEnglish ? "Scale / 10" : "Échelle / 10"}
+                    </span>
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: "0.85rem" }}>
+                    <div>
+                      <label style={{ fontSize: "0.78rem", color: "#4A6356", display: "block", marginBottom: "0.3rem", fontWeight: 600 }}>
+                        {isEnglish ? "Number (value) *" : "Chiffre (valeur) *"}
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={metricsForm.regionsCameroun}
+                        onChange={(e) => setMetricsForm({ ...metricsForm, regionsCameroun: Number(e.target.value) })}
+                        className="form-control"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "0.78rem", color: "#4A6356", display: "block", marginBottom: "0.3rem", fontWeight: 600 }}>
+                        {metricsFormLangTab === "fr" ? "Intitulé (FR) *" : "Label (EN) *"}
+                      </label>
+                      {metricsFormLangTab === "fr" ? (
+                        <input
+                          type="text"
+                          value={metricsForm.labelRegionsFr || ""}
+                          onChange={(e) => setMetricsForm({ ...metricsForm, labelRegionsFr: e.target.value })}
+                          className="form-control"
+                          placeholder="Régions couvertes"
+                          required
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={metricsForm.labelRegionsEn || ""}
+                          onChange={(e) => setMetricsForm({ ...metricsForm, labelRegionsEn: e.target.value })}
+                          className="form-control"
+                          placeholder="Covered regions"
+                          required
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 4. Pays du Bassin */}
+                <div style={{ background: "#F8FAF9", padding: "1.1rem", borderRadius: "12px", border: "1px solid #E2E8F0" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+                    <label className="form-label" style={{ fontWeight: 700, margin: 0, color: "#13221B" }}>
+                      4. {isEnglish ? "Congo Basin Countries" : "Pays du Bassin du Congo"}
+                    </label>
+                    <span style={{ fontSize: "0.75rem", color: "#6A8278", background: "#E8F0EB", padding: "0.15rem 0.5rem", borderRadius: "4px" }}>
+                      {isEnglish ? "Prefix '+' auto" : "Préfixe '+' automatique"}
+                    </span>
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: "0.85rem" }}>
+                    <div>
+                      <label style={{ fontSize: "0.78rem", color: "#4A6356", display: "block", marginBottom: "0.3rem", fontWeight: 600 }}>
+                        {isEnglish ? "Number (value) *" : "Chiffre (valeur) *"}
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={metricsForm.paysAfriqueCentrale}
+                        onChange={(e) => setMetricsForm({ ...metricsForm, paysAfriqueCentrale: Number(e.target.value) })}
+                        className="form-control"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "0.78rem", color: "#4A6356", display: "block", marginBottom: "0.3rem", fontWeight: 600 }}>
+                        {metricsFormLangTab === "fr" ? "Intitulé (FR) *" : "Label (EN) *"}
+                      </label>
+                      {metricsFormLangTab === "fr" ? (
+                        <input
+                          type="text"
+                          value={metricsForm.labelCountriesFr || ""}
+                          onChange={(e) => setMetricsForm({ ...metricsForm, labelCountriesFr: e.target.value })}
+                          className="form-control"
+                          placeholder="Pays du Bassin"
+                          required
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={metricsForm.labelCountriesEn || ""}
+                          onChange={(e) => setMetricsForm({ ...metricsForm, labelCountriesEn: e.target.value })}
+                          className="form-control"
+                          placeholder="Congo Basin countries"
+                          required
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.75rem", marginTop: "1.75rem", paddingTop: "1.25rem", borderTop: "1px solid #E5EBE7" }}>
+                <button
+                  type="button"
+                  onClick={() => setMetricsModalOpen(false)}
+                  disabled={isSavingMetrics}
+                  className="btn btn-outline-forest"
+                >
+                  {isEnglish ? "Cancel" : "Annuler"}
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSavingMetrics}
+                  className="btn btn-forest"
+                  style={{ display: "inline-flex", alignItems: "center", gap: "0.45rem" }}
+                >
+                  {isSavingMetrics ? (
+                    <>
+                      <span className="btn-spinner-ring" style={{ width: "15px", height: "15px", borderWidth: "2px", borderColor: "rgba(255,255,255,0.3)", borderTopColor: "#fff" }}></span>
+                      <span>{isEnglish ? "Saving..." : "Enregistrement..."}</span>
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle size={16} />
+                      <span>{isEnglish ? "Save Impact Metrics" : "Enregistrer les modifications"}</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
