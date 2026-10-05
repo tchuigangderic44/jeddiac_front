@@ -86,6 +86,23 @@ export const translations = {
     modalContactBtn: "Contacter via la coordination",
     modalCloseBtn: "Fermer la fiche",
 
+    // Afrive Spotlight (Partenariat Média International & Mentorat)
+    afriveTag: "Partenariat Média International & Mentorat",
+    afriveHeadlinePrefix: "Synergie avec",
+    afriveHeadlineSuffix: " : La voix panafricaine de la durabilité",
+    afriveLeadText: "revue internationale pour le développement durable de l'Afrique, apporte son expertise éditoriale de haut niveau, son réseau de journalistes d'investigation et sa caisse de résonance médiatique aux jeunes talents formés par JEDDIAC.",
+    afriveBenefit1Title: "Mentorat d'Investigation",
+    afriveBenefit1Desc: "Accompagnement personnalisé par des rédacteurs en chef chevronnés sur les grands dossiers environnementaux.",
+    afriveBenefit2Title: "Diffusion Panafricaine",
+    afriveBenefit2Desc: "Publication des meilleurs reportages scolaires et universitaires dans les éditions imprimées et web d'AFRIVE.",
+    afriveCtaBtn: "Devenir Partenaire Institutionnel",
+    afriveVisionBadge: "Vision Bassin du Congo",
+    afriveVisionTitle: "200 millions d'hectares, 60% de jeunes de moins de 25 ans",
+    afriveVisionDesc: "Le Bassin du Congo est la 2ᵉ forêt tropicale du monde. En équipant sa jeunesse des outils du journalisme rigoureux, nous transformons une vulnérabilité en une force motrice pour le continent et la planète.",
+    afriveVisionFounderName: "Jean Marie Kenfack",
+    afriveVisionFounderRole: "Porteur du programme JEDDIAC",
+    afriveVisionPhotoAlt: "Forêt du Bassin du Congo",
+
     // Footer
     footerMission: "Jeunesse Engagée pour la Durabilité, le Développement et l'Information en Afrique Centrale. Le programme régional de formation et de mobilisation des jeunes médias en faveur du climat et du Bassin du Congo.",
     footerPill: "Sanctuaire Écologique du Bassin du Congo",
@@ -250,6 +267,23 @@ export const translations = {
     modalContributionsTitle: "Key Contributions & Projects",
     modalContactBtn: "Contact through coordination",
     modalCloseBtn: "Close profile",
+
+    // Afrive Spotlight (International Media Partnership & Mentorship)
+    afriveTag: "International Media Partnership & Mentorship",
+    afriveHeadlinePrefix: "Synergy with",
+    afriveHeadlineSuffix: ": The pan-African voice for sustainability",
+    afriveLeadText: "an international review dedicated to Africa's sustainable development, brings its high-level editorial expertise, investigative journalism network, and media resonance to the young talents trained by JEDDIAC.",
+    afriveBenefit1Title: "Investigative Mentorship",
+    afriveBenefit1Desc: "One-on-one guidance by seasoned senior editors on major environmental investigations.",
+    afriveBenefit2Title: "Pan-African Distribution",
+    afriveBenefit2Desc: "Publication of top high school and university reports across AFRIVE print and digital editions.",
+    afriveCtaBtn: "Become an Institutional Partner",
+    afriveVisionBadge: "Congo Basin Vision",
+    afriveVisionTitle: "200 million hectares, 60% youth under 25",
+    afriveVisionDesc: "The Congo Basin is the world's second-largest tropical rainforest. By empowering its youth with rigorous journalism tools, we transform vulnerability into a driving force for the continent and the planet.",
+    afriveVisionFounderName: "Jean Marie Kenfack",
+    afriveVisionFounderRole: "JEDDIAC Program Leader",
+    afriveVisionPhotoAlt: "Congo Basin Forest",
 
     // Footer
     footerMission: "Youth Engaged for Sustainability, Development and Information in Central Africa. Regional program training and mobilizing youth media for climate and the Congo Basin.",

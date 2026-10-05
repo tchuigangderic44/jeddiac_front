@@ -1,7 +1,10 @@
 import React from "react";
-import { Award, Compass, Trees, Target, ArrowUpRight, CheckCircle2 } from "lucide-react";
+import { Award, ArrowUpRight } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function AfriveSpotlight({ onOpenApplication }) {
+  const { t, isEnglish } = useLanguage();
+
   return (
     <section className="afrive-spotlight-section">
       <div className="container">
@@ -10,34 +13,38 @@ export default function AfriveSpotlight({ onOpenApplication }) {
             <div className="afrive-main-col">
               <div className="section-tag-pill light-pill">
                 <Award size={15} />
-                <span>Partenariat Média International & Mentorat</span>
+                <span>{t("afriveTag")}</span>
               </div>
 
               <h2 className="afrive-headline">
-                Synergie avec <span className="afrive-highlight">AFRIVE</span> : La voix panafricaine de la durabilité
+                {t("afriveHeadlinePrefix")} <span className="afrive-highlight">AFRIVE</span>{t("afriveHeadlineSuffix")}
               </h2>
 
               <p className="afrive-lead">
-                <strong>AFRIVE</strong>, revue internationale pour le développement durable de l'Afrique, apporte son expertise éditoriale de haut niveau, son réseau de journalistes d'investigation et sa caisse de résonance médiatique aux jeunes talents formés par JEDDIAC.
+                <strong>AFRIVE</strong>, {t("afriveLeadText")}
               </p>
 
               <div className="afrive-benefits-grid">
                 <div className="afrive-benefit-item">
-                  <h4>Mentorat d'Investigation</h4>
-                  <p>Accompagnement personnalisé par des rédacteurs en chef chevronnés sur les grands dossiers environnementaux.</p>
+                  <h4>{t("afriveBenefit1Title")}</h4>
+                  <p>{t("afriveBenefit1Desc")}</p>
                 </div>
 
                 <div className="afrive-benefit-item">
-                  <h4>Diffusion Panafricaine</h4>
-                  <p>Publication des meilleurs reportages scolaires et universitaires dans les éditions imprimées et web d'AFRIVE.</p>
+                  <h4>{t("afriveBenefit2Title")}</h4>
+                  <p>{t("afriveBenefit2Desc")}</p>
                 </div>
               </div>
 
               <button 
-                onClick={onOpenApplication}
+                onClick={() => {
+                  if (onOpenApplication) {
+                    onOpenApplication(isEnglish ? "Institutional / Media Partnership" : "Partenariat Institutionnel / Média");
+                  }
+                }}
                 className="btn btn-gold-solid"
               >
-                <span>Devenir Partenaire Institutionnel</span>
+                <span>{t("afriveCtaBtn")}</span>
                 <ArrowUpRight size={17} />
               </button>
             </div>
@@ -47,19 +54,20 @@ export default function AfriveSpotlight({ onOpenApplication }) {
               <div className="afrive-vision-photo-frame">
                 <img 
                   src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&auto=format&fit=crop&q=80" 
-                  alt="Forêt du Bassin du Congo" 
+                  alt={t("afriveVisionPhotoAlt")} 
                   className="afrive-vision-img"
+                  loading="lazy"
                 />
               </div>
 
               <div className="afrive-vision-text">
-                <span className="badge badge-gold-solid">Vision Bassin du Congo</span>
-                <h3>200 millions d'hectares, 60% de jeunes de moins de 25 ans</h3>
+                <span className="badge badge-gold-solid">{t("afriveVisionBadge")}</span>
+                <h3>{t("afriveVisionTitle")}</h3>
                 <p>
-                  Le Bassin du Congo est la 2ᵉ forêt tropicale du monde. En équipant sa jeunesse des outils du journalisme rigoureux, nous transformons une vulnérabilité en une force motrice pour le continent et la planète.
+                  {t("afriveVisionDesc")}
                 </p>
                 <div className="afrive-vision-founder">
-                  <strong>Jean Marie Kenfack</strong> · Porteur du programme JEDDIAC
+                  <strong>{t("afriveVisionFounderName")}</strong> · {t("afriveVisionFounderRole")}
                 </div>
               </div>
             </div>
