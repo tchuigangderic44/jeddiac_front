@@ -6,7 +6,6 @@ import StrategicAxes from "./components/StrategicAxes";
 import TeamSection from "./components/TeamSection";
 import TerritoriesMap from "./components/TerritoriesMap";
 import PodcastPlayer from "./components/PodcastPlayer";
-import ArticlesSection from "./components/ArticlesSection";
 import NewsSection from "./components/NewsSection";
 import AgendaSection from "./components/AgendaSection";
 import AfriveSpotlight from "./components/AfriveSpotlight";
@@ -17,7 +16,6 @@ import AdminPortal from "./components/AdminPortal";
 import PageTransitionLoader from "./components/PageTransitionLoader";
 import AllNewsPage from "./pages/AllNewsPage";
 import AllProfilesPage from "./pages/AllProfilesPage";
-import AllArticlesPage from "./pages/AllArticlesPage";
 import AllAgendaPage from "./pages/AllAgendaPage";
 import AllPodcastsPage from "./pages/AllPodcastsPage";
 import { AuthProvider, useAuth } from "./context/AuthContext";
@@ -31,7 +29,6 @@ function AppContent() {
     structuresPartenaires: 90,
     regionsCameroun: 10,
     paysAfriqueCentrale: 6,
-    articlesPublies: 4,
     actualitesCount: 3,
     evenementsCount: 3
   });
@@ -39,7 +36,7 @@ function AppContent() {
   const [applicationModalOpen, setApplicationModalOpen] = useState(false);
   const [applicationSubject, setApplicationSubject] = useState("");
   const [activeSection, setActiveSection] = useState("accueil");
-  const [currentView, setCurrentView] = useState("home"); // "home" | "all-news" | "all-profiles" | "all-articles" | "all-agenda" | "admin"
+  const [currentView, setCurrentView] = useState("home"); // "home" | "all-news" | "all-profiles" | "all-agenda" | "admin"
   const [profilesCategory, setProfilesCategory] = useState("all");
 
   // Page Transition Simulation State
@@ -71,9 +68,6 @@ function AppContent() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else if (hash === "#profils" || hash === "#tous-les-profils" || hash === "#membres" || hash === "#equipe-complete" || hash === "#repertoire") {
       setCurrentView("all-profiles");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    } else if (hash === "#enquetes" || hash === "#toutes-les-enquetes" || hash === "#articles-tous" || hash === "#publications") {
-      setCurrentView("all-articles");
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else if (hash === "#agenda-complet" || hash === "#toutes-les-formations" || hash === "#masterclasses-toutes" || hash === "#sessions") {
       setCurrentView("all-agenda");
@@ -108,7 +102,7 @@ function AppContent() {
     window.addEventListener("keydown", handleKeyDown);
 
     // ScrollSpy for active section in navbar (only active on home landing page)
-    const sections = ["accueil", "programme", "equipe", "piliers", "podcasts", "articles", "agenda", "territoires", "contact"];
+    const sections = ["accueil", "programme", "equipe", "piliers", "podcasts", "agenda", "territoires", "contact"];
     const handleScroll = () => {
       if (currentView !== "home") return;
       const scrollPos = window.scrollY + 200;
@@ -246,10 +240,6 @@ function AppContent() {
         />
       )}
 
-      {currentView === "all-articles" && (
-        <AllArticlesPage onBackToHome={() => navigateToHomeSection("articles")} />
-      )}
-
       {currentView === "all-agenda" && (
         <AllAgendaPage 
           onBackToHome={() => navigateToHomeSection("agenda")} 
@@ -317,16 +307,6 @@ function AppContent() {
               isEnglish ? "Loading Junior Podcast & Audio Hub..." : "Chargement du Hub Audio & Podcasts...",
               isEnglish ? "Accessing field dispatches and student investigations" : "Accès aux récits de terrain et enquêtes sonores de la jeunesse"
             )}
-          />
-
-          {/* Solution Journalism & Investigation Reports */}
-          <ArticlesSection 
-            onNavigateAllArticles={() => navigateTo(
-              "all-articles", 
-              "#toutes-les-enquetes",
-              isEnglish ? "Loading in-depth investigations & reports..." : "Chargement des grandes enquêtes & reportages...",
-              isEnglish ? "Accessing Congo Basin ecological solution publications" : "Accès aux publications de solutions écologiques du Bassin du Congo"
-            )} 
           />
 
           {/* Upcoming Cohorts & Training Workshops */}

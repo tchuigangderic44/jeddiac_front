@@ -40,7 +40,6 @@ export default function Navbar({ onOpenApplication, activeSection, onNavigateSec
     { label: t("navProgram"), href: "#programme" },
     { label: t("navTeam"), href: "#equipe" },
     { label: t("navAxes"), href: "#piliers" },
-    { label: t("navArticles"), href: "#articles" },
     { label: t("navPodcasts"), href: "#podcasts" },
     { label: t("navTerritories"), href: "#territoires" },
     { label: t("navContact"), href: "#contact" },

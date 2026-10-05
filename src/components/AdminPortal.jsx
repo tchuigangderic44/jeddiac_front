@@ -67,7 +67,6 @@ export default function AdminPortal({ onClose }) {
 
   // Admin Data state
   const [stats, setStats] = useState(null);
-  const [articles, setArticles] = useState([]);
   const [news, setNews] = useState([]);
   const [agendas, setAgendas] = useState([]);
   const [contacts, setContacts] = useState([]);
@@ -77,14 +76,6 @@ export default function AdminPortal({ onClose }) {
   const [dataLoading, setDataLoading] = useState(false);
 
   // Modals for creating items
-  const [newArticleOpen, setNewArticleOpen] = useState(false);
-  const [articleForm, setArticleForm] = useState({
-    title: "",
-    category: "Investigation & Climat",
-    summary: "",
-    content: "",
-    tags: "Climat, Bassin du Congo"
-  });
 
   const [newNewsOpen, setNewNewsOpen] = useState(false);
   const [newsFormLangTab, setNewsFormLangTab] = useState("fr"); // 'fr' | 'en'
@@ -265,15 +256,57 @@ export default function AdminPortal({ onClose }) {
   }, [activeActionMenuId]);
 
   const [newAgendaOpen, setNewAgendaOpen] = useState(false);
+  const [agendaFormLangTab, setAgendaFormLangTab] = useState("fr"); // 'fr' | 'en'
   const [agendaForm, setAgendaForm] = useState({
     title: "",
+    titleEn: "",
     type: "Formation Régionale",
+    typeEn: "Regional Training",
     startDate: new Date().toISOString().split("T")[0],
     endDate: new Date(Date.now() + 86400000 * 2).toISOString().split("T")[0],
     location: "Yaoundé · Hybride",
+    locationEn: "Yaoundé · Hybrid",
+    duration: "Session intensive 3 jours",
+    durationEn: "3-day intensive session",
+    seats: "40 places disponibles",
+    seatsEn: "40 seats available",
+    audience: "Lycéens & Étudiants",
+    audienceEn: "High school & University students",
     description: "",
+    descriptionEn: "",
     registrationLink: "/candidature"
   });
+
+  const [editAgendaOpen, setEditAgendaOpen] = useState(false);
+  const [editAgendaLangTab, setEditAgendaLangTab] = useState("fr");
+  const [editAgendaForm, setEditAgendaForm] = useState({
+    id: "",
+    title: "",
+    titleEn: "",
+    type: "Formation Régionale",
+    typeEn: "Regional Training",
+    startDate: "",
+    endDate: "",
+    location: "",
+    locationEn: "",
+    duration: "",
+    durationEn: "",
+    seats: "",
+    seatsEn: "",
+    audience: "",
+    audienceEn: "",
+    description: "",
+    descriptionEn: "",
+    registrationLink: "/candidature",
+    status: "active"
+  });
+
+  const [viewAgendaOpen, setViewAgendaOpen] = useState(false);
+  const [viewAgendaLangTab, setViewAgendaLangTab] = useState("fr");
+  const [selectedAgendaItem, setSelectedAgendaItem] = useState(null);
+
+  const [agendaFilterStatus, setAgendaFilterStatus] = useState("all"); // 'all' | 'active' | 'suspended'
+  const [agendaFilterType, setAgendaFilterType] = useState("all");
 
   // Confirmation Modal State (Désactiver / Activer / Supprimer)
   const [confirmModal, setConfirmModal] = useState({
@@ -315,11 +348,10 @@ export default function AdminPortal({ onClose }) {
   const loadAllAdminData = async () => {
     setDataLoading(true);
     try {
-      const [statsRes, articlesRes, newsRes, agendaRes, contactsRes, newsletterRes, usersRes, podcastsRes] = await Promise.all([
+      const [statsRes, newsRes, agendaRes, contactsRes, newsletterRes, usersRes, podcastsRes] = await Promise.all([
         api.getAdminStats(token).catch(() => null),
-        api.getAdminArticles(token, "?limit=100").catch(() => api.getArticles("?limit=50").catch(() => ({ values: [] }))),
         api.getAdminNews(token, "?limit=100").catch(() => api.getNews("?limit=50").catch(() => ({ values: [] }))),
-        api.getAgendas("?limit=50").catch(() => ({ values: [] })),
+        api.getAdminAgendas(token, "?limit=100").catch(() => api.getAgendas("?limit=50").catch(() => ({ values: [] }))),
         api.getAdminContacts(token, "?limit=50").catch(() => ({ data: [], values: [] })),
         api.getAdminNewsletters(token, "?limit=50").catch(() => ({ data: [], values: [] })),
         api.getAdminUsers(token, "?limit=50").catch(() => ({ data: [], values: [] })),
@@ -327,7 +359,6 @@ export default function AdminPortal({ onClose }) {
       ]);
 
       if (statsRes) setStats(statsRes);
-      if (articlesRes?.values) setArticles(articlesRes.values);
       if (newsRes?.values) setNews(newsRes.values);
       if (agendaRes?.values) setAgendas(agendaRes.values);
       if (contactsRes) setContacts(contactsRes.data || contactsRes.values || []);
@@ -348,45 +379,6 @@ export default function AdminPortal({ onClose }) {
     if (!res.success) {
       setLoginError(res.error || (isEnglish ? "Authentication failed." : "Échec de connexion."));
     }
-  };
-
-  // Article Actions
-  const handleCreateArticle = async (e) => {
-    e.preventDefault();
-    try {
-      await api.createArticle(token, articleForm);
-      setNewArticleOpen(false);
-      setArticleForm({ title: "", category: "Investigation & Climat", summary: "", content: "", tags: "Climat, Bassin du Congo" });
-      loadAllAdminData();
-    } catch (err) {
-      alert("Erreur: " + err.message);
-    }
-  };
-
-  const handleDeleteArticle = (target) => {
-    const item = typeof target === "object" ? target : articles.find(a => a.id === target);
-    const title = item?.title ? `« ${item.title} »` : (isEnglish ? "this article" : "cet article");
-
-    setConfirmModal({
-      isOpen: true,
-      title: isEnglish ? "Delete Article?" : "Supprimer l'article ?",
-      message: isEnglish 
-        ? `Are you sure you want to permanently delete ${title}?`
-        : `Voulez-vous vraiment supprimer définitivement ${title} ?`,
-      subMessage: isEnglish
-        ? "This action is irreversible. The publication will be removed immediately from the portal."
-        : "Cette action est irréversible. L'article sera définitivement supprimé de la plateforme.",
-      confirmText: isEnglish ? "Yes, Delete" : "Oui, supprimer",
-      cancelText: isEnglish ? "Cancel" : "Annuler",
-      variant: "danger",
-      icon: "trash",
-      isProcessing: false,
-      onConfirm: async () => {
-        const idToDelete = item?.id || target;
-        await api.deleteArticle(token, idToDelete);
-        loadAllAdminData();
-      }
-    });
   };
 
   // News Actions
@@ -756,17 +748,105 @@ export default function AdminPortal({ onClose }) {
       setNewAgendaOpen(false);
       setAgendaForm({
         title: "",
+        titleEn: "",
         type: "Formation Régionale",
+        typeEn: "Regional Training",
         startDate: new Date().toISOString().split("T")[0],
         endDate: new Date(Date.now() + 86400000 * 2).toISOString().split("T")[0],
         location: "Yaoundé · Hybride",
+        locationEn: "Yaoundé · Hybrid",
+        duration: "Session intensive 3 jours",
+        durationEn: "3-day intensive session",
+        seats: "40 places disponibles",
+        seatsEn: "40 seats available",
+        audience: "Lycéens & Étudiants",
+        audienceEn: "High school & University students",
         description: "",
+        descriptionEn: "",
         registrationLink: "/candidature"
       });
       loadAllAdminData();
     } catch (err) {
       alert("Erreur: " + err.message);
     }
+  };
+
+  const handleOpenViewAgenda = (item) => {
+    setSelectedAgendaItem(item);
+    setViewAgendaLangTab("fr");
+    setViewAgendaOpen(true);
+  };
+
+  const handleOpenEditAgenda = (item) => {
+    setEditAgendaForm({
+      id: item.id,
+      title: item.title || "",
+      titleEn: item.titleEn || "",
+      type: item.type || "Formation Régionale",
+      typeEn: item.typeEn || "Regional Training",
+      startDate: item.startDate ? new Date(item.startDate).toISOString().split("T")[0] : "",
+      endDate: item.endDate ? new Date(item.endDate).toISOString().split("T")[0] : "",
+      location: item.location || "",
+      locationEn: item.locationEn || "",
+      duration: item.duration || "",
+      durationEn: item.durationEn || "",
+      seats: item.seats || "",
+      seatsEn: item.seatsEn || "",
+      audience: item.audience || "",
+      audienceEn: item.audienceEn || "",
+      description: item.description || "",
+      descriptionEn: item.descriptionEn || "",
+      registrationLink: item.registrationLink || "/candidature",
+      status: item.status || "active"
+    });
+    setEditAgendaLangTab("fr");
+    setEditAgendaOpen(true);
+  };
+
+  const handleUpdateAgenda = async (e) => {
+    e.preventDefault();
+    try {
+      await api.updateAgenda(token, editAgendaForm.id, editAgendaForm);
+      setEditAgendaOpen(false);
+      loadAllAdminData();
+    } catch (err) {
+      alert("Erreur: " + err.message);
+    }
+  };
+
+  const handleToggleAgendaStatus = (target) => {
+    const item = typeof target === "object" ? target : agendas.find(ag => ag.id === target);
+    const isActivating = item?.status !== "active";
+    const title = item?.title ? `« ${item.title} »` : (isEnglish ? "this session" : "cette session");
+
+    setConfirmModal({
+      isOpen: true,
+      title: isActivating 
+        ? (isEnglish ? "Activate Session?" : "Activer la session ?") 
+        : (isEnglish ? "Deactivate Session?" : "Désactiver la session ?"),
+      message: isActivating
+        ? (isEnglish ? `Do you want to make ${title} publicly visible?` : `Voulez-vous rendre la session ${title} visible au public ?`)
+        : (isEnglish ? `Do you want to suspend publication of ${title}?` : `Voulez-vous suspendre l'affichage public de la session ${title} ?`),
+      subMessage: isActivating
+        ? (isEnglish ? "The session will reappear in the public calendar." : "La session réapparaîtra dans le calendrier public.")
+        : (isEnglish ? "The session will be hidden from the public website but preserved in the admin dashboard." : "La session sera masquée du site public tout en restant archivée dans l'administration."),
+      confirmText: isActivating 
+        ? (isEnglish ? "Yes, Activate" : "Oui, activer") 
+        : (isEnglish ? "Yes, Deactivate" : "Oui, désactiver"),
+      cancelText: isEnglish ? "Cancel" : "Annuler",
+      variant: isActivating ? "success" : "warning",
+      icon: isActivating ? "check" : "power",
+      isProcessing: false,
+      onConfirm: async () => {
+        const id = item?.id || target;
+        if (isActivating) {
+          await api.reactivateAgenda(token, id);
+        } else {
+          await api.suspendAgenda(token, id);
+        }
+        loadAllAdminData();
+      }
+    });
   };
 
   const handleDeleteAgenda = (target) => {
@@ -1110,9 +1190,26 @@ export default function AdminPortal({ onClose }) {
 
   // Filtered queries
   const q = searchQuery.toLowerCase().trim();
-  const filteredArticles = articles.filter(a => !q || a.title?.toLowerCase().includes(q) || a.category?.toLowerCase().includes(q));
   const filteredNews = news.filter(n => !q || n.title?.toLowerCase().includes(q) || n.titleEn?.toLowerCase().includes(q) || n.category?.toLowerCase().includes(q) || n.categoryEn?.toLowerCase().includes(q) || n.tags?.toLowerCase().includes(q) || n.tagsEn?.toLowerCase().includes(q));
-  const filteredAgendas = agendas.filter(ag => !q || ag.title?.toLowerCase().includes(q) || ag.location?.toLowerCase().includes(q) || ag.type?.toLowerCase().includes(q));
+  const filteredAgendas = agendas.filter((ag) => {
+    if (agendaFilterStatus !== "all" && ag.status !== agendaFilterStatus) {
+      return false;
+    }
+    if (agendaFilterType !== "all" && ag.type !== agendaFilterType && ag.typeEn !== agendaFilterType) {
+      return false;
+    }
+    if (!q) return true;
+    return (
+      ag.title?.toLowerCase().includes(q) ||
+      ag.titleEn?.toLowerCase().includes(q) ||
+      ag.location?.toLowerCase().includes(q) ||
+      ag.locationEn?.toLowerCase().includes(q) ||
+      ag.type?.toLowerCase().includes(q) ||
+      ag.typeEn?.toLowerCase().includes(q) ||
+      ag.description?.toLowerCase().includes(q) ||
+      ag.descriptionEn?.toLowerCase().includes(q)
+    );
+  });
   const podcastTopics = [
     "all",
     ...new Set(
@@ -1391,17 +1488,6 @@ export default function AdminPortal({ onClose }) {
           </div>
 
           <div
-            onClick={() => { setActiveTab("articles"); setMobileSidebarOpen(false); }}
-            className={`admin-nav-item ${activeTab === "articles" ? "active" : ""}`}
-          >
-            <div className="admin-nav-item-content">
-              <FileText size={18} />
-              <span>{isEnglish ? "Investigations" : "Articles & Enquêtes"}</span>
-            </div>
-            <span className="admin-nav-badge">{articles.length}</span>
-          </div>
-
-          <div
             onClick={() => { setActiveTab("news"); setMobileSidebarOpen(false); }}
             className={`admin-nav-item ${activeTab === "news" ? "active" : ""}`}
           >
@@ -1494,11 +1580,7 @@ export default function AdminPortal({ onClose }) {
                 </div>
 
                 <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-                  <button onClick={() => setNewArticleOpen(true)} className="btn btn-forest btn-sm">
-                    <Plus size={16} />
-                    <span>{isEnglish ? "New Article" : "Nouvel Article"}</span>
-                  </button>
-                  <button onClick={() => setNewNewsOpen(true)} className="btn btn-outline-forest btn-sm">
+                  <button onClick={() => setNewNewsOpen(true)} className="btn btn-forest btn-sm">
                     <Plus size={16} />
                     <span>{isEnglish ? "New Announcement" : "Nouvelle Actualité"}</span>
                   </button>
@@ -1515,18 +1597,6 @@ export default function AdminPortal({ onClose }) {
 
               {/* KPI Cards */}
               <div className="admin-kpi-grid">
-                <div className="admin-kpi-card">
-                  <div className="admin-kpi-top">
-                    <span className="admin-kpi-label">{isEnglish ? "Published Investigations" : "Articles & Enquêtes"}</span>
-                    <div className="admin-kpi-icon-wrap"><FileText size={18} /></div>
-                  </div>
-                  <div className="admin-kpi-val">{stats?.kpi?.totalArticles ?? articles.length}</div>
-                  <div className="admin-kpi-sub">
-                    <TrendingUp size={14} />
-                    <span>{isEnglish ? "Active verified stories" : "Publications vérifiées"}</span>
-                  </div>
-                </div>
-
                 <div className="admin-kpi-card">
                   <div className="admin-kpi-top">
                     <span className="admin-kpi-label">{isEnglish ? "News & Bulletins" : "Actualités & Presse"}</span>
@@ -1644,108 +1714,6 @@ export default function AdminPortal({ onClose }) {
                         <tr>
                           <td colSpan={6} style={{ textAlign: "center", color: "#6A8278", padding: "2rem" }}>
                             {isEnglish ? "No inquiries received yet." : "Aucun message pour le moment."}
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 2: ARTICLES */}
-          {activeTab === "articles" && (
-            <div>
-              <div className="admin-page-header">
-                <div>
-                  <h1 className="admin-page-title">
-                    {isEnglish ? "Investigations & Solutions Desk" : "Gestion des Articles & Enquêtes"}
-                  </h1>
-                  <p className="admin-page-subtitle">
-                    {isEnglish 
-                      ? "Publish, review and manage long-form solution journalism and ecological investigations."
-                      : "Rédigez, modifiez et modérez les publications d'investigation et de journalisme de solutions."}
-                  </p>
-                </div>
-                <button onClick={() => setNewArticleOpen(true)} className="btn btn-forest">
-                  <Plus size={18} />
-                  <span>{isEnglish ? "Write an Article" : "Rédiger un Article"}</span>
-                </button>
-              </div>
-
-              {/* Controls & Search Bar */}
-              <div className="admin-card">
-                <div className="admin-card-header">
-                  <div className="dedicated-search-box" style={{ maxWidth: "380px" }}>
-                    <Search size={16} className="search-icon" />
-                    <input
-                      type="text"
-                      placeholder={isEnglish ? "Search by title or topic..." : "Rechercher par titre ou mot-clé..."}
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="dedicated-search-input"
-                    />
-                  </div>
-
-                  <span className="results-counter-pill">
-                    <strong>{filteredArticles.length}</strong> {isEnglish ? "articles available" : "articles répertoriés"}
-                  </span>
-                </div>
-
-                <div className="admin-table-wrap">
-                  <table className="admin-table">
-                    <thead>
-                      <tr>
-                        <th>{isEnglish ? "Title" : "Titre"}</th>
-                        <th>{isEnglish ? "Category" : "Catégorie"}</th>
-                        <th>{isEnglish ? "Publication Date" : "Date de publication"}</th>
-                        <th>{isEnglish ? "Read Count" : "Lectures"}</th>
-                        <th>{isEnglish ? "Status" : "Statut"}</th>
-                        <th>{isEnglish ? "Actions" : "Actions"}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredArticles.map((a) => (
-                        <tr key={a.id}>
-                          <td style={{ fontWeight: 600, color: "#13221B", maxWidth: "340px" }}>
-                            {a.title}
-                          </td>
-                          <td>
-                            <span className="badge badge-green-light">
-                              {a.category || "Investigation"}
-                            </span>
-                          </td>
-                          <td>
-                            {new Date(a.publishedAt || a.createdAt).toLocaleDateString(isEnglish ? "en-US" : "fr-FR")}
-                          </td>
-                          <td>
-                            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", color: "#5A7367" }}>
-                              <Eye size={13} />
-                              <span>{a.viewsCount || 0}</span>
-                            </div>
-                          </td>
-                          <td>
-                            <span className={`badge ${a.status === "active" ? "badge-green-light" : "badge-gold-light"}`}>
-                              {a.status === "active" ? (isEnglish ? "Published" : "Actif") : a.status}
-                            </span>
-                          </td>
-                          <td>
-                            <button
-                              onClick={() => handleDeleteArticle(a.id)}
-                              className="btn-action-delete"
-                              title={isEnglish ? "Delete" : "Supprimer"}
-                            >
-                              <Trash2 size={14} />
-                              <span>{isEnglish ? "Delete" : "Supprimer"}</span>
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                      {filteredArticles.length === 0 && (
-                        <tr>
-                          <td colSpan={6} style={{ textAlign: "center", color: "#6A8278", padding: "2.5rem" }}>
-                            {isEnglish ? "No matching articles found." : "Aucun article correspondant."}
                           </td>
                         </tr>
                       )}
@@ -1993,53 +1961,184 @@ export default function AdminPortal({ onClose }) {
                     />
                   </div>
 
-                  <span className="results-counter-pill">
-                    <strong>{filteredAgendas.length}</strong> {isEnglish ? "sessions programmed" : "sessions programmées"}
-                  </span>
+                  <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", alignItems: "center" }}>
+                    {/* Status Filter */}
+                    <select
+                      value={agendaFilterStatus}
+                      onChange={(e) => setAgendaFilterStatus(e.target.value)}
+                      style={{
+                        padding: "0.45rem 0.85rem",
+                        borderRadius: "8px",
+                        border: "1px solid #D5E0D5",
+                        fontSize: "0.85rem",
+                        color: "#13221B",
+                        backgroundColor: "#FFFFFF"
+                      }}
+                    >
+                      <option value="all">{isEnglish ? "All statuses" : "Tous les statuts"}</option>
+                      <option value="active">{isEnglish ? "Active only" : "Actifs uniquement"}</option>
+                      <option value="suspended">{isEnglish ? "Suspended only" : "Désactivés uniquement"}</option>
+                    </select>
+
+                    {/* Type Filter */}
+                    <select
+                      value={agendaFilterType}
+                      onChange={(e) => setAgendaFilterType(e.target.value)}
+                      style={{
+                        padding: "0.45rem 0.85rem",
+                        borderRadius: "8px",
+                        border: "1px solid #D5E0D5",
+                        fontSize: "0.85rem",
+                        color: "#13221B",
+                        backgroundColor: "#FFFFFF"
+                      }}
+                    >
+                      <option value="all">{isEnglish ? "All formats" : "Tous les formats"}</option>
+                      <option value="Formation Régionale">{isEnglish ? "Regional Training" : "Formation Régionale"}</option>
+                      <option value="Masterclass Virtuelle">{isEnglish ? "Virtual Masterclass" : "Masterclass Virtuelle"}</option>
+                      <option value="Conférence Régionale">{isEnglish ? "Regional Conference / Forum" : "Conférence Régionale"}</option>
+                    </select>
+
+                    <span className="results-counter-pill">
+                      <strong>{filteredAgendas.length}</strong> {isEnglish ? "sessions listed" : "sessions répertoriées"}
+                    </span>
+                  </div>
                 </div>
 
                 <div className="admin-table-wrap">
                   <table className="admin-table">
                     <thead>
                       <tr>
-                        <th>{isEnglish ? "Training Title" : "Intitulé de la Formation"}</th>
+                        <th>{isEnglish ? "Training / Session" : "Intitulé & Cohorte"}</th>
                         <th>{isEnglish ? "Typology" : "Format"}</th>
                         <th>{isEnglish ? "Timeline" : "Période"}</th>
-                        <th>{isEnglish ? "Territory" : "Lieu & Territoire"}</th>
-                        <th>{isEnglish ? "Actions" : "Actions"}</th>
+                        <th>{isEnglish ? "Location / Territory" : "Lieu & Territoire"}</th>
+                        <th>{isEnglish ? "Status" : "Statut"}</th>
+                        <th style={{ textAlign: "right", paddingRight: "1.5rem" }}>{isEnglish ? "Actions" : "Actions"}</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredAgendas.map((ag) => (
-                        <tr key={ag.id}>
-                          <td style={{ fontWeight: 600, color: "#13221B", maxWidth: "340px" }}>{ag.title}</td>
-                          <td><span className="badge badge-green-light">{ag.type}</span></td>
-                          <td>
-                            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", color: "#5A7367" }}>
-                              <Calendar size={13} />
-                              <span>Du {new Date(ag.startDate).toLocaleDateString(isEnglish ? "en-US" : "fr-FR")}</span>
-                            </div>
-                          </td>
-                          <td>
-                            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", color: "#5A7367" }}>
-                              <MapPin size={13} />
-                              <span>{ag.location}</span>
-                            </div>
-                          </td>
-                          <td>
-                            <button
-                              onClick={() => handleDeleteAgenda(ag.id)}
-                              className="btn-action-delete"
-                            >
-                              <Trash2 size={14} />
-                              <span>{isEnglish ? "Delete" : "Supprimer"}</span>
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
+                      {filteredAgendas.map((ag) => {
+                        const tableTitle = (isEnglish && ag.titleEn) ? ag.titleEn : ag.title;
+                        const tableType = (isEnglish && ag.typeEn) ? ag.typeEn : ag.type;
+                        const tableLocation = (isEnglish && ag.locationEn) ? ag.locationEn : ag.location;
+                        const hasBilingual = !!(ag.title && ag.titleEn);
+
+                        return (
+                          <tr key={ag.id}>
+                            <td style={{ fontWeight: 600, color: "#13221B", maxWidth: "320px" }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                                <span>{tableTitle}</span>
+                                {hasBilingual && (
+                                  <span style={{ fontSize: "0.65rem", padding: "1px 5px", borderRadius: "4px", background: "rgba(30,81,40,0.12)", color: "#1E5128", fontWeight: 700, flexShrink: 0 }}>
+                                    FR/EN
+                                  </span>
+                                )}
+                              </div>
+                            </td>
+                            <td><span className="badge badge-green-light">{tableType}</span></td>
+                            <td>
+                              <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", color: "#5A7367" }}>
+                                <Calendar size={13} />
+                                <span>Du {new Date(ag.startDate).toLocaleDateString(isEnglish ? "en-US" : "fr-FR")}</span>
+                              </div>
+                            </td>
+                            <td>
+                              <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", color: "#5A7367" }}>
+                                <MapPin size={13} />
+                                <span>{tableLocation}</span>
+                              </div>
+                            </td>
+                            <td>
+                              <span className={`badge ${ag.status === "active" ? "badge-green-light" : "badge-gold-light"}`}>
+                                {ag.status === "active" ? (isEnglish ? "Active" : "Actif") : (isEnglish ? "Suspended" : "Désactivé")}
+                              </span>
+                            </td>
+                            <td style={{ textAlign: "right", position: "relative" }}>
+                              <div className="action-menu-container">
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setActiveActionMenuId(activeActionMenuId === ag.id ? null : ag.id);
+                                  }}
+                                  className={`btn-action-more ${activeActionMenuId === ag.id ? "active" : ""}`}
+                                  aria-label={isEnglish ? "Actions menu" : "Menu d'actions"}
+                                  title={isEnglish ? "Actions" : "Options"}
+                                >
+                                  <MoreVertical size={16} />
+                                </button>
+
+                                {activeActionMenuId === ag.id && (
+                                  <div 
+                                    className="action-dropdown-menu" 
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    {/* 1. VOIR */}
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setActiveActionMenuId(null);
+                                        handleOpenViewAgenda(ag);
+                                      }}
+                                      className="action-dropdown-item"
+                                    >
+                                      <Eye size={14} style={{ color: "#2563EB" }} />
+                                      <span>{isEnglish ? "View details" : "Voir les détails"}</span>
+                                    </button>
+
+                                    {/* 2. ÉDITER */}
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setActiveActionMenuId(null);
+                                        handleOpenEditAgenda(ag);
+                                      }}
+                                      className="action-dropdown-item"
+                                    >
+                                      <Edit3 size={14} style={{ color: "#059669" }} />
+                                      <span>{isEnglish ? "Edit session" : "Modifier la session"}</span>
+                                    </button>
+
+                                    {/* 3. ACTIVER / DÉSACTIVER */}
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setActiveActionMenuId(null);
+                                        handleToggleAgendaStatus(ag);
+                                      }}
+                                      className="action-dropdown-item"
+                                    >
+                                      <Power size={14} style={{ color: ag.status === "active" ? "#D97706" : "#16A34A" }} />
+                                      <span>
+                                        {ag.status === "active" 
+                                          ? (isEnglish ? "Deactivate" : "Désactiver") 
+                                          : (isEnglish ? "Activate" : "Activer")}
+                                      </span>
+                                    </button>
+
+                                    {/* 4. SUPPRIMER */}
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setActiveActionMenuId(null);
+                                        handleDeleteAgenda(ag);
+                                      }}
+                                      className="action-dropdown-item action-dropdown-item-danger"
+                                    >
+                                      <Trash2 size={14} style={{ color: "#DC2626" }} />
+                                      <span>{isEnglish ? "Delete" : "Supprimer"}</span>
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
                       {filteredAgendas.length === 0 && (
                         <tr>
-                          <td colSpan={5} style={{ textAlign: "center", color: "#6A8278", padding: "2.5rem" }}>
+                          <td colSpan={6} style={{ textAlign: "center", color: "#6A8278", padding: "2.5rem" }}>
                             {isEnglish ? "No sessions found." : "Aucune session trouvée."}
                           </td>
                         </tr>
@@ -2887,101 +2986,6 @@ export default function AdminPortal({ onClose }) {
           )}
         </main>
       </div>
-
-      {/* CREATE ARTICLE MODAL (Matches Site Modals) */}
-      {newArticleOpen && (
-        <div className="modal-overlay" onClick={() => setNewArticleOpen(false)}>
-          <div className="modal-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "680px" }}>
-            <button 
-              onClick={() => setNewArticleOpen(false)} 
-              className="modal-close-btn"
-              aria-label="Fermer"
-            >
-              <X size={20} />
-            </button>
-
-            <h3 style={{ fontSize: "1.6rem", fontFamily: "var(--font-serif)", fontWeight: 800, color: "#13221B", marginBottom: "0.4rem" }}>
-              {isEnglish ? "Write an Investigation" : "Rédiger un Article d'Investigation"}
-            </h3>
-            <p style={{ color: "#5A7367", fontSize: "0.9rem", marginBottom: "1.5rem" }}>
-              {isEnglish ? "Publish a new story to the investigative solutions catalog." : "Diffuser une nouvelle enquête dans le catalogue des solutions durables."}
-            </p>
-
-            <form onSubmit={handleCreateArticle}>
-              <div className="form-group">
-                <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Article Title *" : "Titre de l'article *"}</label>
-                <input 
-                  type="text" 
-                  required 
-                  className="form-control" 
-                  value={articleForm.title} 
-                  onChange={(e) => setArticleForm({ ...articleForm, title: e.target.value })} 
-                  placeholder={isEnglish ? "e.g. Congo Basin: Forest governance in Central Africa" : "ex: Bassin du Congo : Gouvernance forestière et jeunesse"}
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Thematic Category" : "Catégorie Thématique"}</label>
-                <select 
-                  className="dedicated-select" 
-                  style={{ width: "100%" }}
-                  value={articleForm.category} 
-                  onChange={(e) => setArticleForm({ ...articleForm, category: e.target.value })}
-                >
-                  <option value="Investigation & Climat">Investigation & Climat</option>
-                  <option value="Médias & Méthodes">Médias & Méthodes</option>
-                  <option value="Territoires & Communautés">Territoires & Communautés</option>
-                  <option value="Tribune & Entretien">Tribune & Entretien</option>
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Summary / Lead paragraph *" : "Résumé / Chapeau introductif *"}</label>
-                <textarea 
-                  required 
-                  rows={2} 
-                  className="form-control" 
-                  value={articleForm.summary} 
-                  onChange={(e) => setArticleForm({ ...articleForm, summary: e.target.value })} 
-                  placeholder={isEnglish ? "Concise hook summarizing the investigation..." : "Accroche concise résumant l'enquête..."}
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Full Body Content *" : "Contenu intégral de l'article *"}</label>
-                <textarea 
-                  required 
-                  rows={6} 
-                  className="form-control" 
-                  value={articleForm.content} 
-                  onChange={(e) => setArticleForm({ ...articleForm, content: e.target.value })} 
-                  placeholder={isEnglish ? "Full journalistic text, data and testimonies..." : "Texte complet du reportage, données de terrain et témoignages..."}
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Tags (comma separated)" : "Mots-clés / Tags (séparés par des virgules)"}</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  value={articleForm.tags} 
-                  onChange={(e) => setArticleForm({ ...articleForm, tags: e.target.value })} 
-                  placeholder="Forêt, Biodiversité, COMIFAC, Jeunesse"
-                />
-              </div>
-
-              <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.75rem", marginTop: "1.75rem", paddingTop: "1.25rem", borderTop: "1px solid #E5EBE7" }}>
-                <button type="button" onClick={() => setNewArticleOpen(false)} className="btn btn-outline-forest">
-                  {isEnglish ? "Cancel" : "Annuler"}
-                </button>
-                <button type="submit" className="btn btn-forest">
-                  {isEnglish ? "Publish Story" : "Publier l'article"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
 
       {/* CREATE NEWS MODAL */}
       {newNewsOpen && (
@@ -4716,7 +4720,7 @@ export default function AdminPortal({ onClose }) {
       {/* CREATE AGENDA MODAL */}
       {newAgendaOpen && (
         <div className="modal-overlay" onClick={() => setNewAgendaOpen(false)}>
-          <div className="modal-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "640px" }}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "680px" }}>
             <button 
               onClick={() => setNewAgendaOpen(false)} 
               className="modal-close-btn"
@@ -4728,26 +4732,204 @@ export default function AdminPortal({ onClose }) {
             <h3 style={{ fontSize: "1.6rem", fontFamily: "var(--font-serif)", fontWeight: 800, color: "#13221B", marginBottom: "0.4rem" }}>
               {isEnglish ? "Program a Training Session" : "Programmer une Session de Formation"}
             </h3>
-            <p style={{ color: "#5A7367", fontSize: "0.9rem", marginBottom: "1.5rem" }}>
-              {isEnglish ? "Add a masterclass or workshop to the regional calendar." : "Ajouter une masterclass ou atelier pratique au calendrier pédagogique."}
+            <p style={{ color: "#5A7367", fontSize: "0.9rem", marginBottom: "1.25rem" }}>
+              {isEnglish ? "Add a masterclass or workshop to the regional calendar in French and English." : "Ajouter une masterclass ou atelier pratique au calendrier pédagogique en français et anglais."}
             </p>
 
-            <form onSubmit={handleCreateAgenda}>
-              <div className="form-group">
-                <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Session Title *" : "Intitulé de la session *"}</label>
-                <input 
-                  type="text" 
-                  required 
-                  className="form-control" 
-                  value={agendaForm.title} 
-                  onChange={(e) => setAgendaForm({ ...agendaForm, title: e.target.value })} 
-                  placeholder="ex: Atelier d'investigation par imagerie satellite"
-                />
-              </div>
+            {/* Bilingual Tab Switcher */}
+            <div className="modal-lang-tabs">
+              <button 
+                type="button" 
+                className={`modal-lang-tab-btn ${agendaFormLangTab === "fr" ? "active" : ""}`}
+                onClick={() => setAgendaFormLangTab("fr")}
+              >
+                <span>🇫🇷</span>
+                <span>{isEnglish ? "French Version (Primary *)" : "Version Française (Principale *)"}</span>
+              </button>
+              <button 
+                type="button" 
+                className={`modal-lang-tab-btn ${agendaFormLangTab === "en" ? "active" : ""}`}
+                onClick={() => setAgendaFormLangTab("en")}
+              >
+                <span>🇬🇧</span>
+                <span>{isEnglish ? "English Version" : "Version Anglaise"}</span>
+              </button>
+            </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <form onSubmit={handleCreateAgenda}>
+              {agendaFormLangTab === "fr" ? (
+                <>
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>Intitulé de la session (FR) *</label>
+                    <input 
+                      type="text" 
+                      required 
+                      className="form-control" 
+                      value={agendaForm.title} 
+                      onChange={(e) => setAgendaForm({ ...agendaForm, title: e.target.value })} 
+                      placeholder="ex: Session Inaugurale : Investigation Climat & Écriture de Solutions"
+                    />
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>Format / Typologie</label>
+                      <select
+                        className="dedicated-select"
+                        style={{ width: "100%" }}
+                        value={agendaForm.type}
+                        onChange={(e) => setAgendaForm({ ...agendaForm, type: e.target.value })}
+                      >
+                        <option value="Formation Régionale">Formation Régionale</option>
+                        <option value="Masterclass Virtuelle">Masterclass Virtuelle</option>
+                        <option value="Conférence Régionale">Conférence Régionale</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>Lieu & Territoire (FR)</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={agendaForm.location} 
+                        onChange={(e) => setAgendaForm({ ...agendaForm, location: e.target.value })} 
+                        placeholder="ex: Yaoundé · Hybride"
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>Durée de la session (FR)</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={agendaForm.duration} 
+                        onChange={(e) => setAgendaForm({ ...agendaForm, duration: e.target.value })} 
+                        placeholder="ex: Session intensive 3 jours"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>Places / Modalités (FR)</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={agendaForm.seats} 
+                        onChange={(e) => setAgendaForm({ ...agendaForm, seats: e.target.value })} 
+                        placeholder="ex: 40 places disponibles"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>Public cible (FR)</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={agendaForm.audience} 
+                      onChange={(e) => setAgendaForm({ ...agendaForm, audience: e.target.value })} 
+                      placeholder="ex: Lycéens, étudiants et jeunes reporters"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>Description pédagogique (FR) *</label>
+                    <textarea 
+                      required 
+                      rows={3} 
+                      className="form-control" 
+                      value={agendaForm.description} 
+                      onChange={(e) => setAgendaForm({ ...agendaForm, description: e.target.value })} 
+                      placeholder="Objectifs pédagogiques, compétences acquises, méthodologie..."
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>Session Title (EN)</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={agendaForm.titleEn} 
+                      onChange={(e) => setAgendaForm({ ...agendaForm, titleEn: e.target.value })} 
+                      placeholder="e.g. Inaugural Training Session: Climate Investigation"
+                    />
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>Format / Typology (EN)</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={agendaForm.typeEn} 
+                        onChange={(e) => setAgendaForm({ ...agendaForm, typeEn: e.target.value })} 
+                        placeholder="e.g. Regional Training"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>Location / Territory (EN)</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={agendaForm.locationEn} 
+                        onChange={(e) => setAgendaForm({ ...agendaForm, locationEn: e.target.value })} 
+                        placeholder="e.g. Yaoundé · Hybrid"
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>Duration (EN)</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={agendaForm.durationEn} 
+                        onChange={(e) => setAgendaForm({ ...agendaForm, durationEn: e.target.value })} 
+                        placeholder="e.g. 3-day intensive session"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>Seats / Access (EN)</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={agendaForm.seatsEn} 
+                        onChange={(e) => setAgendaForm({ ...agendaForm, seatsEn: e.target.value })} 
+                        placeholder="e.g. 40 seats available"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>Target Audience (EN)</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={agendaForm.audienceEn} 
+                      onChange={(e) => setAgendaForm({ ...agendaForm, audienceEn: e.target.value })} 
+                      placeholder="e.g. High school & university students"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>Pedagogical Description (EN)</label>
+                    <textarea 
+                      rows={3} 
+                      className="form-control" 
+                      value={agendaForm.descriptionEn} 
+                      onChange={(e) => setAgendaForm({ ...agendaForm, descriptionEn: e.target.value })} 
+                      placeholder="Learning objectives, acquired skills, field methodologies..."
+                    />
+                  </div>
+                </>
+              )}
+
+              {/* Shared Date Settings */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginTop: "1rem", paddingTop: "1rem", borderTop: "1px solid #E5EBE7" }}>
                 <div className="form-group">
-                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Start Date" : "Date de début"}</label>
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Start Date *" : "Date de début *"}</label>
                   <input 
                     type="date" 
                     required 
@@ -4757,27 +4939,14 @@ export default function AdminPortal({ onClose }) {
                   />
                 </div>
                 <div className="form-group">
-                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Location / Territory" : "Lieu & Format"}</label>
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "End Date" : "Date de fin"}</label>
                   <input 
-                    type="text" 
+                    type="date" 
                     className="form-control" 
-                    value={agendaForm.location} 
-                    onChange={(e) => setAgendaForm({ ...agendaForm, location: e.target.value })} 
-                    placeholder="ex: Yaoundé · Hybride"
+                    value={agendaForm.endDate} 
+                    onChange={(e) => setAgendaForm({ ...agendaForm, endDate: e.target.value })} 
                   />
                 </div>
-              </div>
-
-              <div className="form-group">
-                <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Pedagogical Description *" : "Description pédagogique *"}</label>
-                <textarea 
-                  required 
-                  rows={3} 
-                  className="form-control" 
-                  value={agendaForm.description} 
-                  onChange={(e) => setAgendaForm({ ...agendaForm, description: e.target.value })} 
-                  placeholder="Objectifs pédagogiques, formateurs et publics cibles..."
-                />
               </div>
 
               <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.75rem", marginTop: "1.75rem", paddingTop: "1.25rem", borderTop: "1px solid #E5EBE7" }}>
@@ -4789,6 +4958,371 @@ export default function AdminPortal({ onClose }) {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* EDIT AGENDA MODAL */}
+      {editAgendaOpen && (
+        <div className="modal-overlay" onClick={() => setEditAgendaOpen(false)}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "680px" }}>
+            <button 
+              onClick={() => setEditAgendaOpen(false)} 
+              className="modal-close-btn"
+              aria-label="Fermer"
+            >
+              <X size={20} />
+            </button>
+
+            <h3 style={{ fontSize: "1.6rem", fontFamily: "var(--font-serif)", fontWeight: 800, color: "#13221B", marginBottom: "0.4rem" }}>
+              {isEnglish ? "Edit Training Session" : "Modifier la Session de Formation"}
+            </h3>
+            <p style={{ color: "#5A7367", fontSize: "0.9rem", marginBottom: "1.25rem" }}>
+              {isEnglish ? "Update the session details, schedule, or English translation." : "Mettez à jour les informations, les dates ou la version anglaise."}
+            </p>
+
+            {/* Bilingual Tab Switcher */}
+            <div className="modal-lang-tabs">
+              <button 
+                type="button" 
+                className={`modal-lang-tab-btn ${editAgendaLangTab === "fr" ? "active" : ""}`}
+                onClick={() => setEditAgendaLangTab("fr")}
+              >
+                <span>🇫🇷</span>
+                <span>{isEnglish ? "French Version" : "Version Française"}</span>
+              </button>
+              <button 
+                type="button" 
+                className={`modal-lang-tab-btn ${editAgendaLangTab === "en" ? "active" : ""}`}
+                onClick={() => setEditAgendaLangTab("en")}
+              >
+                <span>🇬🇧</span>
+                <span>{isEnglish ? "English Version" : "Version Anglaise"}</span>
+              </button>
+            </div>
+
+            <form onSubmit={handleUpdateAgenda}>
+              {editAgendaLangTab === "fr" ? (
+                <>
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>Intitulé de la session (FR) *</label>
+                    <input 
+                      type="text" 
+                      required 
+                      className="form-control" 
+                      value={editAgendaForm.title} 
+                      onChange={(e) => setEditAgendaForm({ ...editAgendaForm, title: e.target.value })} 
+                    />
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>Format / Typologie</label>
+                      <select
+                        className="dedicated-select"
+                        style={{ width: "100%" }}
+                        value={editAgendaForm.type}
+                        onChange={(e) => setEditAgendaForm({ ...editAgendaForm, type: e.target.value })}
+                      >
+                        <option value="Formation Régionale">Formation Régionale</option>
+                        <option value="Masterclass Virtuelle">Masterclass Virtuelle</option>
+                        <option value="Conférence Régionale">Conférence Régionale</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>Lieu & Territoire (FR)</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={editAgendaForm.location} 
+                        onChange={(e) => setEditAgendaForm({ ...editAgendaForm, location: e.target.value })} 
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>Durée de la session (FR)</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={editAgendaForm.duration} 
+                        onChange={(e) => setEditAgendaForm({ ...editAgendaForm, duration: e.target.value })} 
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>Places / Modalités (FR)</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={editAgendaForm.seats} 
+                        onChange={(e) => setEditAgendaForm({ ...editAgendaForm, seats: e.target.value })} 
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>Public cible (FR)</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={editAgendaForm.audience} 
+                      onChange={(e) => setEditAgendaForm({ ...editAgendaForm, audience: e.target.value })} 
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>Description pédagogique (FR) *</label>
+                    <textarea 
+                      required 
+                      rows={3} 
+                      className="form-control" 
+                      value={editAgendaForm.description} 
+                      onChange={(e) => setEditAgendaForm({ ...editAgendaForm, description: e.target.value })} 
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>Session Title (EN)</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={editAgendaForm.titleEn} 
+                      onChange={(e) => setEditAgendaForm({ ...editAgendaForm, titleEn: e.target.value })} 
+                    />
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>Format / Typology (EN)</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={editAgendaForm.typeEn} 
+                        onChange={(e) => setEditAgendaForm({ ...editAgendaForm, typeEn: e.target.value })} 
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>Location / Territory (EN)</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={editAgendaForm.locationEn} 
+                        onChange={(e) => setEditAgendaForm({ ...editAgendaForm, locationEn: e.target.value })} 
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>Duration (EN)</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={editAgendaForm.durationEn} 
+                        onChange={(e) => setEditAgendaForm({ ...editAgendaForm, durationEn: e.target.value })} 
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: "#13221B" }}>Seats / Access (EN)</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={editAgendaForm.seatsEn} 
+                        onChange={(e) => setEditAgendaForm({ ...editAgendaForm, seatsEn: e.target.value })} 
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>Target Audience (EN)</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={editAgendaForm.audienceEn} 
+                      onChange={(e) => setEditAgendaForm({ ...editAgendaForm, audienceEn: e.target.value })} 
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: "#13221B" }}>Pedagogical Description (EN)</label>
+                    <textarea 
+                      rows={3} 
+                      className="form-control" 
+                      value={editAgendaForm.descriptionEn} 
+                      onChange={(e) => setEditAgendaForm({ ...editAgendaForm, descriptionEn: e.target.value })} 
+                    />
+                  </div>
+                </>
+              )}
+
+              {/* Shared Date Settings */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginTop: "1rem", paddingTop: "1rem", borderTop: "1px solid #E5EBE7" }}>
+                <div className="form-group">
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Start Date *" : "Date de début *"}</label>
+                  <input 
+                    type="date" 
+                    required 
+                    className="form-control" 
+                    value={editAgendaForm.startDate} 
+                    onChange={(e) => setEditAgendaForm({ ...editAgendaForm, startDate: e.target.value })} 
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "End Date" : "Date de fin"}</label>
+                  <input 
+                    type="date" 
+                    className="form-control" 
+                    value={editAgendaForm.endDate} 
+                    onChange={(e) => setEditAgendaForm({ ...editAgendaForm, endDate: e.target.value })} 
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.75rem", marginTop: "1.75rem", paddingTop: "1.25rem", borderTop: "1px solid #E5EBE7" }}>
+                <button type="button" onClick={() => setEditAgendaOpen(false)} className="btn btn-outline-forest">
+                  {isEnglish ? "Cancel" : "Annuler"}
+                </button>
+                <button type="submit" className="btn btn-forest">
+                  {isEnglish ? "Save Changes" : "Enregistrer les modifications"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* VIEW AGENDA DETAILS MODAL */}
+      {viewAgendaOpen && selectedAgendaItem && (
+        <div className="modal-overlay" onClick={() => setViewAgendaOpen(false)}>
+          <div className="modal-card article-modal-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "680px" }}>
+            <button 
+              onClick={() => setViewAgendaOpen(false)} 
+              className="modal-close-btn"
+              aria-label="Fermer"
+            >
+              <X size={20} />
+            </button>
+
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem" }}>
+              <span className={`badge ${selectedAgendaItem.status === "active" ? "badge-green-light" : "badge-gold-light"}`}>
+                {selectedAgendaItem.status === "active" ? (isEnglish ? "Active" : "Actif") : (isEnglish ? "Suspended" : "Désactivé")}
+              </span>
+              <span className="badge badge-green-light">
+                {(viewAgendaLangTab === "en" && selectedAgendaItem.typeEn) ? selectedAgendaItem.typeEn : selectedAgendaItem.type}
+              </span>
+            </div>
+
+            {/* Bilingual Tab Switcher */}
+            <div className="modal-lang-tabs">
+              <button 
+                type="button" 
+                className={`modal-lang-tab-btn ${viewAgendaLangTab === "fr" ? "active" : ""}`}
+                onClick={() => setViewAgendaLangTab("fr")}
+              >
+                <span>🇫🇷</span>
+                <span>{isEnglish ? "French Content" : "Contenu Français"}</span>
+              </button>
+              <button 
+                type="button" 
+                className={`modal-lang-tab-btn ${viewAgendaLangTab === "en" ? "active" : ""}`}
+                onClick={() => setViewAgendaLangTab("en")}
+              >
+                <span>🇬🇧</span>
+                <span>{isEnglish ? "English Content" : "Contenu Anglais"}</span>
+              </button>
+            </div>
+
+            <div style={{ marginTop: "1rem" }}>
+              <h2 style={{ fontSize: "1.5rem", fontFamily: "var(--font-serif)", fontWeight: 800, color: "#13221B", marginBottom: "1rem" }}>
+                {(viewAgendaLangTab === "en" && selectedAgendaItem.titleEn) ? selectedAgendaItem.titleEn : selectedAgendaItem.title}
+              </h2>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", background: "#F4F7F5", padding: "1rem", borderRadius: "10px", marginBottom: "1.25rem" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "#2D5A43", fontSize: "0.9rem" }}>
+                  <Calendar size={16} />
+                  <span><strong>{isEnglish ? "Start:" : "Début :"}</strong> {new Date(selectedAgendaItem.startDate).toLocaleDateString(viewAgendaLangTab === "en" ? "en-US" : "fr-FR")}</span>
+                </div>
+                {selectedAgendaItem.endDate && (
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "#2D5A43", fontSize: "0.9rem" }}>
+                    <Calendar size={16} />
+                    <span><strong>{isEnglish ? "End:" : "Fin :"}</strong> {new Date(selectedAgendaItem.endDate).toLocaleDateString(viewAgendaLangTab === "en" ? "en-US" : "fr-FR")}</span>
+                  </div>
+                )}
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "#2D5A43", fontSize: "0.9rem" }}>
+                  <MapPin size={16} />
+                  <span><strong>{isEnglish ? "Location:" : "Lieu :"}</strong> {(viewAgendaLangTab === "en" && selectedAgendaItem.locationEn) ? selectedAgendaItem.locationEn : selectedAgendaItem.location}</span>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "#2D5A43", fontSize: "0.9rem" }}>
+                  <Clock size={16} />
+                  <span><strong>{isEnglish ? "Duration:" : "Durée :"}</strong> {(viewAgendaLangTab === "en" && selectedAgendaItem.durationEn) ? selectedAgendaItem.durationEn : (selectedAgendaItem.duration || "Non spécifiée")}</span>
+                </div>
+              </div>
+
+              {(selectedAgendaItem.seats || selectedAgendaItem.seatsEn) && (
+                <div style={{ marginBottom: "0.75rem", fontSize: "0.9rem", color: "#13221B" }}>
+                  <strong>{isEnglish ? "Places / Modality:" : "Places / Modalités :"}</strong> {(viewAgendaLangTab === "en" && selectedAgendaItem.seatsEn) ? selectedAgendaItem.seatsEn : selectedAgendaItem.seats}
+                </div>
+              )}
+
+              {(selectedAgendaItem.audience || selectedAgendaItem.audienceEn) && (
+                <div style={{ marginBottom: "1rem", fontSize: "0.9rem", color: "#13221B" }}>
+                  <strong>{isEnglish ? "Target Audience:" : "Public cible :"}</strong> {(viewAgendaLangTab === "en" && selectedAgendaItem.audienceEn) ? selectedAgendaItem.audienceEn : selectedAgendaItem.audience}
+                </div>
+              )}
+
+              <div style={{ marginTop: "1rem" }}>
+                <h4 style={{ fontSize: "1rem", fontWeight: 700, color: "#13221B", marginBottom: "0.4rem" }}>
+                  {isEnglish ? "Pedagogical Description" : "Description Pédagogique"}
+                </h4>
+                <p style={{ color: "#3B4E44", lineHeight: 1.6, fontSize: "0.95rem" }}>
+                  {(viewAgendaLangTab === "en" && selectedAgendaItem.descriptionEn) ? selectedAgendaItem.descriptionEn : selectedAgendaItem.description}
+                </p>
+              </div>
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "1.75rem", paddingTop: "1.25rem", borderTop: "1px solid #E5EBE7" }}>
+              <button
+                type="button"
+                onClick={() => {
+                  const item = selectedAgendaItem;
+                  setViewAgendaOpen(false);
+                  handleToggleAgendaStatus(item);
+                }}
+                className={`btn btn-sm ${selectedAgendaItem.status === "active" ? "btn-outline-forest" : "btn-forest"}`}
+              >
+                <Power size={14} />
+                <span>
+                  {selectedAgendaItem.status === "active" 
+                    ? (isEnglish ? "Deactivate" : "Désactiver") 
+                    : (isEnglish ? "Activate" : "Activer")}
+                </span>
+              </button>
+
+              <div style={{ display: "flex", gap: "0.75rem" }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const item = selectedAgendaItem;
+                    setViewAgendaOpen(false);
+                    handleOpenEditAgenda(item);
+                  }}
+                  className="btn btn-outline-forest btn-sm"
+                >
+                  <Edit3 size={14} />
+                  <span>{isEnglish ? "Edit" : "Modifier"}</span>
+                </button>
+                <button 
+                  type="button" 
+                  onClick={() => setViewAgendaOpen(false)} 
+                  className="btn btn-forest btn-sm"
+                >
+                  {isEnglish ? "Close" : "Fermer"}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

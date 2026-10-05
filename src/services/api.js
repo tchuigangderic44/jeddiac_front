@@ -52,8 +52,6 @@ async function request(endpoint, options = {}) {
 export const api = {
   // Public
   getOverviewStats: () => request("/overview-stats"),
-  getArticles: (params = "") => request(`/articles${params}`),
-  getArticleDetails: (idOrSlug) => request(`/articles/${idOrSlug}`),
   getNews: (params = "") => request(`/news${params}`),
   getNewsDetails: (idOrSlug) => request(`/news/${idOrSlug}`),
   getAgendas: (params = "") => request(`/agenda${params}`),
@@ -89,31 +87,6 @@ export const api = {
 
   // Admin Management
   getAdminStats: (token) => request("/admin/stats", { token }),
-  
-  // Admin Articles
-  getAdminArticles: (token, params = "") => request(`/admin/articles${params}`, { token }),
-  createArticle: (token, payload) => request("/admin/articles", {
-    method: "POST",
-    token,
-    body: JSON.stringify(payload),
-  }),
-  updateArticle: (token, id, payload) => request(`/admin/articles/${id}`, {
-    method: "PUT",
-    token,
-    body: JSON.stringify(payload),
-  }),
-  deleteArticle: (token, id) => request(`/admin/articles/${id}`, {
-    method: "DELETE",
-    token,
-  }),
-  suspendArticle: (token, id) => request(`/admin/articles/${id}/suspend`, {
-    method: "PATCH",
-    token,
-  }),
-  reactivateArticle: (token, id) => request(`/admin/articles/${id}/reactivate`, {
-    method: "PATCH",
-    token,
-  }),
 
   // Admin News
   getAdminNews: (token, params = "") => request(`/admin/news${params}`, { token }),
@@ -157,13 +130,27 @@ export const api = {
 
   // Admin Agenda
   getAdminAgendas: (token, params = "") => request(`/admin/agenda${params}`, { token }),
+  getAdminAgendaDetails: (token, id) => request(`/admin/agenda/${id}`, { token }),
   createAgenda: (token, payload) => request("/admin/agenda", {
     method: "POST",
     token,
     body: JSON.stringify(payload),
   }),
+  updateAgenda: (token, id, payload) => request(`/admin/agenda/${id}`, {
+    method: "PUT",
+    token,
+    body: JSON.stringify(payload),
+  }),
   deleteAgenda: (token, id) => request(`/admin/agenda/${id}`, {
     method: "DELETE",
+    token,
+  }),
+  suspendAgenda: (token, id) => request(`/admin/agenda/${id}/suspend`, {
+    method: "PATCH",
+    token,
+  }),
+  reactivateAgenda: (token, id) => request(`/admin/agenda/${id}/reactivate`, {
+    method: "PATCH",
     token,
   }),
 

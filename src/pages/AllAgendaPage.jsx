@@ -3,61 +3,6 @@ import { Calendar, MapPin, Clock, ArrowRight, ArrowLeft, Search, X, Sparkles, Fi
 import { api } from "../services/api";
 import { useLanguage } from "../context/LanguageContext";
 
-const FALLBACK_AGENDAS = [
-  {
-    id: "agenda-inaugurale-yaounde",
-    title: "Session Inaugurale de Formation : Investigation Climat & Écriture de Solutions",
-    type: "Formation Régionale",
-    description: "Atelier intensif de 3 jours réunissant 40 délégués de clubs de presse scolaires et universitaires : cartographie des sources scientifiques, déconstruction des fausses nouvelles écologiques et techniques d'interview de terrain.",
-    location: "Yaoundé · Centre Régional des Médias & Hybride",
-    duration: "Session intensive 3 jours",
-    startDate: "2026-10-11T09:00:00.000Z",
-    endDate: "2026-10-13T17:00:00.000Z",
-    status: "active",
-    seats: "40 places disponibles",
-    audience: "Lycéens & Étudiants"
-  },
-  {
-    id: "agenda-masterclass-audio",
-    title: "Masterclass Audio : Réaliser un Podcast Environnemental avec un Smartphone",
-    type: "Masterclass Virtuelle",
-    description: "Apprenez les bases de la prise de son mobile, du montage audio léger avec Audacity et du storytelling sonore au cœur des forêts et des quartiers urbains africains.",
-    location: "En direct sur JEDDIAC Live & Radios partenaires",
-    duration: "Masterclass 2h30 + Exercice pratique",
-    startDate: "2026-10-19T14:00:00.000Z",
-    endDate: "2026-10-19T16:30:00.000Z",
-    status: "active",
-    seats: "Accès libre sur inscription",
-    audience: "Jeunes reporters & animateurs radio"
-  },
-  {
-    id: "agenda-forum-douala",
-    title: "Forum Sous-Régional des Jeunes Médias du Bassin du Congo",
-    type: "Conférence Régionale",
-    description: "Rencontre plénière des délégations du Cameroun, du Gabon, de RDC, du Congo-Brazzaville, de Centrafrique et du Tchad pour signer le Pacte de la Jeunesse Médiatique pour la Durabilité.",
-    location: "Douala & Retransmission Panafricaine",
-    duration: "Forum de 2 jours",
-    startDate: "2026-11-13T08:30:00.000Z",
-    endDate: "2026-11-15T18:00:00.000Z",
-    status: "active",
-    seats: "Délégations invitées & Observateurs",
-    audience: "Chefs d'équipes & Partenaires institutionnels"
-  },
-  {
-    id: "agenda-atelier-kinshasa",
-    title: "Atelier Itinérant : Tourbières du Bassin du Congo & Enquêtes Carbone",
-    type: "Formation Régionale",
-    description: "Immersion scientifique guidée par des chercheurs en écologie pour vulgariser l'importance planétaire des tourbières du Bassin du Congo auprès du grand public.",
-    location: "Kinshasa / Mbandaka & Distanciel",
-    duration: "Atelier 4 jours terrain + rédaction",
-    startDate: "2026-12-05T09:00:00.000Z",
-    endDate: "2026-12-09T17:00:00.000Z",
-    status: "upcoming",
-    seats: "25 places sur sélection",
-    audience: "Étudiants en journalisme & sciences"
-  }
-];
-
 export default function AllAgendaPage({ onBackToHome, onOpenApplication }) {
   const { t, isEnglish } = useLanguage();
   const [agendas, setAgendas] = useState([]);
@@ -73,20 +18,15 @@ export default function AllAgendaPage({ onBackToHome, onOpenApplication }) {
   const loadAgendas = async () => {
     try {
       setLoading(true);
-      const res = await api.getAgendas();
-      if (res && res.values && res.values.length > 0) {
-        // Merge with rich metadata
-        const merged = res.values.map((item, idx) => ({
-          ...FALLBACK_AGENDAS[idx % FALLBACK_AGENDAS.length],
-          ...item
-        }));
-        setAgendas(merged);
+      const res = await api.getAgendas("?limit=100");
+      if (res && res.values) {
+        setAgendas(res.values);
       } else {
-        setAgendas(FALLBACK_AGENDAS);
+        setAgendas([]);
       }
     } catch (err) {
-      console.warn("Using fallback agenda:", err);
-      setAgendas(FALLBACK_AGENDAS);
+      console.error("Failed to load agendas from API:", err);
+      setAgendas([]);
     } finally {
       setLoading(false);
     }
@@ -100,14 +40,28 @@ export default function AllAgendaPage({ onBackToHome, onOpenApplication }) {
   ];
 
   const filteredAgendas = agendas.filter((item) => {
-    const matchType = selectedType === "all" || item.type === selectedType;
+    const itemTypeFr = item.type || "";
+    const itemTypeEn = item.typeEn || "";
+
+    const matchType =
+      selectedType === "all" ||
+      itemTypeFr === selectedType ||
+      (selectedType === "Formation Régionale" && (itemTypeFr.includes("Formation") || itemTypeEn.includes("Training"))) ||
+      (selectedType === "Masterclass Virtuelle" && (itemTypeFr.includes("Masterclass") || itemTypeEn.includes("Masterclass"))) ||
+      (selectedType === "Conférence Régionale" && (itemTypeFr.includes("Conférence") || itemTypeFr.includes("Forum") || itemTypeEn.includes("Conference") || itemTypeEn.includes("Forum")));
+
     const q = searchQuery.toLowerCase().trim();
     const matchSearch =
       !q ||
       (item.title && item.title.toLowerCase().includes(q)) ||
+      (item.titleEn && item.titleEn.toLowerCase().includes(q)) ||
       (item.description && item.description.toLowerCase().includes(q)) ||
+      (item.descriptionEn && item.descriptionEn.toLowerCase().includes(q)) ||
       (item.location && item.location.toLowerCase().includes(q)) ||
-      (item.type && item.type.toLowerCase().includes(q));
+      (item.locationEn && item.locationEn.toLowerCase().includes(q)) ||
+      (item.type && item.type.toLowerCase().includes(q)) ||
+      (item.typeEn && item.typeEn.toLowerCase().includes(q));
+
     return matchType && matchSearch;
   });
 
@@ -215,6 +169,24 @@ export default function AllAgendaPage({ onBackToHome, onOpenApplication }) {
                 .toUpperCase();
               const yearStr = dateObj.getFullYear();
 
+              const displayTitle = (isEnglish && item.titleEn) ? item.titleEn : item.title;
+              const displayDesc = (isEnglish && item.descriptionEn) ? item.descriptionEn : item.description;
+              const displayLocation = (isEnglish && item.locationEn) 
+                ? item.locationEn 
+                : (item.location || (isEnglish ? "Yaoundé & Online (Hybrid)" : "Yaoundé & En ligne (Bimodal)"));
+              const displayDuration = (isEnglish && item.durationEn) 
+                ? item.durationEn 
+                : (item.duration || (isEnglish ? "3-day intensive session" : "Session intensive 3 jours"));
+              const displayType = (isEnglish && item.typeEn) 
+                ? item.typeEn 
+                : (item.type || (isEnglish ? "Regional Training" : "Formation"));
+              const displaySeats = (isEnglish && item.seatsEn) 
+                ? item.seatsEn 
+                : (item.seats || (isEnglish ? "Limited Seats" : "Places Limitées"));
+              const displayAudience = (isEnglish && item.audienceEn) 
+                ? item.audienceEn 
+                : item.audience;
+
               return (
                 <div key={item.id} className="agenda-card">
                   <div className="agenda-card-top">
@@ -226,36 +198,34 @@ export default function AllAgendaPage({ onBackToHome, onOpenApplication }) {
                     </div>
 
                     <div className="agenda-meta-badges">
-                      <span className="badge badge-green-light">{item.type || "Formation"}</span>
-                      <span className="badge badge-gold-light">
-                        {item.seats || (isEnglish ? "Limited Seats" : "Places Limitées")}
-                      </span>
+                      <span className="badge badge-green-light">{displayType}</span>
+                      <span className="badge badge-gold-light">{displaySeats}</span>
                     </div>
                   </div>
 
-                  <h3 className="agenda-card-title">{item.title}</h3>
-                  <p className="agenda-card-desc">{item.description}</p>
+                  <h3 className="agenda-card-title">{displayTitle}</h3>
+                  <p className="agenda-card-desc">{displayDesc}</p>
 
                   <div className="agenda-card-details">
                     <div className="agenda-detail-row">
                       <MapPin size={15} className="detail-icon" />
-                      <span>{item.location || (isEnglish ? "Yaoundé & Online (Bimodal)" : "Yaoundé & En ligne (Bimodal)")}</span>
+                      <span>{displayLocation}</span>
                     </div>
                     <div className="agenda-detail-row">
                       <Clock size={15} className="detail-icon" />
-                      <span>{item.duration || (isEnglish ? "Intensive 3-Day Session" : "Session intensive 3 jours")}</span>
+                      <span>{displayDuration}</span>
                     </div>
-                    {item.audience && (
+                    {displayAudience && (
                       <div className="agenda-detail-row">
                         <Users size={15} className="detail-icon" />
-                        <span>{item.audience}</span>
+                        <span>{displayAudience}</span>
                       </div>
                     )}
                   </div>
 
                   <div className="agenda-card-footer">
                     <button
-                      onClick={() => onOpenApplication(`Inscription Session: ${item.title}`)}
+                      onClick={() => onOpenApplication(`Inscription Session: ${displayTitle}`)}
                       className="btn btn-forest"
                       style={{ width: "100%", justifyContent: "center" }}
                     >

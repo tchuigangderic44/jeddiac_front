@@ -60,7 +60,6 @@ export default function Footer({ onOpenApplication }) {
               <li><a href="#equipe">{t("footerLinkTeam")}</a></li>
               <li><a href="#territoires">{t("footerLinkTerritories")}</a></li>
               <li><a href="#agenda">{t("footerLinkAgenda")}</a></li>
-              <li><a href="#articles">{t("footerLinkArticles")}</a></li>
             </ul>
           </div>
 
