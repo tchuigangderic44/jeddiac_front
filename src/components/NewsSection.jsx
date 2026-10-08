@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Bell, Calendar, ArrowRight, Clock, X } from "lucide-react";
 import { api, getMediaUrl } from "../services/api";
 import { useLanguage } from "../context/LanguageContext";
+import { OFFICIAL_NEWS } from "../data/officialNews";
 
 export default function NewsSection({ onNavigateAllNews }) {
   const { t, isEnglish } = useLanguage();
-  const [news, setNews] = useState([]);
+  const [news, setNews] = useState(OFFICIAL_NEWS.slice(0, 3));
   const [loading, setLoading] = useState(true);
   const [selectedNews, setSelectedNews] = useState(null);
   const [isNavigating, setIsNavigating] = useState(false);
@@ -18,11 +19,14 @@ export default function NewsSection({ onNavigateAllNews }) {
     try {
       setLoading(true);
       const res = await api.getNews("?limit=3");
-      if (res && res.values) {
+      if (res && res.values && res.values.length > 0) {
         setNews(res.values.slice(0, 3));
+      } else {
+        setNews(OFFICIAL_NEWS.slice(0, 3));
       }
     } catch (err) {
-      console.error("Failed to load news:", err);
+      console.warn("Using official news fallback:", err);
+      setNews(OFFICIAL_NEWS.slice(0, 3));
     } finally {
       setLoading(false);
     }

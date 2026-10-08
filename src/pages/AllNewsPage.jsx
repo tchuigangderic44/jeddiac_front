@@ -3,39 +3,11 @@ import { Bell, Calendar, ArrowRight, ArrowLeft, Clock, Search, X, Tag, Sparkles,
 import { api, getMediaUrl } from "../services/api";
 import { useLanguage } from "../context/LanguageContext";
 
-const FALLBACK_NEWS = [
-  {
-    id: "news-pilot-launch",
-    title: "Lancement officiel de la Phase Pilote Cameroun (Octobre 2026 – Mai 2027)",
-    category: "Événement Majeur",
-    summary: "Déploiement du programme JEDDIAC à travers les 10 régions du Cameroun, mobilisant 90 structures scolaires et communautaires.",
-    content: "Le programme JEDDIAC annonce officiellement le coup d'envoi de sa phase pilote sur l'ensemble du territoire camerounais. Durant 8 mois intensifs, les formateurs et journalistes mentors parcourront les 10 régions pour équiper, former et mettre en réseau 90 structures scolaires, universitaires et associatives. L'objectif est de transformer les jeunes en producteurs actifs d'information sur la durabilité.",
-    tags: "Cameroun, Pilote, Jeunesse, Médias",
-    publishedAt: "2026-09-29T21:46:47.420Z"
-  },
-  {
-    id: "news-afrive-alliance",
-    title: "Alliance stratégique entre JEDDIAC et la revue internationale AFRIVE",
-    category: "Partenariat",
-    summary: "Une synergie éditoriale pour offrir une tribune panafricaine aux jeunes voix et journalistes émergents du Bassin du Congo.",
-    content: "AFRIVE, revue internationale de référence dédiée au développement durable en Afrique, s'engage aux côtés de JEDDIAC. Cet accord garantit la co-production de cahiers spéciaux, le mentorat des jeunes rédactions par les journalistes d'investigation de la revue, ainsi qu'une diffusion à grande échelle des reportages réalisés par les clubs médias.",
-    tags: "Partenariat, AFRIVE, Rayonnement, Plaidoyer",
-    publishedAt: "2026-09-27T21:46:47.420Z"
-  },
-  {
-    id: "news-call-applications",
-    title: "Bassin du Congo : Appel à candidatures ouvert pour les radios scolaires et communautaires",
-    category: "Appel à Projets",
-    summary: "Rejoignez la première cohorte régionale d'apprentis journalistes environnementaux et animateurs de solutions durables.",
-    content: "Les établissements scolaires, campus universitaires et associations de jeunes des zones rurales et urbaines peuvent dès à présent postuler pour intégrer le réseau JEDDIAC. Les structures sélectionnées bénéficieront de kits mobiles d'enregistrement, de formations certifiantes et d'un accompagnement éditorial complet.",
-    tags: "Candidature, Radios Scolaires, Formation, Cohorte",
-    publishedAt: "2026-09-24T21:46:47.420Z"
-  }
-];
+import { OFFICIAL_NEWS } from "../data/officialNews";
 
 export default function AllNewsPage({ onBackToHome }) {
   const { t, isEnglish } = useLanguage();
-  const [news, setNews] = useState([]);
+  const [news, setNews] = useState(OFFICIAL_NEWS);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -50,15 +22,15 @@ export default function AllNewsPage({ onBackToHome }) {
   const loadNews = async () => {
     try {
       setLoading(true);
-      const res = await api.getNews();
+      const res = await api.getNews("?limit=100");
       if (res && res.values && res.values.length > 0) {
         setNews(res.values);
       } else {
-        setNews(FALLBACK_NEWS);
+        setNews(OFFICIAL_NEWS);
       }
     } catch (err) {
       console.warn("Using fallback news list:", err);
-      setNews(FALLBACK_NEWS);
+      setNews(OFFICIAL_NEWS);
     } finally {
       setLoading(false);
     }
