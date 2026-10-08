@@ -188,9 +188,6 @@ export default function TeamSection({ onNavigateAllProfiles }) {
                       </div>
                     )}
 
-                    <span className="team-card-pole-badge">
-                      {pole}
-                    </span>
                     {member.location && (
                       <span className="team-card-location-tag">
                         <MapPin size={12} />

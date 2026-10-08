@@ -251,9 +251,6 @@ export default function AllProfilesPage({ onBackToHome, initialCategory = "all" 
                         </span>
                       </div>
                     )}
-                    <span className="team-card-pole-badge">
-                      {pole}
-                    </span>
                     {member.location && (
                       <span className="team-card-location-tag">
                         <MapPin size={12} />
