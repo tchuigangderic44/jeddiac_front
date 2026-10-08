@@ -18,6 +18,7 @@ import AllNewsPage from "./pages/AllNewsPage";
 import AllProfilesPage from "./pages/AllProfilesPage";
 import AllAgendaPage from "./pages/AllAgendaPage";
 import AllPodcastsPage from "./pages/AllPodcastsPage";
+import LegalPage from "./pages/LegalPage";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { LanguageProvider, useLanguage } from "./context/LanguageContext";
 import { api } from "./services/api";
@@ -74,6 +75,12 @@ function AppContent() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else if (hash === "#tous-les-podcasts" || hash === "#podcasts-tous" || hash === "#toutes-les-emissions" || hash === "#hub-audio") {
       setCurrentView("all-podcasts");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (hash === "#mentions-legales" || hash === "#mentions" || hash === "#legal" || path === "/mentions-legales") {
+      setCurrentView("legal-mentions");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (hash === "#politique-de-confidentialite" || hash === "#confidentialite" || hash === "#privacy" || hash === "#rgpd" || path === "/politique-de-confidentialite") {
+      setCurrentView("legal-privacy");
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
       setCurrentView("home");
@@ -251,6 +258,20 @@ function AppContent() {
         <AllPodcastsPage onBackToHome={() => navigateToHomeSection("podcasts")} />
       )}
 
+      {currentView === "legal-mentions" && (
+        <LegalPage 
+          onBackToHome={() => navigateToHomeSection("accueil")} 
+          initialTab="mentions"
+        />
+      )}
+
+      {currentView === "legal-privacy" && (
+        <LegalPage 
+          onBackToHome={() => navigateToHomeSection("accueil")} 
+          initialTab="confidentialite"
+        />
+      )}
+
       {currentView === "home" && (
         <>
           {/* Hero Showcase with Large Authentic Photography */}
@@ -333,6 +354,18 @@ function AppContent() {
       {/* Rich Institutional Footer (NO ADMIN BUTTON) */}
       <Footer
         onOpenApplication={() => openApplication()}
+        onNavigateLegal={() => navigateTo(
+          "legal-mentions",
+          "#mentions-legales",
+          isEnglish ? "Loading Legal Notice..." : "Chargement des Mentions Légales...",
+          isEnglish ? "Official statutory information & publisher identification" : "Identification de l'éditeur et cadre réglementaire officiel"
+        )}
+        onNavigatePrivacy={() => navigateTo(
+          "legal-privacy",
+          "#politique-de-confidentialite",
+          isEnglish ? "Loading Privacy Policy..." : "Chargement de la Politique de Confidentialité...",
+          isEnglish ? "RGPD standards and personal data protection principles" : "Protection des données personnelles et conformité RGPD"
+        )}
       />
 
       {/* Application / Join Modal */}

@@ -3,7 +3,7 @@ import { Trees, Mail, ArrowRight, CheckCircle2, Heart, Shield, Globe, Users } fr
 import { api } from "../services/api";
 import { useLanguage } from "../context/LanguageContext";
 
-export default function Footer({ onOpenApplication }) {
+export default function Footer({ onOpenApplication, onNavigateLegal, onNavigatePrivacy }) {
   const { t } = useLanguage();
   const [email, setEmail] = useState("");
   const [subscribing, setSubscribing] = useState(false);
@@ -63,7 +63,7 @@ export default function Footer({ onOpenApplication }) {
             </ul>
           </div>
 
-          {/* Col 3: Partenariats & Réseau (NO ADMIN BUTTON) */}
+          {/* Col 3: Partenariats, Réseau & Cadre Juridique */}
           <div className="footer-col-links">
             <h4 className="footer-col-heading">{t("footerColNetwork")}</h4>
             <ul className="footer-nav-list">
@@ -78,7 +78,32 @@ export default function Footer({ onOpenApplication }) {
                 </button>
               </li>
               <li><a href="#contact">{t("footerLinkPartnership")}</a></li>
-              <li><a href="#accueil">{t("footerLinkCharter")}</a></li>
+              <li>
+                <a 
+                  href="#mentions-legales"
+                  onClick={(e) => {
+                    if (onNavigateLegal) {
+                      e.preventDefault();
+                      onNavigateLegal();
+                    }
+                  }}
+                >
+                  {t("footerLinkLegal")}
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="#politique-de-confidentialite"
+                  onClick={(e) => {
+                    if (onNavigatePrivacy) {
+                      e.preventDefault();
+                      onNavigatePrivacy();
+                    }
+                  }}
+                >
+                  {t("footerLinkPrivacy")}
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -120,13 +145,39 @@ export default function Footer({ onOpenApplication }) {
           </div>
         </div>
 
-        {/* Bottom Bar: Copyright & Accreditations (NO ADMIN LINK) */}
+        {/* Bottom Bar: Copyright & Legal References */}
         <div className="footer-bottom-bar">
           <p className="footer-copyright">
             © {new Date().getFullYear()} JEDDIAC. {t("footerCopyright")}
           </p>
 
           <div className="footer-partner-strip">
+            <a 
+              href="#mentions-legales"
+              onClick={(e) => {
+                if (onNavigateLegal) {
+                  e.preventDefault();
+                  onNavigateLegal();
+                }
+              }}
+              className="footer-legal-inline-link"
+            >
+              {t("footerLinkLegal")}
+            </a>
+            <span>·</span>
+            <a 
+              href="#politique-de-confidentialite"
+              onClick={(e) => {
+                if (onNavigatePrivacy) {
+                  e.preventDefault();
+                  onNavigatePrivacy();
+                }
+              }}
+              className="footer-legal-inline-link"
+            >
+              {t("footerLinkPrivacy")}
+            </a>
+            <span>·</span>
             <span>{t("footerSynergy")} <strong>AFRIVE</strong></span>
             <span>·</span>
             <span>{t("footerCities")}</span>
