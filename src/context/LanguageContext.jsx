@@ -108,6 +108,17 @@ export const translations = {
     afriveVisionFounderRole: "Porteur du programme JEDDIAC",
     afriveVisionPhotoAlt: "Forêt du Bassin du Congo",
 
+    // Impact Gallery Section
+    galleryTag: "JEDDIAC sur le terrain",
+    galleryTitle: "Zone d'intervention",
+    galleryTitleHighlight: "de JEDDIAC",
+    gallerySubtitle: "Des programmes conçus pour transformer les jeunes en acteurs de l'information, de la sensibilisation et du développement durable.",
+    galleryStat1Num: "90",
+    galleryStat1Label: "Clubs & Studios documentés",
+    galleryStat2Num: "100%",
+    galleryStat2Label: "Terrain & Récits vivants",
+    galleryCloseModal: "Fermer",
+
     // Footer
     footerMission: "Jeunesse Engagée pour la Durabilité, le Développement et l'Information en Afrique Centrale. Le programme régional de formation et de mobilisation des jeunes médias en faveur du climat et du Bassin du Congo.",
     footerPill: "Sanctuaire Écologique du Bassin du Congo",
@@ -296,6 +307,17 @@ export const translations = {
     afriveVisionFounderName: "Jean Marie Kenfack",
     afriveVisionFounderRole: "JEDDIAC Program Leader",
     afriveVisionPhotoAlt: "Congo Basin Forest",
+
+    // Impact Gallery Section
+    galleryTag: "JEDDIAC in the field",
+    galleryTitle: "Areas of Intervention",
+    galleryTitleHighlight: "of JEDDIAC",
+    gallerySubtitle: "Programmes designed to empower youth as proactive agents of environmental reporting, community awareness, and sustainable development.",
+    galleryStat1Num: "90",
+    galleryStat1Label: "Documented Clubs & Studios",
+    galleryStat2Num: "100%",
+    galleryStat2Label: "Field & Living Narratives",
+    galleryCloseModal: "Close",
 
     // Footer
     footerMission: "Youth Engaged for Sustainability, Development and Information in Central Africa. Regional program training and mobilizing youth media for climate and the Congo Basin.",
