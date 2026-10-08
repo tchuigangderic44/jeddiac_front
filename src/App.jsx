@@ -27,9 +27,9 @@ function AppContent() {
   const { isEnglish, t } = useLanguage();
   const [stats, setStats] = useState({
     journalistesCibles: 20000,
-    structuresPartenaires: 90,
-    regionsCameroun: 10,
-    paysAfriqueCentrale: 6,
+    structuresPartenaires: 300,
+    regionsCameroun: 6,
+    paysAfriqueCentrale: 9,
     actualitesCount: 3,
     evenementsCount: 3
   });

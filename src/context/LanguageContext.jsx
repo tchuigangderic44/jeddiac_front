@@ -51,10 +51,10 @@ export const translations = {
     heroCtaPodcasts: "Nos Podcasts",
 
     // Hero Metrics
-    metricYouth: "Jeunes mobilisés",
-    metricPartners: "Clubs & radios partenaires",
-    metricRegions: "Régions couvertes",
-    metricCountries: "Pays du Bassin",
+    metricYouth: "Jeunes formés directement",
+    metricPartners: "Structures accompagnées",
+    metricRegions: "Pays à terme",
+    metricCountries: "Personnes sensibilisées",
 
     // Hero Photo Tag & Status
     heroPhotoTag: "Enquête de terrain · Réserve du Dja, Cameroun",
@@ -240,10 +240,10 @@ export const translations = {
     heroCtaPodcasts: "Our Podcasts",
 
     // Hero Metrics
-    metricYouth: "Youth mobilized",
-    metricPartners: "Partner clubs & radios",
-    metricRegions: "Covered regions",
-    metricCountries: "Basin countries",
+    metricYouth: "Directly trained youth",
+    metricPartners: "Supported organizations",
+    metricRegions: "Target countries",
+    metricCountries: "People sensitized",
 
     // Hero Photo Tag & Status
     heroPhotoTag: "Field Investigation · Dja Reserve, Cameroon",

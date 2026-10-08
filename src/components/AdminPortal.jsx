@@ -243,17 +243,17 @@ export default function AdminPortal({ onClose }) {
   // Public Hero Impact Metrics States
   const [heroMetrics, setHeroMetrics] = useState({
     journalistesCibles: 20000,
-    structuresPartenaires: 90,
-    regionsCameroun: 10,
-    paysAfriqueCentrale: 6,
-    labelYouthFr: "Jeunes mobilisés",
-    labelYouthEn: "Youth mobilized",
-    labelPartnersFr: "Clubs & radios partenaires",
-    labelPartnersEn: "Partner clubs & radios",
-    labelRegionsFr: "Régions couvertes",
-    labelRegionsEn: "Covered regions",
-    labelCountriesFr: "Pays du Bassin",
-    labelCountriesEn: "Congo Basin countries"
+    structuresPartenaires: 300,
+    regionsCameroun: 6,
+    paysAfriqueCentrale: 9,
+    labelYouthFr: "Jeunes formés directement",
+    labelYouthEn: "Young people trained directly",
+    labelPartnersFr: "Structures accompagnées",
+    labelPartnersEn: "Organisations receiving support",
+    labelRegionsFr: "Pays à terme",
+    labelRegionsEn: "Target countries",
+    labelCountriesFr: "Personnes sensibilisées",
+    labelCountriesEn: "People sensitized"
   });
   const [metricsModalOpen, setMetricsModalOpen] = useState(false);
   const [metricsForm, setMetricsForm] = useState({ ...heroMetrics });
@@ -1757,10 +1757,10 @@ export default function AdminPortal({ onClose }) {
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem", padding: "1.25rem" }}>
                   <div style={{ background: "#F4F8F5", padding: "1rem 1.25rem", borderRadius: "10px", border: "1px solid #D9E3DE" }}>
                     <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "#4A6356", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.25rem" }}>
-                      {isEnglish ? (heroMetrics.labelYouthEn || "Youth mobilized") : (heroMetrics.labelYouthFr || "Jeunes mobilisés")}
+                      {isEnglish ? (heroMetrics.labelYouthEn || "Young people trained directly") : (heroMetrics.labelYouthFr || "Jeunes formés directement")}
                     </div>
                     <div style={{ fontSize: "1.6rem", fontWeight: 800, color: "#13221B" }}>
-                      +{Number(heroMetrics.journalistesCibles || 20000).toLocaleString(isEnglish ? "en-US" : "fr-FR")}
+                      {Number(heroMetrics.journalistesCibles || 20000).toLocaleString(isEnglish ? "en-US" : "fr-FR")}
                     </div>
                     <div style={{ fontSize: "0.72rem", color: "#6A8278", marginTop: "0.2rem" }}>
                       API: <code>journalistesCibles</code>
@@ -1769,10 +1769,10 @@ export default function AdminPortal({ onClose }) {
 
                   <div style={{ background: "#F4F8F5", padding: "1rem 1.25rem", borderRadius: "10px", border: "1px solid #D9E3DE" }}>
                     <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "#4A6356", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.25rem" }}>
-                      {isEnglish ? (heroMetrics.labelPartnersEn || "Partner clubs & radios") : (heroMetrics.labelPartnersFr || "Clubs & radios partenaires")}
+                      {isEnglish ? (heroMetrics.labelPartnersEn || "Organisations receiving support") : (heroMetrics.labelPartnersFr || "Structures accompagnées")}
                     </div>
                     <div style={{ fontSize: "1.6rem", fontWeight: 800, color: "#13221B" }}>
-                      {heroMetrics.structuresPartenaires || 90}
+                      {heroMetrics.structuresPartenaires || 300}+
                     </div>
                     <div style={{ fontSize: "0.72rem", color: "#6A8278", marginTop: "0.2rem" }}>
                       API: <code>structuresPartenaires</code>
@@ -1781,10 +1781,10 @@ export default function AdminPortal({ onClose }) {
 
                   <div style={{ background: "#F4F8F5", padding: "1rem 1.25rem", borderRadius: "10px", border: "1px solid #D9E3DE" }}>
                     <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "#4A6356", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.25rem" }}>
-                      {isEnglish ? (heroMetrics.labelRegionsEn || "Covered regions") : (heroMetrics.labelRegionsFr || "Régions couvertes")}
+                      {isEnglish ? (heroMetrics.labelRegionsEn || "Target countries") : (heroMetrics.labelRegionsFr || "Pays à terme")}
                     </div>
                     <div style={{ fontSize: "1.6rem", fontWeight: 800, color: "#13221B" }}>
-                      {heroMetrics.regionsCameroun || 10}
+                      {heroMetrics.regionsCameroun || 6}
                     </div>
                     <div style={{ fontSize: "0.72rem", color: "#6A8278", marginTop: "0.2rem" }}>
                       API: <code>regionsCameroun</code>
@@ -1793,10 +1793,10 @@ export default function AdminPortal({ onClose }) {
 
                   <div style={{ background: "#F4F8F5", padding: "1rem 1.25rem", borderRadius: "10px", border: "1px solid #D9E3DE" }}>
                     <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "#4A6356", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.25rem" }}>
-                      {isEnglish ? (heroMetrics.labelCountriesEn || "Congo Basin countries") : (heroMetrics.labelCountriesFr || "Pays du Bassin")}
+                      {isEnglish ? (heroMetrics.labelCountriesEn || "People sensitized") : (heroMetrics.labelCountriesFr || "Personnes sensibilisées")}
                     </div>
                     <div style={{ fontSize: "1.6rem", fontWeight: 800, color: "#13221B" }}>
-                      {heroMetrics.paysAfriqueCentrale || 6}
+                      {heroMetrics.paysAfriqueCentrale || 9} M+
                     </div>
                     <div style={{ fontSize: "0.72rem", color: "#6A8278", marginTop: "0.2rem" }}>
                       API: <code>paysAfriqueCentrale</code>
@@ -6994,14 +6994,14 @@ export default function AdminPortal({ onClose }) {
 
             <form onSubmit={handleSaveHeroMetrics}>
               <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-                {/* 1. Jeunes mobilisés */}
+                {/* 1. Jeunes formés directement */}
                 <div style={{ background: "#F8FAF9", padding: "1.1rem", borderRadius: "12px", border: "1px solid #E2E8F0" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
                     <label className="form-label" style={{ fontWeight: 700, margin: 0, color: "#13221B" }}>
-                      1. {isEnglish ? "Youth Mobilized" : "Jeunes Mobilisés"}
+                      1. {isEnglish ? "Directly Trained Youth" : "Jeunes Formés Directement"}
                     </label>
                     <span style={{ fontSize: "0.75rem", color: "#6A8278", background: "#E8F0EB", padding: "0.15rem 0.5rem", borderRadius: "4px" }}>
-                      {isEnglish ? "Prefix '+' auto" : "Préfixe '+' automatique"}
+                      {isEnglish ? "Standard (e.g. 20 000)" : "Format standard (ex: 20 000)"}
                     </span>
                   </div>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: "0.85rem" }}>
@@ -7028,7 +7028,7 @@ export default function AdminPortal({ onClose }) {
                           value={metricsForm.labelYouthFr || ""}
                           onChange={(e) => setMetricsForm({ ...metricsForm, labelYouthFr: e.target.value })}
                           className="form-control"
-                          placeholder="Jeunes mobilisés"
+                          placeholder="Jeunes formés directement"
                           required
                         />
                       ) : (
@@ -7037,7 +7037,7 @@ export default function AdminPortal({ onClose }) {
                           value={metricsForm.labelYouthEn || ""}
                           onChange={(e) => setMetricsForm({ ...metricsForm, labelYouthEn: e.target.value })}
                           className="form-control"
-                          placeholder="Youth mobilized"
+                          placeholder="Young people trained directly"
                           required
                         />
                       )}
@@ -7045,14 +7045,14 @@ export default function AdminPortal({ onClose }) {
                   </div>
                 </div>
 
-                {/* 2. Structures partenaires */}
+                {/* 2. Structures accompagnées */}
                 <div style={{ background: "#F8FAF9", padding: "1.1rem", borderRadius: "12px", border: "1px solid #E2E8F0" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
                     <label className="form-label" style={{ fontWeight: 700, margin: 0, color: "#13221B" }}>
-                      2. {isEnglish ? "Partner Clubs & Radios" : "Clubs & Radios Partenaires"}
+                      2. {isEnglish ? "Supported Organizations" : "Structures Accompagnées"}
                     </label>
                     <span style={{ fontSize: "0.75rem", color: "#6A8278", background: "#E8F0EB", padding: "0.15rem 0.5rem", borderRadius: "4px" }}>
-                      {isEnglish ? "Prefix '+' auto" : "Préfixe '+' automatique"}
+                      {isEnglish ? "Suffix '+' auto (e.g. 300+)" : "Suffixe '+' auto (ex: 300+)"}
                     </span>
                   </div>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: "0.85rem" }}>
@@ -7079,7 +7079,7 @@ export default function AdminPortal({ onClose }) {
                           value={metricsForm.labelPartnersFr || ""}
                           onChange={(e) => setMetricsForm({ ...metricsForm, labelPartnersFr: e.target.value })}
                           className="form-control"
-                          placeholder="Clubs & radios partenaires"
+                          placeholder="Structures accompagnées"
                           required
                         />
                       ) : (
@@ -7088,7 +7088,7 @@ export default function AdminPortal({ onClose }) {
                           value={metricsForm.labelPartnersEn || ""}
                           onChange={(e) => setMetricsForm({ ...metricsForm, labelPartnersEn: e.target.value })}
                           className="form-control"
-                          placeholder="Partner clubs & radios"
+                          placeholder="Organisations receiving support"
                           required
                         />
                       )}
@@ -7096,14 +7096,14 @@ export default function AdminPortal({ onClose }) {
                   </div>
                 </div>
 
-                {/* 3. Régions couvertes */}
+                {/* 3. Pays à terme */}
                 <div style={{ background: "#F8FAF9", padding: "1.1rem", borderRadius: "12px", border: "1px solid #E2E8F0" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
                     <label className="form-label" style={{ fontWeight: 700, margin: 0, color: "#13221B" }}>
-                      3. {isEnglish ? "Covered Regions" : "Régions Couvertes"}
+                      3. {isEnglish ? "Target Countries" : "Pays à Terme"}
                     </label>
                     <span style={{ fontSize: "0.75rem", color: "#6A8278", background: "#E8F0EB", padding: "0.15rem 0.5rem", borderRadius: "4px" }}>
-                      {isEnglish ? "Scale / 10" : "Échelle / 10"}
+                      {isEnglish ? "Target scope (e.g. 6)" : "Objectif à terme (ex: 6)"}
                     </span>
                   </div>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: "0.85rem" }}>
@@ -7130,7 +7130,7 @@ export default function AdminPortal({ onClose }) {
                           value={metricsForm.labelRegionsFr || ""}
                           onChange={(e) => setMetricsForm({ ...metricsForm, labelRegionsFr: e.target.value })}
                           className="form-control"
-                          placeholder="Régions couvertes"
+                          placeholder="Pays à terme"
                           required
                         />
                       ) : (
@@ -7139,7 +7139,7 @@ export default function AdminPortal({ onClose }) {
                           value={metricsForm.labelRegionsEn || ""}
                           onChange={(e) => setMetricsForm({ ...metricsForm, labelRegionsEn: e.target.value })}
                           className="form-control"
-                          placeholder="Covered regions"
+                          placeholder="Target countries"
                           required
                         />
                       )}
@@ -7147,14 +7147,14 @@ export default function AdminPortal({ onClose }) {
                   </div>
                 </div>
 
-                {/* 4. Pays du Bassin */}
+                {/* 4. Personnes sensibilisées */}
                 <div style={{ background: "#F8FAF9", padding: "1.1rem", borderRadius: "12px", border: "1px solid #E2E8F0" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
                     <label className="form-label" style={{ fontWeight: 700, margin: 0, color: "#13221B" }}>
-                      4. {isEnglish ? "Congo Basin Countries" : "Pays du Bassin du Congo"}
+                      4. {isEnglish ? "People Sensitized" : "Personnes Sensibilisées"}
                     </label>
                     <span style={{ fontSize: "0.75rem", color: "#6A8278", background: "#E8F0EB", padding: "0.15rem 0.5rem", borderRadius: "4px" }}>
-                      {isEnglish ? "Prefix '+' auto" : "Préfixe '+' automatique"}
+                      {isEnglish ? "Suffix 'M+' auto (e.g. 9 M+)" : "Suffixe 'M+' auto (ex: 9 M+)"}
                     </span>
                   </div>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: "0.85rem" }}>
@@ -7181,7 +7181,7 @@ export default function AdminPortal({ onClose }) {
                           value={metricsForm.labelCountriesFr || ""}
                           onChange={(e) => setMetricsForm({ ...metricsForm, labelCountriesFr: e.target.value })}
                           className="form-control"
-                          placeholder="Pays du Bassin"
+                          placeholder="Personnes sensibilisées"
                           required
                         />
                       ) : (
@@ -7190,7 +7190,7 @@ export default function AdminPortal({ onClose }) {
                           value={metricsForm.labelCountriesEn || ""}
                           onChange={(e) => setMetricsForm({ ...metricsForm, labelCountriesEn: e.target.value })}
                           className="form-control"
-                          placeholder="Congo Basin countries"
+                          placeholder="People sensitized"
                           required
                         />
                       )}

@@ -74,9 +74,9 @@ export default function HeroSection({ stats, onOpenApplication, onExploreAxes })
 
   // Animated counters directly driven by API metrics
   const targetJeunes = apiMetrics?.journalistesCibles ?? stats?.journalistesCibles ?? 20000;
-  const targetPartenaires = apiMetrics?.structuresPartenaires ?? stats?.structuresPartenaires ?? 90;
-  const targetRegions = apiMetrics?.regionsCameroun ?? stats?.regionsCameroun ?? 10;
-  const targetPays = apiMetrics?.paysAfriqueCentrale ?? stats?.paysAfriqueCentrale ?? 6;
+  const targetPartenaires = apiMetrics?.structuresPartenaires ?? stats?.structuresPartenaires ?? 300;
+  const targetRegions = apiMetrics?.regionsCameroun ?? stats?.regionsCameroun ?? 6;
+  const targetPays = apiMetrics?.paysAfriqueCentrale ?? stats?.paysAfriqueCentrale ?? 9;
 
   const countJeunes = useAnimatedCounter(targetJeunes, 2000);
   const countPartenaires = useAnimatedCounter(targetPartenaires, 1600);
@@ -304,13 +304,13 @@ export default function HeroSection({ stats, onOpenApplication, onExploreAxes })
             {/* Impact Metric Strip */}
             <div className="hero-metrics-grid">
               <div className="metric-box metric-box-animated" style={{ animationDelay: "0.1s" }}>
-                <span className="metric-box-number">+{countJeunes.toLocaleString(language === "fr" ? "fr-FR" : "en-US")}</span>
+                <span className="metric-box-number">{countJeunes.toLocaleString(language === "fr" ? "fr-FR" : "en-US").replace(/\s/g, " ")}</span>
                 <span className="metric-box-label">
                   {(isEnglish ? apiMetrics?.labelYouthEn : apiMetrics?.labelYouthFr) || t("metricYouth")}
                 </span>
               </div>
               <div className="metric-box metric-box-animated" style={{ animationDelay: "0.2s" }}>
-                <span className="metric-box-number">{countPartenaires}</span>
+                <span className="metric-box-number">{countPartenaires}+</span>
                 <span className="metric-box-label">
                   {(isEnglish ? apiMetrics?.labelPartnersEn : apiMetrics?.labelPartnersFr) || t("metricPartners")}
                 </span>
@@ -322,7 +322,7 @@ export default function HeroSection({ stats, onOpenApplication, onExploreAxes })
                 </span>
               </div>
               <div className="metric-box metric-box-animated" style={{ animationDelay: "0.4s" }}>
-                <span className="metric-box-number">{countPays}</span>
+                <span className="metric-box-number">{countPays} M+</span>
                 <span className="metric-box-label">
                   {(isEnglish ? apiMetrics?.labelCountriesEn : apiMetrics?.labelCountriesFr) || t("metricCountries")}
                 </span>
