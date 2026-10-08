@@ -63,9 +63,9 @@ export const translations = {
 
     // Team Section
     teamKicker: "Qui sommes-nous · Gouvernance & Réseau",
-    teamTitle: "L'Équipe & les Visages",
+    teamTitle: "Membres",
     teamTitleHighlight: "de JEDDIAC",
-    teamSubtitle: "À l'image des grandes initiatives climatiques internationales, JEDDIAC rassemble des journalistes chevronnés, des scientifiques spécialistes du Bassin du Congo, des animateurs de radios communautaires et des jeunes ambassadeurs engagés.",
+    teamSubtitle: "JEDDIAC s'entoure de personnalités issues des institutions publiques, des organisations internationales, de la société civile, du monde économique, des médias et de la jeunesse. Elles accompagnent le programme à travers quatre formes d'engagement : présidence d'honneur, parrainage, ambassade et conseil.",
     teamAllProfiles: "Tous les profils",
     teamDirection: "Direction du Programme",
     teamHonoraryPresidency: "Présidence d'honneur",
@@ -252,9 +252,9 @@ export const translations = {
 
     // Team Section
     teamKicker: "Who We Are · Governance & Network",
-    teamTitle: "The Team & Faces",
+    teamTitle: "Members",
     teamTitleHighlight: "of JEDDIAC",
-    teamSubtitle: "Inspired by leading global climate initiatives, JEDDIAC convenes seasoned journalists, Congo Basin environmental scientists, community radio producers, and committed youth ambassadors.",
+    teamSubtitle: "JEDDIAC is supported by distinguished figures from public institutions, international organizations, civil society, the economy, media, and youth. They support the programme across four forms of engagement: honorary presidency, patronage, ambassadorship, and advisory.",
     teamAllProfiles: "All Profiles",
     teamDirection: "Programme Leadership",
     teamHonoraryPresidency: "Honorary Presidency",
