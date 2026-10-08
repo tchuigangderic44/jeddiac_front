@@ -49,10 +49,10 @@ export default function ImpactGallery() {
               <span>JEDDIAC sur le terrain</span>
             </div>
             <h2 className="section-title-editorial">
-              Le Bassin du Congo <span className="text-highlight-green">à Travers Nos Objectifs</span>
+              Zone d'intervention <span className="text-highlight-green">de Jeddiac</span>
             </h2>
             <p className="section-subtitle-editorial" style={{ margin: 0, textAlign: "left" }}>
-              Des salles de rédaction aux profondeurs de la forêt équatoriale, découvrez les temps forts de la mobilisation de la jeunesse pour la durabilité.
+              Des programmes conçus pour transformer les jeunes en acteurs de l'information, de la sensibilisation et du développement durable.
             </p>
           </div>
           <div className="gallery-header-stats">
