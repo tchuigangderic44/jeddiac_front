@@ -1082,6 +1082,8 @@ export default function AdminPortal({ onClose }) {
       if (userForm.contributions) formData.append("contributions", userForm.contributions);
       if (userForm.contributionsEn) formData.append("contributionsEn", userForm.contributionsEn);
       if (userForm.linkedin) formData.append("linkedin", userForm.linkedin);
+      if (userForm.displayOrder !== undefined) formData.append("displayOrder", userForm.displayOrder);
+      if (userForm.photoSource) formData.append("photoSource", userForm.photoSource);
       if (userForm.avatarFile) formData.append("avatar", userForm.avatarFile);
 
       await api.createUser(token, formData);
@@ -1108,6 +1110,8 @@ export default function AdminPortal({ onClose }) {
         conseilEn: "",
         contributions: "",
         contributionsEn: "",
+        displayOrder: 999,
+        photoSource: "",
         avatarFile: null,
         avatarPreview: null
       });
@@ -1139,6 +1143,8 @@ export default function AdminPortal({ onClose }) {
       conseilEn: userItem.conseilEn || "",
       contributions: userItem.contributions || "",
       contributionsEn: userItem.contributionsEn || "",
+      displayOrder: userItem.displayOrder !== undefined ? userItem.displayOrder : 999,
+      photoSource: userItem.photoSource || "",
       avatar: userItem.avatar || "",
       avatarFile: null,
       avatarPreview: userItem.avatar ? getMediaUrl(userItem.avatar) : null,
@@ -1171,6 +1177,8 @@ export default function AdminPortal({ onClose }) {
       formData.append("contributions", editUserForm.contributions || "");
       formData.append("contributionsEn", editUserForm.contributionsEn || "");
       formData.append("linkedin", editUserForm.linkedin || "");
+      if (editUserForm.displayOrder !== undefined) formData.append("displayOrder", editUserForm.displayOrder);
+      if (editUserForm.photoSource !== undefined) formData.append("photoSource", editUserForm.photoSource);
 
       if (editUserForm.avatarFile) {
         formData.append("avatar", editUserForm.avatarFile);
@@ -5918,8 +5926,15 @@ export default function AdminPortal({ onClose }) {
                     value={userForm.role} 
                     onChange={(e) => setUserForm({ ...userForm, role: e.target.value })}
                   >
-                    <option value="member">Membre / Journaliste</option>
-                    <option value="expert">Expert Scientifique</option>
+                    <option value="president">Président (Direction)</option>
+                    <option value="secretaire_general">Secrétaire général (Direction)</option>
+                    <option value="tresorier">Trésorier (Direction)</option>
+                    <option value="president_honneur">Président / Présidente d’honneur</option>
+                    <option value="parrain">Parrain de la phase pilote</option>
+                    <option value="marraine">Marraine</option>
+                    <option value="conseiller">Conseiller / Conseillère</option>
+                    <option value="ambassadeur">Ambassadeur / Ambassadrice</option>
+                    <option value="member">Membre</option>
                     <option value="partner">Partenaire Institutionnel</option>
                   </select>
                 </div>
@@ -5931,10 +5946,12 @@ export default function AdminPortal({ onClose }) {
                     value={userForm.category} 
                     onChange={(e) => setUserForm({ ...userForm, category: e.target.value })}
                   >
-                    <option value="direction">Coordination / Direction</option>
-                    <option value="journaliste">Journaliste / Reporter</option>
-                    <option value="expert">Expert / Scientifique</option>
-                    <option value="partenaire">Partenaire Institutionnel</option>
+                    <option value="direction">Direction du Programme</option>
+                    <option value="honneur">Présidence d'honneur</option>
+                    <option value="parrainage">Parrain & Marraines</option>
+                    <option value="conseil">Conseillers</option>
+                    <option value="ambassadeur">Ambassadeurs</option>
+                    <option value="partenaire">Partenaires</option>
                   </select>
                 </div>
               </div>
@@ -5976,6 +5993,30 @@ export default function AdminPortal({ onClose }) {
                   onChange={(e) => setUserForm({ ...userForm, linkedin: e.target.value })} 
                   placeholder="https://linkedin.com/in/profil"
                 />
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "1rem" }}>
+                <div className="form-group">
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Display Order" : "Ordre d'affichage"}</label>
+                  <input 
+                    type="number" 
+                    min="1"
+                    className="form-control" 
+                    value={userForm.displayOrder} 
+                    onChange={(e) => setUserForm({ ...userForm, displayOrder: e.target.value })} 
+                    placeholder="1, 2, 3..."
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Photo Source / Credit" : "Source de la photo (Crédit)"}</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    value={userForm.photoSource} 
+                    onChange={(e) => setUserForm({ ...userForm, photoSource: e.target.value })} 
+                    placeholder="ex: Ministère de l'Europe et des Affaires étrangères _Sindbad Bonfanti"
+                  />
+                </div>
               </div>
 
               {/* Language Switcher Tabs */}
@@ -6274,8 +6315,15 @@ export default function AdminPortal({ onClose }) {
                     value={editUserForm.role} 
                     onChange={(e) => setEditUserForm({ ...editUserForm, role: e.target.value })}
                   >
-                    <option value="member">Membre / Journaliste</option>
-                    <option value="expert">Expert Scientifique</option>
+                    <option value="president">Président (Direction)</option>
+                    <option value="secretaire_general">Secrétaire général (Direction)</option>
+                    <option value="tresorier">Trésorier (Direction)</option>
+                    <option value="president_honneur">Président / Présidente d’honneur</option>
+                    <option value="parrain">Parrain de la phase pilote</option>
+                    <option value="marraine">Marraine</option>
+                    <option value="conseiller">Conseiller / Conseillère</option>
+                    <option value="ambassadeur">Ambassadeur / Ambassadrice</option>
+                    <option value="member">Membre</option>
                     <option value="partner">Partenaire Institutionnel</option>
                   </select>
                 </div>
@@ -6287,10 +6335,12 @@ export default function AdminPortal({ onClose }) {
                     value={editUserForm.category} 
                     onChange={(e) => setEditUserForm({ ...editUserForm, category: e.target.value })}
                   >
-                    <option value="direction">Coordination / Direction</option>
-                    <option value="journaliste">Journaliste / Reporter</option>
-                    <option value="expert">Expert / Scientifique</option>
-                    <option value="partenaire">Partenaire Institutionnel</option>
+                    <option value="direction">Direction du Programme</option>
+                    <option value="honneur">Présidence d'honneur</option>
+                    <option value="parrainage">Parrain & Marraines</option>
+                    <option value="conseil">Conseillers</option>
+                    <option value="ambassadeur">Ambassadeurs</option>
+                    <option value="partenaire">Partenaires</option>
                   </select>
                 </div>
               </div>
@@ -6330,6 +6380,30 @@ export default function AdminPortal({ onClose }) {
                   value={editUserForm.linkedin} 
                   onChange={(e) => setEditUserForm({ ...editUserForm, linkedin: e.target.value })} 
                 />
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "1rem" }}>
+                <div className="form-group">
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Display Order" : "Ordre d'affichage"}</label>
+                  <input 
+                    type="number" 
+                    min="1"
+                    className="form-control" 
+                    value={editUserForm.displayOrder} 
+                    onChange={(e) => setEditUserForm({ ...editUserForm, displayOrder: e.target.value })} 
+                    placeholder="1, 2, 3..."
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="form-label" style={{ color: "#13221B" }}>{isEnglish ? "Photo Source / Credit" : "Source de la photo (Crédit)"}</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    value={editUserForm.photoSource} 
+                    onChange={(e) => setEditUserForm({ ...editUserForm, photoSource: e.target.value })} 
+                    placeholder="ex: Ministère de l'Europe et des Affaires étrangères _Sindbad Bonfanti"
+                  />
+                </div>
               </div>
 
               {/* Language Switcher Tabs */}

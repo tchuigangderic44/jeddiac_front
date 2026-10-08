@@ -105,7 +105,7 @@ export default function ContactSection() {
                   </div>
                   <div>
                     <span className="contact-label">{isEnglish ? "Official Email" : "Courriel Officiel"}</span>
-                    <strong className="contact-value">contact@jeddiac.org / jeddiac.contact@gmail.com</strong>
+                    <strong className="contact-value">contact@jeddiac.org</strong>
                   </div>
                 </div>
 
@@ -115,7 +115,7 @@ export default function ContactSection() {
                   </div>
                   <div>
                     <span className="contact-label">{isEnglish ? "Phone Line" : "Permanence Téléphonique"}</span>
-                    <strong className="contact-value">+237 670 00 00 00 / +237 690 00 00 00</strong>
+                    <strong className="contact-value">+33 651 159 013</strong>
                   </div>
                 </div>
 

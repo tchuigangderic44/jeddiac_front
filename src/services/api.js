@@ -56,9 +56,20 @@ export const api = {
   getNewsDetails: (idOrSlug) => request(`/news/${idOrSlug}`),
   getAgendas: (params = "") => request(`/agenda${params}`),
   getAgendaDetails: (idOrSlug) => request(`/agenda/${idOrSlug}`),
-  getMissions: () => request("/missions"),
-  getMembers: () => request("/members"),
-  getPodcasts: (params = "") => request(`/podcasts${params}`),
+  getMembers: (params = "?limit=100") => {
+    let query = "?limit=100";
+    if (typeof params === "string") {
+      query = params ? (params.startsWith("?") ? params : `?${params}`) : "?limit=100";
+    } else if (params && typeof params === "object") {
+      const sp = new URLSearchParams();
+      if (!("limit" in params)) sp.append("limit", "100");
+      Object.entries(params).forEach(([k, v]) => {
+        if (v !== undefined && v !== null) sp.append(k, String(v));
+      });
+      query = `?${sp.toString()}`;
+    }
+    return request(`/members${query}`);
+  },
   getPodcastDetails: (idOrSlug) => request(`/podcasts/${idOrSlug}`),
   
   // Interactions

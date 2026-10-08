@@ -75,13 +75,27 @@ html {
   background-color: var(--bg-page);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
 }
 
 body {
   overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+  position: relative;
   line-height: 1.65;
   background-color: var(--bg-page);
   color: var(--text-secondary);
+}
+
+#root,
+.app-layout {
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+  position: relative;
 }
 
 a {
@@ -98,6 +112,7 @@ button, input, textarea, select {
 
 img {
   max-width: 100%;
+  height: auto;
   display: block;
 }
 
@@ -107,11 +122,13 @@ img {
   max-width: 1240px;
   margin: 0 auto;
   padding: 0 1.5rem;
+  box-sizing: border-box;
 }
 
 .container-narrow {
   max-width: 860px;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 /* ==========================================================================
@@ -130,6 +147,8 @@ img {
   cursor: pointer;
   transition: all var(--transition-normal);
   white-space: nowrap;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .btn-forest {
@@ -1422,7 +1441,7 @@ img {
 
 .news-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
   gap: 2rem;
 }
 
@@ -1662,7 +1681,10 @@ img {
   border: 1px solid var(--border-light);
   border-radius: var(--radius-full);
   padding: 0.4rem 1rem;
-  min-width: 320px;
+  min-width: 0;
+  width: 100%;
+  max-width: 380px;
+  box-sizing: border-box;
 }
 
 .team-search-icon {
@@ -1686,7 +1708,7 @@ img {
 /* Team Grid */
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
   gap: 2rem;
 }
 
@@ -1840,6 +1862,9 @@ img {
   justify-content: space-between;
   align-items: center;
   gap: 2.5rem;
+  box-sizing: border-box;
+  max-width: 100%;
+  width: 100%;
 }
 
 .team-join-content {
@@ -1872,10 +1897,11 @@ img {
 /* Profile Modal / Fiche Profil */
 .modal-card.profile-modal-card,
 .profile-modal-card {
-  max-width: 820px;
+  max-width: min(820px, calc(100vw - 1rem));
   width: 100%;
   padding: 2.2rem 2.5rem;
   background: #FFFFFF;
+  box-sizing: border-box;
 }
 
 .profile-modal-grid {
@@ -1885,13 +1911,31 @@ img {
   align-items: start;
 }
 
+.profile-modal-photo-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
 .profile-modal-photo-container {
   width: 100%;
   aspect-ratio: 1 / 1.15;
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-md);
-  margin-bottom: 1.2rem;
+  margin-bottom: 0.4rem;
+}
+
+.profile-modal-photo-attribution {
+  font-size: 0.8rem;
+  color: #6b7280;
+  line-height: 1.45;
+  margin: 0.35rem 0 0.85rem 0;
+  text-align: center;
+  font-weight: 400;
+  width: 100%;
+  word-break: break-word;
 }
 
 .profile-modal-photo {
@@ -1987,6 +2031,8 @@ img {
   margin-top: 1.8rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--border-light);
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 /* ==========================================================================
@@ -3100,7 +3146,7 @@ img {
 
 .agenda-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
   gap: 2rem;
 }
 
@@ -4533,30 +4579,73 @@ select.form-control {
   .profile-modal-sidebar {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
     gap: 1.25rem;
     padding-bottom: 1.1rem;
     border-bottom: 1px solid var(--border-light);
   }
 
+  .profile-modal-photo-block {
+    width: 120px;
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
   .profile-modal-photo-container {
-    width: 110px;
-    height: 110px;
-    min-width: 110px;
+    width: 120px;
+    height: 120px;
+    min-width: 120px;
     aspect-ratio: 1 / 1;
     margin-bottom: 0;
     border-radius: var(--radius-lg);
+  }
+
+  .profile-modal-photo-attribution {
+    font-size: 0.72rem;
+    margin-top: 0.35rem;
+    margin-bottom: 0;
+    line-height: 1.35;
   }
 
   .profile-modal-meta {
     flex: 1;
     gap: 0.45rem;
   }
+
+  /* Institutional Join Banner on Tablet */
+  .team-join-banner {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: left;
+    padding: 1.75rem 1.25rem;
+    gap: 1.25rem;
+  }
+
+  .team-join-banner .btn {
+    width: 100%;
+    justify-content: center;
+    white-space: normal;
+    text-align: center;
+  }
 }
 
 @media (max-width: 768px) {
   .hero-metrics-grid {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .gallery-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .gallery-header-stats {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
   }
 
   .gallery-mosaic-grid {
@@ -4575,10 +4664,74 @@ select.form-control {
   .form-row-two-col {
     grid-template-columns: 1fr;
   }
+
+  .hero-floating-status-pill {
+    position: static;
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    justify-content: center;
+  }
+
+  .hero-parallax-lightbeam,
+  .hero-mist-drifter {
+    display: none;
+  }
+
+  .news-cards-grid,
+  .team-grid,
+  .agenda-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .axis-showcase-card,
+  .territory-feature-card,
+  .podcast-player-card,
+  .afrive-editorial-card,
+  .contact-info-card,
+  .contact-form-card {
+    padding: 1.6rem 1.2rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .territory-feature-content {
+    padding: 1.6rem 1.2rem;
+  }
+
+  .territory-feature-photo-wrap {
+    min-height: 220px;
+  }
+
+  .territory-stats-boxes {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .hero-animated-canopy,
+  .hero-parallax-image {
+    inset: 0;
+    max-width: 100%;
+    width: 100%;
+    left: 0;
+    right: 0;
+    animation: none;
+    transform: none !important;
+  }
+
+  .afrive-benefits-grid {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
 }
 
 /* Small Smartphone Screen Modal Optimization */
 @media (max-width: 580px) {
+  .container {
+    padding: 0 0.85rem;
+  }
+
   .modal-overlay {
     padding: 0.75rem 0.5rem;
   }
@@ -4601,10 +4754,21 @@ select.form-control {
     padding-bottom: 0.9rem;
   }
 
+  .profile-modal-photo-block {
+    width: 100%;
+    align-items: center;
+  }
+
   .profile-modal-photo-container {
-    width: 92px;
-    height: 92px;
-    min-width: 92px;
+    width: 96px;
+    height: 96px;
+    min-width: 96px;
+  }
+
+  .profile-modal-photo-attribution {
+    font-size: 0.72rem;
+    margin-top: 0.35rem;
+    margin-bottom: 0.2rem;
   }
 
   .profile-modal-name {
@@ -4647,6 +4811,8 @@ select.form-control {
     justify-content: center;
     font-size: 0.85rem;
     padding: 0.65rem 0.9rem;
+    white-space: normal;
+    text-align: center;
   }
 
   .modal-close-btn {
@@ -4654,6 +4820,85 @@ select.form-control {
     right: 0.65rem;
     width: 32px;
     height: 32px;
+  }
+
+  .team-join-banner {
+    padding: 1.25rem 0.85rem;
+    margin-top: 2rem;
+  }
+
+  .team-join-banner h3 {
+    font-size: 1.25rem;
+  }
+
+  .agenda-card {
+    padding: 1.35rem 1rem;
+  }
+
+  .axis-showcase-card,
+  .territory-feature-card,
+  .territory-feature-content,
+  .podcast-player-card,
+  .afrive-editorial-card,
+  .contact-info-card,
+  .contact-form-card {
+    padding: 1.25rem 0.85rem;
+  }
+}
+
+/* Ultra-compact screen optimization (300px - 420px) */
+@media (max-width: 420px) {
+  .container {
+    padding: 0 0.65rem;
+  }
+
+  .modal-overlay {
+    padding: 0.5rem 0.25rem;
+  }
+
+  .modal-card,
+  .modal-card.profile-modal-card {
+    padding: 1rem 0.7rem;
+    max-width: calc(100vw - 0.5rem);
+    border-radius: var(--radius-md);
+  }
+
+  .profile-modal-photo-container {
+    width: 80px;
+    height: 80px;
+    min-width: 80px;
+  }
+
+  .profile-modal-name {
+    font-size: 1.15rem;
+    word-break: break-word;
+  }
+
+  .profile-modal-metier {
+    font-size: 0.82rem;
+    word-break: break-word;
+  }
+
+  .profile-modal-actions {
+    gap: 0.45rem;
+  }
+
+  .profile-modal-actions .btn {
+    font-size: 0.78rem;
+    padding: 0.55rem 0.65rem;
+    width: 100%;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .btn {
+    white-space: normal;
+    text-align: center;
+  }
+
+  .hero-floating-status-pill {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
   }
 }
 
@@ -4900,11 +5145,13 @@ select.form-control {
 
 .dedicated-search-box {
   flex: 1;
-  min-width: 280px;
+  min-width: 0;
+  width: 100%;
   max-width: 520px;
   position: relative;
   display: flex;
   align-items: center;
+  box-sizing: border-box;
 }
 
 .dedicated-search-box .search-icon {
