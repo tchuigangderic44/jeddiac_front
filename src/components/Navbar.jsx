@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Sparkles, Menu, X, ArrowUpRight, ArrowLeft, Globe, Users, ChevronRight, Trees } from "lucide-react";
+import { Sparkles, Menu, X, ArrowUpRight, ArrowLeft, Globe, Users, ChevronRight, Trees, Handshake } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
 
@@ -133,11 +133,11 @@ export default function Navbar({ onOpenApplication, activeSection, onNavigateSec
           {/* Action Area (NO ADMIN BUTTON - Admin accesses via direct URL) */}
           <div className="nav-actions">
             <button 
-              onClick={onOpenApplication}
-              className={`btn btn-forest btn-sm nav-cta-btn ${showNavCta ? "nav-cta-visible" : "nav-cta-hidden"}`}
+              onClick={() => onOpenApplication && onOpenApplication(isEnglish ? "Partnership Proposal" : "Devenir Partenaire")}
+              className="btn btn-forest btn-sm nav-cta-btn nav-cta-visible"
               aria-label={t("joinNetwork")}
             >
-              <Sparkles size={15} />
+              <Handshake size={15} />
               <span>{t("joinNetwork")}</span>
             </button>
 
@@ -229,12 +229,15 @@ export default function Navbar({ onOpenApplication, activeSection, onNavigateSec
 
             <div className="mobile-drawer-cta">
               <button 
-                onClick={() => { setMobileMenuOpen(false); onOpenApplication(); }}
+                onClick={() => { 
+                  setMobileMenuOpen(false); 
+                  if (onOpenApplication) onOpenApplication(isEnglish ? "Partnership Proposal" : "Devenir Partenaire"); 
+                }}
                 className="btn btn-forest"
                 style={{ width: "100%", justifyContent: "center" }}
               >
-                <Sparkles size={16} />
-                <span>{t("applyNow")}</span>
+                <Handshake size={16} />
+                <span>{t("joinNetwork")}</span>
               </button>
             </div>
           </div>

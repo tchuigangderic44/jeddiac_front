@@ -15,7 +15,7 @@ export const translations = {
     navPodcasts: "Podcasts",
     navTerritories: "Territoires",
     navContact: "Contact",
-    joinNetwork: "Rejoindre le Réseau",
+    joinNetwork: "Devenir partenaire",
     applyNow: "Candidater / Rejoindre le Réseau",
 
     // Strategic Axes (Méthodologie & Cadre Opérationnel)
@@ -219,7 +219,7 @@ export const translations = {
     navPodcasts: "Podcasts",
     navTerritories: "Territories",
     navContact: "Contact",
-    joinNetwork: "Join the Network",
+    joinNetwork: "Become a partner",
     applyNow: "Apply / Join the Network",
 
     // Strategic Axes (Methodology & Operational Framework)
