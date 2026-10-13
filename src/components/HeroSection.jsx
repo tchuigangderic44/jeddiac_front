@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Sparkles, ArrowRight, Radio, Award, MapPin, CheckCircle2, Trees, Users, ChevronLeft, ChevronRight } from "lucide-react";
+import { Sparkles, ArrowRight, Award, MapPin, CheckCircle2, Trees, Users, ChevronLeft, ChevronRight } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
 import { api, getMediaUrl } from "../services/api";
 
@@ -290,14 +290,6 @@ export default function HeroSection({ stats, onOpenApplication, onExploreAxes })
               >
                 <Users size={17} />
                 <span>{t("heroCtaTeam")}</span>
-              </a>
-
-              <a 
-                href="#podcasts"
-                className="btn btn-ghost-forest"
-              >
-                <Radio size={17} />
-                <span>{t("heroCtaPodcasts")}</span>
               </a>
             </div>
 

@@ -68,7 +68,6 @@ export default function Footer({ onOpenApplication, onNavigateLegal, onNavigateP
             <h4 className="footer-col-heading">{t("footerColNetwork")}</h4>
             <ul className="footer-nav-list">
               <li><span className="footer-highlight-link">{t("footerLinkAfrive")}</span></li>
-              <li><a href="#podcasts">{t("footerLinkPodcasts")}</a></li>
               <li>
                 <button 
                   onClick={onOpenApplication} 

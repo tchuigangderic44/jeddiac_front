@@ -5,7 +5,6 @@ import ImpactGallery from "./components/ImpactGallery";
 import StrategicAxes from "./components/StrategicAxes";
 import TeamSection from "./components/TeamSection";
 import TerritoriesMap from "./components/TerritoriesMap";
-import PodcastPlayer from "./components/PodcastPlayer";
 import NewsSection from "./components/NewsSection";
 import AgendaSection from "./components/AgendaSection";
 import AfriveSpotlight from "./components/AfriveSpotlight";
@@ -318,16 +317,6 @@ function AppContent() {
           {/* Central Africa Territories & Regional Hubs */}
           <TerritoriesMap
             onOpenApplication={() => openApplication("Candidature Pôle Régional")}
-          />
-
-          {/* Youth Media & Audio Podcast Hub */}
-          <PodcastPlayer 
-            onNavigateAllPodcasts={() => navigateTo(
-              "all-podcasts",
-              "#tous-les-podcasts",
-              isEnglish ? "Loading Junior Podcast & Audio Hub..." : "Chargement du Hub Audio & Podcasts...",
-              isEnglish ? "Accessing field dispatches and student investigations" : "Accès aux récits de terrain et enquêtes sonores de la jeunesse"
-            )}
           />
 
           {/* Upcoming Cohorts & Training Workshops */}
