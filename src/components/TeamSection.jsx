@@ -200,7 +200,6 @@ export default function TeamSection({ onNavigateAllProfiles }) {
                     <h3 className="team-card-name">
                       {member.firstName} {member.lastName}
                     </h3>
-                    <p className="team-card-metier">{metier}</p>
 
                     <p className="team-card-bio-snippet">
                       {bio ? `${bio.slice(0, 140)}...` : ""}
