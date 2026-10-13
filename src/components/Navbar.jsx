@@ -8,7 +8,7 @@ export default function Navbar({ onOpenApplication, activeSection, onNavigateSec
   const [showNavCta, setShowNavCta] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, logout } = useAuth();
-  const { language, setLanguage, t } = useLanguage();
+  const { language, setLanguage, t, isEnglish } = useLanguage();
 
   const handleLinkClick = (e, targetSection) => {
     if (onNavigateSection) {
