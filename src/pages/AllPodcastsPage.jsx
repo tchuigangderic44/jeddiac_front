@@ -470,7 +470,7 @@ export default function AllPodcastsPage({ onBackToHome }) {
               return (
                 <article 
                   key={podcast.id} 
-                  className={`team-card ${isItemPlaying ? "playing-border" : ""}`}
+                  className={`team-card podcast-card ${isItemPlaying ? "playing-border" : ""}`}
                   style={{
                     display: "flex",
                     flexDirection: "column",
