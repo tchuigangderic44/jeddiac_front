@@ -40,15 +40,17 @@ export const translations = {
     territoryPhotoCaption: "Écosystème préservé ·",
 
     // Hero Section
-    heroKickerTag: "Programme Régional Pilote · 2026–2027",
-    heroKickerBadge: "Bassin du Congo",
+    heroKickerTag: "PROGRAMME RÉGIONAL PILOTE · 2026–2029",
+    heroKickerBadge: "CEMAC · AFRIQUE CENTRALE",
     heroTitlePart1: "Faire des jeunes les",
     heroTitleHighlight: "voix de la durabilité",
-    heroTitlePart2: "en Afrique Centrale.",
-    heroLead: "JEDDIAC (Jeunesse Engagée pour la Durabilité, le Développement et l'Information en Afrique Centrale) transforme les lycéens, étudiants et jeunes journalistes en producteurs d'enquêtes rigoureuses et de récits de solutions écologiques pour le deuxième poumon vert de la planète.",
-    heroCtaJoin: "Rejoindre le Mouvement",
-    heroCtaTeam: "Découvrir l'Équipe",
-    heroCtaPodcasts: "Nos Podcasts",
+    heroTitlePart2: "en Afrique centrale",
+    heroLeadP1: "JEDDIAC — Jeunesse Engagée pour la Durabilité, le Développement et l’Information en Afrique Centrale — est une association loi 1901 établie en France, dont le siège social est situé à Ivry-sur-Seine. Elle porte un programme dédié à la jeunesse et au développement durable en Afrique centrale, déployé au Cameroun en phase pilote de 2026 à 2029, avant une extension progressive aux six pays de la CEMAC.",
+    heroLeadP2: "JEDDIAC s’adresse aux lycéens, étudiants, futurs journalistes et communicants. Le programme mobilise les établissements scolaires et universitaires, les écoles de journalisme, les clubs médias, les radios communautaires et les médias de proximité, avec l’appui d’éducateurs, de professionnels des médias et d’acteurs du développement durable.",
+    heroLead: "JEDDIAC — Jeunesse Engagée pour la Durabilité, le Développement et l’Information en Afrique Centrale — est une association loi 1901 établie en France, dont le siège social est situé à Ivry-sur-Seine. Elle porte un programme dédié à la jeunesse et au développement durable en Afrique centrale, déployé au Cameroun en phase pilote de 2026 à 2029, avant une extension progressive aux six pays de la CEMAC.",
+    heroCtaProgram: "Découvrir le programme",
+    heroCtaPartner: "Devenir partenaire",
+    heroCtaLearnMore: "En savoir plus sur JEDDIAC (Les cinq piliers)",
 
     // Hero Metrics
     metricYouth: "Jeunes formés directement",
@@ -242,15 +244,17 @@ export const translations = {
     territoryPhotoCaption: "Preserved Ecosystem ·",
 
     // Hero Section
-    heroKickerTag: "Pilot Regional Program · 2026–2027",
-    heroKickerBadge: "Congo Basin",
+    heroKickerTag: "PILOT REGIONAL PROGRAM · 2026–2029",
+    heroKickerBadge: "CEMAC · CENTRAL AFRICA",
     heroTitlePart1: "Empowering youth to be the",
     heroTitleHighlight: "voices of sustainability",
-    heroTitlePart2: "in Central Africa.",
-    heroLead: "JEDDIAC (Youth Engaged for Sustainability, Development and Information in Central Africa) trains high schoolers, students and young journalists to produce rigorous investigations and ecological solution stories for our planet's second green lung.",
-    heroCtaJoin: "Join the Movement",
-    heroCtaTeam: "Meet the Team",
-    heroCtaPodcasts: "Our Podcasts",
+    heroTitlePart2: "in Central Africa",
+    heroLeadP1: "JEDDIAC — Youth Engaged for Sustainability, Development and Information in Central Africa — is a non-profit association established in France (under the 1901 Act), headquartered in Ivry-sur-Seine. It leads a program dedicated to youth and sustainable development across Central Africa, rolled out in Cameroon as a pilot phase from 2026 to 2029, before gradual expansion to the six CEMAC countries.",
+    heroLeadP2: "JEDDIAC is aimed at high schoolers, university students, aspiring journalists, and media communicators. The program mobilizes educational institutions, universities, journalism schools, media clubs, community radio stations, and grassroots media, supported by educators, media professionals, and sustainable development stakeholders.",
+    heroLead: "JEDDIAC — Youth Engaged for Sustainability, Development and Information in Central Africa — is a non-profit association established in France (under the 1901 Act), headquartered in Ivry-sur-Seine. It leads a program dedicated to youth and sustainable development across Central Africa, rolled out in Cameroon as a pilot phase from 2026 to 2029, before gradual expansion to the six CEMAC countries.",
+    heroCtaProgram: "Discover the program",
+    heroCtaPartner: "Become a partner",
+    heroCtaLearnMore: "Learn more about JEDDIAC (The five pillars)",
 
     // Hero Metrics
     metricYouth: "Directly trained youth",

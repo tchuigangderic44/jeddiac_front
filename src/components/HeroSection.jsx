@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Sparkles, ArrowRight, Award, MapPin, CheckCircle2, Trees, Users, ChevronLeft, ChevronRight } from "lucide-react";
+import { Sparkles, ArrowRight, Award, MapPin, CheckCircle2, Trees, Users, ChevronLeft, ChevronRight, Globe, Handshake } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
 import { api, getMediaUrl } from "../services/api";
 
@@ -259,7 +259,7 @@ export default function HeroSection({ stats, onOpenApplication, onExploreAxes })
                 {t("heroKickerTag")}
               </span>
               <span className="hero-kicker-badge">
-                <Trees size={14} />
+                <Globe size={14} />
                 {t("heroKickerBadge")}
               </span>
             </div>
@@ -270,26 +270,40 @@ export default function HeroSection({ stats, onOpenApplication, onExploreAxes })
               {t("heroTitlePart2")}
             </h1>
 
-            <p className="hero-lead-editorial">
-              {t("heroLead")}
-            </p>
+            <div className="hero-lead-editorial">
+              <p className="hero-lead-p">
+                {t("heroLeadP1")}
+              </p>
+              <p className="hero-lead-p">
+                {t("heroLeadP2")}
+              </p>
+            </div>
 
             <div className="hero-editorial-ctas">
-              <button 
+              <a 
                 id="hero-main-cta"
-                onClick={onOpenApplication}
+                href="#programme"
                 className="btn btn-forest"
               >
-                <span>{t("heroCtaJoin")}</span>
+                <span>{t("heroCtaProgram")}</span>
                 <ArrowRight size={17} />
+              </a>
+
+              <button 
+                id="hero-partner-cta"
+                onClick={() => onOpenApplication && onOpenApplication(isEnglish ? "Partnership Proposal" : "Devenir Partenaire")}
+                className="btn btn-outline-forest"
+              >
+                <Handshake size={17} />
+                <span>{t("heroCtaPartner")}</span>
               </button>
 
               <a 
-                href="#equipe"
-                className="btn btn-outline-forest"
+                href="#piliers"
+                className="hero-discreet-link"
               >
-                <Users size={17} />
-                <span>{t("heroCtaTeam")}</span>
+                <span>{t("heroCtaLearnMore")}</span>
+                <ArrowRight size={14} />
               </a>
             </div>
 

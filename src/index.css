@@ -933,18 +933,49 @@ img {
 }
 
 .hero-lead-editorial {
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   color: var(--text-secondary);
   line-height: 1.75;
   margin-bottom: 2.2rem;
 }
 
+.hero-lead-p {
+  margin: 0;
+}
+
+.hero-lead-p + .hero-lead-p {
+  margin-top: 0.95rem;
+}
+
 .hero-editorial-ctas {
   display: flex;
-  gap: 0.9rem;
+  gap: 1rem;
   flex-wrap: wrap;
   align-items: center;
   margin-bottom: 3.2rem;
+}
+
+.hero-discreet-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--color-forest);
+  text-decoration: none;
+  padding: 0.55rem 0.95rem;
+  border-radius: var(--radius-full);
+  background: var(--color-forest-tint);
+  border: 1px solid var(--color-forest-border);
+  transition: all var(--transition-fast);
+}
+
+.hero-discreet-link:hover {
+  background: #E8F5EE;
+  color: var(--color-forest);
+  border-color: var(--color-forest);
+  gap: 0.65rem;
+  box-shadow: 0 2px 10px rgba(15, 71, 52, 0.08);
 }
 
 /* Impact Metrics Grid (Crisp White Surface Cards) */
