@@ -1290,36 +1290,57 @@ img {
   justify-content: space-between;
   align-items: flex-end;
   margin-bottom: 3rem;
-  gap: 2rem;
+  gap: 2.5rem;
+}
+
+.gallery-header-info {
+  flex: 1;
+  max-width: 640px;
 }
 
 .gallery-header-stats {
   display: flex;
-  gap: 1.2rem;
+  gap: 1rem;
+  flex-shrink: 0;
 }
 
 .gallery-stat-badge {
   background: var(--bg-subtle);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
-  padding: 0.9rem 1.3rem;
+  padding: 0.85rem 1.15rem;
   text-align: center;
+  min-width: 125px;
+  max-width: 175px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.gallery-stat-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(15, 45, 30, 0.06);
 }
 
 .gallery-stat-num {
   font-family: var(--font-display);
-  font-size: 1.6rem;
+  font-size: 1.55rem;
   font-weight: 800;
   color: var(--color-forest);
   display: block;
-  line-height: 1;
+  line-height: 1.1;
+  white-space: nowrap;
 }
 
 .gallery-stat-lbl {
-  font-size: 0.76rem;
+  font-size: 0.72rem;
   color: var(--text-muted);
   font-weight: 600;
   text-transform: uppercase;
+  line-height: 1.35;
+  margin-top: 0.35rem;
+  display: block;
 }
 
 .gallery-mosaic-grid {
@@ -4642,11 +4663,20 @@ select.form-control {
     margin-bottom: 2rem;
   }
 
+  .gallery-header-info {
+    max-width: 100%;
+  }
+
   .gallery-header-stats {
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 0.75rem;
+  }
+
+  .gallery-stat-badge {
+    max-width: 100%;
+    min-width: 0;
   }
 
   .gallery-mosaic-grid {
@@ -4844,6 +4874,11 @@ select.form-control {
   .contact-info-card,
   .contact-form-card {
     padding: 1.25rem 0.85rem;
+  }
+
+  .gallery-header-stats {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
   }
 }
 

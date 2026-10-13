@@ -61,13 +61,15 @@ export default function ImpactGallery() {
     <section className="gallery-section">
       <div className="container">
         <div className="gallery-header-row">
-          <div>
+          <div className="gallery-header-info">
             <div className="section-tag-pill">
               <Camera size={16} />
               <span>{t("galleryTag")}</span>
             </div>
             <h2 className="section-title-editorial">
-              {t("galleryTitle")} <span className="text-highlight-green">{t("galleryTitleHighlight")}</span>
+              {t("galleryTitle")} {t("galleryTitleHighlight") && !t("galleryTitle").includes(t("galleryTitleHighlight")) ? (
+                <span className="text-highlight-green">{t("galleryTitleHighlight")}</span>
+              ) : null}
             </h2>
             <p className="section-subtitle-editorial" style={{ margin: 0, textAlign: "left" }}>
               {t("gallerySubtitle")}
@@ -81,6 +83,10 @@ export default function ImpactGallery() {
             <div className="gallery-stat-badge">
               <span className="gallery-stat-num">{t("galleryStat2Num")}</span>
               <span className="gallery-stat-lbl">{t("galleryStat2Label")}</span>
+            </div>
+            <div className="gallery-stat-badge">
+              <span className="gallery-stat-num">{t("galleryStat3Num")}</span>
+              <span className="gallery-stat-lbl">{t("galleryStat3Label")}</span>
             </div>
           </div>
         </div>

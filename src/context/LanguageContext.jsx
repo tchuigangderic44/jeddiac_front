@@ -110,13 +110,15 @@ export const translations = {
 
     // Impact Gallery Section
     galleryTag: "JEDDIAC sur le terrain",
-    galleryTitle: "Zone d'intervention",
+    galleryTitle: "Les territoires d’action",
     galleryTitleHighlight: "de JEDDIAC",
-    gallerySubtitle: "Des programmes conçus pour transformer les jeunes en acteurs de l'information, de la sensibilisation et du développement durable.",
-    galleryStat1Num: "90",
-    galleryStat1Label: "Clubs & Studios documentés",
-    galleryStat2Num: "100%",
-    galleryStat2Label: "Terrain & Récits vivants",
+    gallerySubtitle: "JEDDIAC déploie progressivement son modèle à l’échelle de l’Afrique centrale. Le Cameroun constitue le territoire pilote du programme pour les trois premières années, avant une extension progressive aux cinq autres pays de la CEMAC sur un horizon de dix ans.",
+    galleryStat1Num: "65,3 M",
+    galleryStat1Label: "Population de la CEMAC",
+    galleryStat2Num: "3,0 M KM²",
+    galleryStat2Label: "Territoire couvert",
+    galleryStat3Num: "29–37 %",
+    galleryStat3Label: "Jeunes de 10 à 14 ans selon les pays",
     galleryCloseModal: "Fermer",
 
     // Footer
@@ -310,13 +312,15 @@ export const translations = {
 
     // Impact Gallery Section
     galleryTag: "JEDDIAC in the field",
-    galleryTitle: "Areas of Intervention",
+    galleryTitle: "Action Territories",
     galleryTitleHighlight: "of JEDDIAC",
-    gallerySubtitle: "Programmes designed to empower youth as proactive agents of environmental reporting, community awareness, and sustainable development.",
-    galleryStat1Num: "90",
-    galleryStat1Label: "Documented Clubs & Studios",
-    galleryStat2Num: "100%",
-    galleryStat2Label: "Field & Living Narratives",
+    gallerySubtitle: "JEDDIAC is progressively rolling out its model across Central Africa. Cameroon serves as the pilot territory for the first three years, before a gradual expansion to the five other CEMAC countries over a ten-year horizon.",
+    galleryStat1Num: "65.3 M",
+    galleryStat1Label: "CEMAC Population",
+    galleryStat2Num: "3.0 M KM²",
+    galleryStat2Label: "Covered Territory",
+    galleryStat3Num: "29–37%",
+    galleryStat3Label: "Youth aged 10 to 14 by country",
     galleryCloseModal: "Close",
 
     // Footer

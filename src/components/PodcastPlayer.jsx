@@ -271,7 +271,7 @@ export default function PodcastPlayer({ onNavigateAllPodcasts }) {
         ) : !current ? (
           <div style={{ textAlign: "center", padding: "3rem 1rem", background: "#f8faf9", borderRadius: "16px", margin: "2rem 0" }}>
             <Headphones size={40} style={{ color: "#9ca3af", margin: "0 auto 1rem" }} />
-            <p style={{ color: "#6b7280" }}>{isEnglish ? "No podcasts available from the API at this time." : "Aucun podcast disponible sur l'API pour le moment."}</p>
+            <p style={{ color: "#6b7280" }}>{isEnglish ? "No podcasts available at this time." : "Aucun podcast disponible pour le moment."}</p>
           </div>
         ) : (
           <>
