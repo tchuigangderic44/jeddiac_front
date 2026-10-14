@@ -4027,6 +4027,14 @@ select.form-control {
 .footer-highlight-link {
   color: var(--color-gold-warm);
   font-weight: 600;
+  transition: all var(--transition-fast);
+  display: inline-block;
+}
+
+a.footer-highlight-link:hover {
+  color: #FFFFFF;
+  text-decoration: underline;
+  transform: translateX(3px);
 }
 
 .footer-btn-link {
@@ -4121,6 +4129,17 @@ select.form-control {
 
 .footer-partner-strip strong {
   color: #FFFFFF;
+}
+
+.footer-bottom-afrive-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: all var(--transition-fast);
+}
+
+.footer-bottom-afrive-link:hover {
+  color: var(--color-gold-warm);
 }
 
 /* ==========================================================================

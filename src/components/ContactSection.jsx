@@ -84,8 +84,8 @@ export default function ContactSection() {
               </h3>
               <p className="contact-info-desc">
                 {isEnglish 
-                  ? "Headquartered in Yaoundé with regional focal points in Douala, Libreville, Brazzaville and Kinshasa, JEDDIAC coordination steers deployment across 10 regions of Cameroon and Congo Basin countries."
-                  : "Basée à Yaoundé avec des relais régionaux à Douala, Libreville, Brazzaville et Kinshasa, la coordination JEDDIAC pilote le déploiement sur les 10 régions du Cameroun et les pays du Bassin du Congo."}
+                  ? "Headquartered in France with regional focal points in Cameroon and CEMAC countries, JEDDIAC coordination steers deployment across Central Africa."
+                  : "Établie en France avec des relais régionaux au Cameroun et dans les pays de la CEMAC, la coordination JEDDIAC pilote le déploiement du programme en Afrique centrale."}
               </p>
 
               <div className="contact-details-list">
@@ -95,7 +95,7 @@ export default function ContactSection() {
                   </div>
                   <div>
                     <span className="contact-label">{isEnglish ? "Headquarters" : "Siège de la Coordination"}</span>
-                    <strong className="contact-value">Yaoundé, Cameroun · Bassin du Congo</strong>
+                    <strong className="contact-value">Paris, France</strong>
                   </div>
                 </div>
 
@@ -126,7 +126,7 @@ export default function ContactSection() {
                   <div>
                     <span className="contact-label">{isEnglish ? "Availability" : "Disponibilité"}</span>
                     <strong className="contact-value">
-                      {isEnglish ? "Monday to Friday: 08:30 AM – 05:30 PM (GMT+1)" : "Du Lundi au Vendredi : 08h30 – 17h30 (GMT+1)"}
+                      {isEnglish ? "Monday to Friday: 09:00 – 17:30" : "Du Lundi au Vendredi : 09h – 17h30"}
                     </strong>
                   </div>
                 </div>

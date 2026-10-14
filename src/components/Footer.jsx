@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Trees, Mail, ArrowRight, CheckCircle2, Heart, Shield, Globe, Users } from "lucide-react";
+import { Mail, ArrowRight, CheckCircle2, Heart, Shield, Globe, Users } from "lucide-react";
 import { api } from "../services/api";
 import { useLanguage } from "../context/LanguageContext";
 
@@ -44,11 +44,6 @@ export default function Footer({ onOpenApplication, onNavigateLegal, onNavigateP
             <p className="footer-mission-text">
               <strong>JEDDIAC</strong> : {t("footerMission")}
             </p>
-
-            <div className="footer-pill-tag">
-              <Trees size={14} />
-              <span>{t("footerPill")}</span>
-            </div>
           </div>
 
           {/* Col 2: Le Programme */}
@@ -67,7 +62,16 @@ export default function Footer({ onOpenApplication, onNavigateLegal, onNavigateP
           <div className="footer-col-links">
             <h4 className="footer-col-heading">{t("footerColNetwork")}</h4>
             <ul className="footer-nav-list">
-              <li><span className="footer-highlight-link">{t("footerLinkAfrive")}</span></li>
+              <li>
+                <a 
+                  href="https://afrive.info/" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="footer-highlight-link"
+                >
+                  {t("footerLinkAfrive")}
+                </a>
+              </li>
               <li>
                 <button 
                   onClick={onOpenApplication} 
@@ -177,7 +181,17 @@ export default function Footer({ onOpenApplication, onNavigateLegal, onNavigateP
               {t("footerLinkPrivacy")}
             </a>
             <span>·</span>
-            <span>{t("footerSynergy")} <strong>AFRIVE</strong></span>
+            <span>
+              {t("footerSynergy")}{" "}
+              <a 
+                href="https://afrive.info/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="footer-bottom-afrive-link"
+              >
+                <strong>AFRIVE</strong>
+              </a>
+            </span>
             <span>·</span>
             <span>{t("footerCities")}</span>
           </div>

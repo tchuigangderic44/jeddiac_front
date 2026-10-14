@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 export const translations = {
   fr: {
     // Utility bar
-    cordinatedIn: "Bassin du Congo · Afrique Centrale",
+    cordinatedIn: "CEMAC · Afrique Centrale",
     strategicPartner: "Partenaire Média Stratégique :",
     cohortAgenda: "Agenda des Cohortes",
 
@@ -207,7 +207,7 @@ export const translations = {
 
   en: {
     // Utility bar
-    cordinatedIn: "Congo Basin · Central Africa",
+    cordinatedIn: "CEMAC · Central Africa",
     strategicPartner: "Strategic Media Partner :",
     cohortAgenda: "Cohorts Agenda",
 
