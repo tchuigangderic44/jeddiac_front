@@ -80,10 +80,10 @@ export const translations = {
     teamPartners: "Membres d'Honneur",
     teamSearchPlaceholder: "Rechercher un profil, un métier, une ville...",
     teamViewProfile: "Consulter le profil",
-    teamJoinBannerTag: "Rejoindre l'équipe & les comités régionaux",
-    teamJoinBannerTitle: "Vous êtes journaliste, scientifique ou animateur de radio locale ?",
-    teamJoinBannerDesc: "JEDDIAC recrute en continu des mentors, correspondants régionaux et encadreurs d'ateliers pour la phase pilote au Cameroun et dans toute l'Afrique Centrale.",
-    teamJoinBannerBtn: "Proposer ma candidature au Réseau",
+    teamJoinBannerTag: "Partenariats & Engagement",
+    teamJoinBannerTitle: "Vous souhaitez contribuer au développement de JEDDIAC ?",
+    teamJoinBannerDesc: "JEDDIAC développe des partenariats avec les institutions publiques, les établissements éducatifs, les médias, les organisations de jeunesse et les acteurs du développement durable pour déployer son programme pilote au Cameroun et construire un réseau à l’échelle de l’Afrique centrale.",
+    teamJoinBannerBtn: "Devenir partenaire",
 
     // Profile Modal
     modalProfileKicker: "Fiche Profil Membre JEDDIAC",
@@ -284,10 +284,10 @@ export const translations = {
     teamPartners: "Honorary Members",
     teamSearchPlaceholder: "Search for a profile, role, city...",
     teamViewProfile: "View profile",
-    teamJoinBannerTag: "Join the team & regional committees",
-    teamJoinBannerTitle: "Are you a journalist, scientist or community radio host?",
-    teamJoinBannerDesc: "JEDDIAC continuously recruits mentors, regional correspondents and workshop leaders for the pilot phase across Cameroon and Central Africa.",
-    teamJoinBannerBtn: "Submit application to the Network",
+    teamJoinBannerTag: "Partnerships & Engagement",
+    teamJoinBannerTitle: "Would you like to contribute to the development of JEDDIAC?",
+    teamJoinBannerDesc: "JEDDIAC develops partnerships with public institutions, educational establishments, media, youth organizations, and sustainable development actors to deploy its pilot program in Cameroon and build a network across Central Africa.",
+    teamJoinBannerBtn: "Become a partner",
 
     // Profile Modal
     modalProfileKicker: "JEDDIAC Member Profile Sheet",

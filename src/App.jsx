@@ -298,6 +298,7 @@ function AppContent() {
 
           {/* Our Team & User Profiles (inspired by Climate Chance Qui sommes-nous / Équipe - strictly non-admin) */}
           <TeamSection 
+            onOpenApplication={openApplication}
             onNavigateAllProfiles={(cat = "all") => {
               setProfilesCategory(cat);
               navigateTo(

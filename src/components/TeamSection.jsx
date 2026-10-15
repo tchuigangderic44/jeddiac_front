@@ -3,7 +3,7 @@ import { Users, Search, ArrowRight, X, ExternalLink, Mail, Award, MapPin, Sparkl
 import { api, getMediaUrl } from "../services/api";
 import { useLanguage } from "../context/LanguageContext";
 
-export default function TeamSection({ onNavigateAllProfiles }) {
+export default function TeamSection({ onNavigateAllProfiles, onOpenApplication }) {
   const { t, isEnglish } = useLanguage();
   const [members, setMembers] = useState([]);
   const [activeCategory, setActiveCategory] = useState("all");
@@ -288,10 +288,20 @@ export default function TeamSection({ onNavigateAllProfiles }) {
               {t("teamJoinBannerDesc")}
             </p>
           </div>
-          <a href="#contact" className="btn btn-forest">
+          <button 
+            type="button"
+            onClick={() => {
+              if (onOpenApplication) {
+                onOpenApplication(isEnglish ? "Partnership Proposal" : "Devenir Partenaire");
+              } else {
+                window.location.hash = "#contact";
+              }
+            }}
+            className="btn btn-forest"
+          >
             <span>{t("teamJoinBannerBtn")}</span>
             <ArrowRight size={16} />
-          </a>
+          </button>
         </div>
       </div>
 
