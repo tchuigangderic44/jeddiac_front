@@ -2014,7 +2014,6 @@ img {
   align-items: center;
   gap: 2.5rem;
   box-sizing: border-box;
-  max-width: 1040px;
   width: 100%;
   margin-left: auto;
   margin-right: auto;
@@ -2022,7 +2021,7 @@ img {
 
 .team-join-content {
   flex: 1;
-  max-width: 720px;
+  max-width: 800px;
 }
 
 .team-join-banner .btn {
