@@ -9,7 +9,7 @@ export const translations = {
 
     // Navigation
     navHome: "Accueil",
-    navProgram: "Programme",
+    navProgram: "Le programme",
     navTeam: "L'Équipe",
     navAxes: "Les 5 Piliers",
     navPodcasts: "Podcasts",
@@ -213,7 +213,7 @@ export const translations = {
 
     // Navigation
     navHome: "Home",
-    navProgram: "Program",
+    navProgram: "The Program",
     navTeam: "Team",
     navAxes: "The 5 Pillars",
     navPodcasts: "Podcasts",
