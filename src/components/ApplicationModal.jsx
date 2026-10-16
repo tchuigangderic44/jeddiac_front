@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, Sparkles, CheckCircle2, Send, Trees, Globe, MapPin, Building, Phone, Mail, User } from "lucide-react";
 import { api } from "../services/api";
 import { useLanguage } from "../context/LanguageContext";
@@ -20,6 +20,21 @@ export default function ApplicationModal({ isOpen, onClose, prefilledSubject }) 
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      setSuccess(false);
+      setError(null);
+      if (prefilledSubject) {
+        setFormData((prev) => ({
+          ...prev,
+          message: isEnglish 
+            ? `Proposal / Application: ${prefilledSubject}` 
+            : `Proposition / Candidature : ${prefilledSubject}`
+        }));
+      }
+    }
+  }, [isOpen, prefilledSubject, isEnglish]);
 
   if (!isOpen) return null;
 

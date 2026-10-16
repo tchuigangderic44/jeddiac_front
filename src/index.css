@@ -6835,4 +6835,309 @@ a.footer-highlight-link:hover {
   }
 }
 
+/* ==========================================================================
+   PROGRAM EN ACTION - THEMATIC FILTERS & ENRICHED STRUCTURE
+   ========================================================================== */
+
+/* Home Section Quick Thematic Pills */
+.news-home-thematic-pills {
+  display: flex;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.news-home-thematic-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.95rem;
+  background: #FFFFFF;
+  border: 1px solid #D5E3DA;
+  border-radius: 999px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #1E3D2F;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  box-shadow: 0 1px 4px rgba(19, 34, 27, 0.04);
+}
+
+.news-home-thematic-pill:hover {
+  background: #F0F6F2;
+  border-color: #2E7D32;
+  color: #1B5E20;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(46, 125, 50, 0.12);
+}
+
+.thematic-pill-icon {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+/* Dedicated Page Thematic Priority Pills */
+.thematic-priority-btn {
+  border-color: rgba(46, 125, 50, 0.35) !important;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F8FAF8 100%) !important;
+}
+
+.thematic-priority-btn:hover {
+  background: #EEF6F0 !important;
+  border-color: #2E7D32 !important;
+}
+
+.thematic-priority-btn.active {
+  background: #1E5128 !important;
+  color: #FFFFFF !important;
+  border-color: #1E5128 !important;
+  box-shadow: 0 4px 12px rgba(30, 81, 40, 0.28) !important;
+}
+
+.cat-pill-icon {
+  margin-right: 0.35rem;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.cat-thematic-dot {
+  width: 6px;
+  height: 6px;
+  background: #2E7D32;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 0.45rem;
+  vertical-align: middle;
+}
+
+.thematic-priority-btn.active .cat-thematic-dot {
+  background: #A3E635;
+}
+
+/* Enriched Action Sheet Visual Layout */
+.enriched-article-wrapper {
+  margin-top: 1rem;
+}
+
+.article-body-text {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #2B4036;
+}
+
+.enriched-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  margin: 1.75rem 0;
+}
+
+.enriched-feature-card {
+  border-radius: 12px;
+  padding: 1.15rem 1.25rem;
+  border: 1px solid #DCE6DF;
+  box-shadow: 0 2px 6px rgba(19, 34, 27, 0.03);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.enriched-feature-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(19, 34, 27, 0.07);
+}
+
+.enriched-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 0.65rem;
+}
+
+.enriched-card-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.enriched-card-icon.icon-school {
+  background: #E8F5E9;
+  color: #1B5E20;
+}
+
+.enriched-card-icon.icon-results {
+  background: #E0F2F1;
+  color: #00695C;
+}
+
+.enriched-card-icon.icon-partners {
+  background: #EDE7F6;
+  color: #4527A0;
+}
+
+.enriched-card-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #13221B;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.enriched-card-body {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #2B4036;
+  margin: 0;
+}
+
+.enriched-card-contribution {
+  border-left: 4px solid #2E7D32;
+  background: linear-gradient(135deg, #FAFDFB 0%, #F2F8F4 100%);
+}
+
+.enriched-card-results {
+  border-left: 4px solid #00897B;
+  background: linear-gradient(135deg, #F8FCFB 0%, #EEF7F4 100%);
+}
+
+.enriched-card-partners {
+  border-left: 4px solid #5E35B1;
+  background: linear-gradient(135deg, #FAF8FE 0%, #F3EFFB 100%);
+}
+
+/* Institutional Transparency Notice */
+.enriched-transparency-card {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  padding: 1.1rem 1.25rem;
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-left: 4px solid #D97706;
+  border-radius: 10px;
+  margin: 1.5rem 0;
+}
+
+.transparency-icon-col {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.transparency-icon {
+  color: #D97706;
+}
+
+.transparency-content-col {
+  flex: 1;
+}
+
+.transparency-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #92400E;
+  margin-bottom: 0.25rem;
+}
+
+.transparency-text {
+  font-size: 0.89rem;
+  color: #78350F;
+  font-style: italic;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Contextual Action CTA Box */
+.enriched-action-cta-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.35rem 1.6rem;
+  background: linear-gradient(135deg, #13221B 0%, #1D3A2C 100%);
+  border-radius: 12px;
+  color: #FFFFFF;
+  margin-top: 1.75rem;
+  box-shadow: 0 10px 28px rgba(19, 34, 27, 0.16);
+}
+
+.action-cta-text {
+  flex: 1;
+}
+
+.action-cta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #A3E635;
+  margin-bottom: 0.35rem;
+}
+
+.action-cta-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0 0 0.3rem 0;
+  line-height: 1.35;
+}
+
+.action-cta-subtitle {
+  font-size: 0.88rem;
+  color: #D0E5D9;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.btn-emerald-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.45rem;
+  background: #2E7D32;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.92rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.22s ease;
+  box-shadow: 0 4px 14px rgba(46, 125, 50, 0.4);
+}
+
+.btn-emerald-action:hover {
+  background: #1B5E20;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(46, 125, 50, 0.55);
+}
+
+@media (max-width: 768px) {
+  .enriched-action-cta-box {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.1rem;
+    padding: 1.25rem;
+  }
+
+  .btn-emerald-action {
+    width: 100%;
+  }
+
+  .enriched-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
 

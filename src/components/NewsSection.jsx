@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Bell, Calendar, ArrowRight, Clock, X } from "lucide-react";
+import { Bell, Calendar, ArrowRight, Clock, X, Sparkles, Filter } from "lucide-react";
 import { api, getMediaUrl } from "../services/api";
 import { useLanguage } from "../context/LanguageContext";
 import { OFFICIAL_NEWS } from "../data/officialNews";
+import EnrichedArticleContent from "./EnrichedArticleContent";
 
-export default function NewsSection({ onNavigateAllNews }) {
+const THEMATIC_CATEGORIES = [
+  { fr: "Médias & Formation", en: "Media & Training", icon: "🎙️" },
+  { fr: "Environnement & Déchets", en: "Environment & Waste", icon: "🌱" },
+  { fr: "Eau & Biodiversité", en: "Water & Biodiversity", icon: "💧" },
+  { fr: "Alimentation & Cantine", en: "Food & School Canteen", icon: "🥗" },
+  { fr: "Innovation & Réemploi", en: "Innovation & Reuse", icon: "🔄" },
+  { fr: "Rencontres & Restitution", en: "Dialogue & Restitution", icon: "🏛️" }
+];
+
+export default function NewsSection({ onNavigateAllNews, onOpenApplication }) {
   const { t, isEnglish } = useLanguage();
   const [news, setNews] = useState(OFFICIAL_NEWS.slice(0, 3));
   const [loading, setLoading] = useState(true);
@@ -44,8 +54,24 @@ export default function NewsSection({ onNavigateAllNews }) {
             Le Programme <span className="text-highlight-green">en Action</span>
           </h2>
           <p className="section-subtitle-editorial">
-            Suivez les annonces majeures, les jalons de la phase pilote et les partenariats institutionnels du programme JEDDIAC.
+            Suivez les annonces majeures, les jalons de la phase pilote et les fiches d'action concrètes du programme JEDDIAC.
           </p>
+
+          {/* Quick Thematic Filters */}
+          <div className="news-home-thematic-pills">
+            {THEMATIC_CATEGORIES.map((cat, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => onNavigateAllNews && onNavigateAllNews(isEnglish ? cat.en : cat.fr)}
+                className="news-home-thematic-pill"
+                title={isEnglish ? `View all ${cat.en} initiatives` : `Voir toutes les actions ${cat.fr}`}
+              >
+                <span className="thematic-pill-icon">{cat.icon}</span>
+                <span>{isEnglish ? cat.en : cat.fr}</span>
+              </button>
+            ))}
+          </div>
         </div>
 
         {loading ? (
@@ -231,7 +257,17 @@ export default function NewsSection({ onNavigateAllNews }) {
                     {modalSummary}
                   </p>
                 )}
-                <p style={{ whiteSpace: "pre-line" }}>{modalContent}</p>
+                <EnrichedArticleContent
+                  content={modalContent}
+                  title={modalTitle}
+                  isEnglish={isEnglish}
+                  onProposeInitiative={(title) => {
+                    setSelectedNews(null);
+                    if (onOpenApplication) {
+                      onOpenApplication(title);
+                    }
+                  }}
+                />
               </div>
 
               {modalTags && (

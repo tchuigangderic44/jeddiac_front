@@ -38,6 +38,7 @@ function AppContent() {
   const [activeSection, setActiveSection] = useState("accueil");
   const [currentView, setCurrentView] = useState("home"); // "home" | "all-news" | "all-profiles" | "all-agenda" | "admin"
   const [profilesCategory, setProfilesCategory] = useState("all");
+  const [newsCategory, setNewsCategory] = useState("all");
 
   // Page Transition Simulation State
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -236,7 +237,11 @@ function AppContent() {
 
       {/* Render Dedicated View OR Home Landing Page */}
       {currentView === "all-news" && (
-        <AllNewsPage onBackToHome={() => navigateToHomeSection("programme")} />
+        <AllNewsPage 
+          onBackToHome={() => navigateToHomeSection("programme")} 
+          onOpenApplication={openApplication}
+          initialCategory={newsCategory}
+        />
       )}
 
       {currentView === "all-profiles" && (
@@ -288,12 +293,16 @@ function AppContent() {
 
           {/* Program News & Press Announcements */}
           <NewsSection 
-            onNavigateAllNews={() => navigateTo(
-              "all-news", 
-              "#toutes-les-actualites",
-              isEnglish ? "Loading official news & dispatches..." : "Chargement des actualités & communiqués...",
-              isEnglish ? "Fetching official press releases and updates" : "Récupération des dépêches officielles et annonces JEDDIAC"
-            )} 
+            onNavigateAllNews={(cat = "all") => {
+              setNewsCategory(cat);
+              navigateTo(
+                "all-news", 
+                "#toutes-les-actualites",
+                isEnglish ? "Loading official news & dispatches..." : "Chargement des actualités & communiqués...",
+                isEnglish ? "Fetching official press releases and updates" : "Récupération des dépêches officielles et annonces JEDDIAC"
+              );
+            }} 
+            onOpenApplication={openApplication}
           />
 
           {/* Our Team & User Profiles (inspired by Climate Chance Qui sommes-nous / Équipe - strictly non-admin) */}

@@ -1,338 +1,418 @@
 export const OFFICIAL_NEWS = [
   {
-    id: "a0000001-0000-4000-8000-000000000001",
-    title: "Clubs Médias JEDDIAC : Déploiement des espaces d'expression citoyenne dans les lycées et universités",
-    titleEn: "JEDDIAC Media Clubs: Rolling out civic expression spaces across schools and universities",
-    category: "Médias scolaires & universitaires",
-    categoryEn: "School & University Media",
-    summary: "JEDDIAC lance la création et le renforcement de clubs journaux, web-radios étudiantes et cellules de communication pour permettre aux jeunes d'enquêter et de produire leurs propres récits écologiques.",
-    summaryEn: "JEDDIAC establishes school newspapers, student web radios, and youth media hubs empowering students to investigate and report on environmental realities.",
-    content: `Dans le cadre de sa phase pilote au Cameroun, JEDDIAC accompagne activement les établissements d'enseignement secondaire et supérieur dans la structuration d'espaces d'expression citoyenne et de pratique médiatique.
-
-Ce dispositif novateur repose sur cinq formats complémentaires :
-• Clubs journaux au sein des lycées et collèges
-• Clubs médias pluridisciplinaires
-• Édition de journaux scolaires imprimés et numériques
-• Création de web-radios étudiantes participatives
-• Espaces de débat et d'expression citoyenne
-
-Les élèves et étudiants y développent progressivement les réflexes journalistiques fondamentaux : identification des sujets d'intérêt public, collecte des témoignages locaux, vérification des faits et rédaction d'articles percutants. 
-
-Les thématiques prioritaires abordent de front le développement durable, la protection de la biodiversité, l'adaptation climatique, l'éco-citoyenneté et le droit à une information environnementale rigoureuse. Le programme assure un accompagnement continu des équipes pédagogiques pour pérenniser ces espaces d'expression citoyenne.`,
-    contentEn: `As part of its pilot phase in Cameroon, JEDDIAC actively supports secondary and higher education institutions in setting up civic communication spaces and student newsrooms.
-
-This forward-looking framework relies on five complementary formats:
-• School press clubs in high schools and colleges
-• Multidisciplinary campus media clubs
-• Print and digital student newspapers
-• Participatory student web radios
-• Civic debate and citizen expression forums
-
-Students progressively build core investigative journalism skills: identifying public-interest topics, collecting local testimonies, verifying facts, and crafting compelling solution-driven articles.
-
-Priority focus areas encompass sustainable development, biodiversity conservation, climate adaptation, environmental citizenship, and access to verified environmental reporting.`,
-    tags: "Clubs Médias, Éducation, Lycées, Citoyenneté, Cameroun",
-    tagsEn: "Media Clubs, Education, Schools, Youth Civic, Cameroon",
-    coverImage: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=1200&auto=format&fit=crop&q=80",
-    publishedAt: "2026-10-06T09:00:00.000Z",
-    status: "active"
+    "id": "b0000001-0000-4000-8000-000000000001",
+    "title": "Le programme en action : Protocole opérationnel de déploiement en 6 étapes dans les établissements partenaires",
+    "titleEn": "The Program in Action: 6-Step Operational Rollout in Partner Institutions",
+    "category": "Médias & Formation",
+    "categoryEn": "Media & Training",
+    "summary": "JEDDIAC formalise sa méthode d'intervention progressive dans les lycées et universités du Cameroun : de la rencontre diagnostique initiale jusqu'à la restitution publique et à l'évaluation d'impact.",
+    "summaryEn": "JEDDIAC establishes its structured methodology in schools and universities across Cameroon: from initial diagnostic to public restitution and impact assessment.",
+    "content": "Former, expérimenter et partager : JEDDIAC fait du développement durable un sujet d'apprentissage et d'action concrète pour la jeunesse. Dans les établissements partenaires, le programme déploie un protocole méthodique articulé en 6 étapes graduelles :\n\n1. Rencontre et diagnostic : échange approfondi avec la direction, enseignants référents et vie scolaire pour cartographier les besoins réels (déchets, eau, cantine, pratiques d'information).\n2. Accord de collaboration : contractualisation claire des rôles sans charge financière pour l'établissement.\n3. Formation courte et pratique : modules adaptés sur l'information fiable, le fact-checking et les enjeux écologiques locaux.\n4. Choix d'une initiative de terrain : sélection ciblée d'une ou deux actions réalistes et mesurables.\n5. Mise en œuvre et documentation : encadrement par un adulte responsable et reportage mené par les équipes médias.\n6. Restitution et amélioration : présentation des résultats mesurés (journal, radio, exposition) et capitalisation.\n\n? Contribution attendue de l'école :\nDésignation d'un référent pédagogique, mise à disposition d'une salle, créneaux réguliers respectant le calendrier scolaire, autorisations parentales et respect des protocoles de sécurité.\n\n? Résultats concrets & Livrables attendus :\nDiagnostic documenté, calendrier éditorial, productions journalistiques des élèves, indicateurs de terrain vérifiés et rapport de restitution.\n\n? Partenaires mobilisables :\nÉtablissements scolaires, radios locales, journalistes mentors, communes et associations environnementales.\n\n?? Mention de transparence :\nLes activités présentées sont des pistes de mise en œuvre. Leur réalisation dépendra des partenariats, des financements, des autorisations et des conditions locales.",
+    "contentEn": "Train, experiment, and share: JEDDIAC turns sustainable development into tangible learning and action for youth. In partner institutions, the program implements a structured 6-step roadmap:\n\n1. Initial Meeting & Diagnostic: dialogue with school leadership and teachers to assess local needs (waste, water, information).\n2. Collaboration Agreement: transparent commitment without financial burden on the school.\n3. Practical Training: short modules on verified information and ecological challenges.\n4. Field Action Selection: realistic choice of 1 or 2 high-impact initiatives.\n5. Implementation & Documentation: adult supervision, youth safety, and journalistic documentation.\n6. Restitution & Scaling: public presentation of measured outcomes.\n\n? School Contribution:\nDesignated faculty mentor, room access, scheduled extracurricular slots, parental consents.\n\n? Concrete Expected Outcomes:\nDocumented baseline, editorial calendar, youth media releases, verified field indicators.\n\n? Partner Network:\nSchools, community radios, professional media mentors, municipalities, and environmental NGOs.\n\n?? Transparency Notice:\nThe activities presented are implementation roadmaps. Execution depends on partnerships, confirmed funding, authorizations, and local conditions.",
+    "tags": "Méthodologie, Phase Pilote, Établissements, Cameroun, 6 Étapes",
+    "tagsEn": "Methodology, Pilot Phase, Schools, Cameroon, 6 Steps",
+    "coverImage": "https://images.unsplash.com/photo-1577495508048-b635879837f1?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-10-15T08:00:00.000Z",
+    "status": "active"
   },
   {
-    id: "a0000001-0000-4000-8000-000000000002",
-    title: "École des Jeunes Médias : Un cursus pratique dédié aux fondamentaux du journalisme climatique",
-    titleEn: "Young Media Academy: Practical curriculum dedicated to climate journalism fundamentals",
-    category: "Formation",
-    categoryEn: "Training",
-    summary: "Former les jeunes aux fondamentaux du développement durable et aux pratiques journalistiques rigoureuses pour produire une information vérifiée et indépendante.",
-    summaryEn: "Equipping youth with essential sustainability knowledge and investigative journalism techniques to produce reliable, fact-checked news.",
-    content: `Véritable cœur battant du programme JEDDIAC, l'École des Jeunes Médias déploie un cursus intensif combinant maîtrise des sciences environnementales et apprentissage des techniques professionnelles de reportage.
-
-Le programme pédagogique s'articule autour de modules concrets et interactifs :
-• Ateliers pratiques d'écriture de presse et d'enquête de proximité
-• Masterclass dispensées par des journalistes d'investigation renommés
-• Formations de formateurs pour pérenniser l'animation des clubs
-• Méthodologies avancées de fact-checking et de lutte contre la désinformation
-• Rencontres immersives avec des professionnels des grands médias
-• Visites pédagogiques sur des sites écologiques sensibles et réserves naturelles
-
-Les thématiques enseignées couvrent l'urgence climatique, la préservation des forêts du Bassin du Congo, la gestion de l'eau, l'économie circulaire et le traitement des déchets, l'agriculture durable ainsi que la transition vers les énergies renouvelables. Les participants apprennent également à manier la captation audio pour la radio, la scénarisation de podcasts et le tournage de capsules vidéo mobiles.`,
-    contentEn: `As the beating heart of the JEDDIAC programme, the Young Media Academy deploys an intensive curriculum combining environmental sciences with professional reporting techniques.
-
-The pedagogical journey revolves around hands-on, practical modules:
-• Practical print writing and local investigative workshops
-• Masterclasses delivered by renowned investigative journalists
-• Training-of-trainers to sustain media club leadership
-• Advanced fact-checking and anti-disinformation methodologies
-• Interactive meetings with veteran media figures
-• Field study visits to ecologically sensitive areas and national reserves
-
-Key curriculum pillars include the climate emergency, Congo Basin forest conservation, water management, waste recycling, sustainable agriculture, and renewable energy.`,
-    tags: "Formation, École des Médias, Fact-Checking, Climat, Journalisme",
-    tagsEn: "Training, Media Academy, Fact-Checking, Climate, Journalism",
-    coverImage: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1200&auto=format&fit=crop&q=80",
-    publishedAt: "2026-10-04T10:30:00.000Z",
-    status: "active"
+    "id": "b0000001-0000-4000-8000-000000000002",
+    "title": "Clubs médias et mini-rédactions scolaires : Structurer l'expression environnementale des élèves",
+    "titleEn": "School Media Clubs & Mini-Newsrooms: Structuring Youth Environmental Expression",
+    "category": "Médias & Formation",
+    "categoryEn": "Media & Training",
+    "summary": "Créer ou renforcer des groupes d'élèves qui enquêtent, vérifient les sources et produisent journaux papier, chroniques audio et capsules vidéo sur les défis écologiques de leur communauté.",
+    "summaryEn": "Building student groups that investigate, verify facts, and produce school newspapers, audio podcasts, and videos on local ecological challenges.",
+    "content": "Le club média scolaire constitue la cellule de base du programme JEDDIAC. Encadrés par un enseignant référent et soutenus par notre équipe, les élèves apprennent à identifier des sujets d'intérêt public, à mener des interviews rigoureuses et à produire des formats variés : journal papier ou numérique, chroniques radio et capsules vidéo mobiles.\n\nJEDDIAC fournit la méthodologie éditoriale, des fiches pratiques et, selon les financements mobilisés, du matériel de prise de son et de captation.\n\n? Contribution attendue de l'école :\nDésigner un enseignant référent, prévoir un créneau régulier dans l'emploi du temps, mettre à disposition un espace de réunion sécurisé et faciliter la diffusion interne des productions.\n\n? Résultats concrets & Livrables attendus :\nCalendrier éditorial établi, charte de publication signée, premières éditions du journal scolaire ou podcasts diffusés, équipe d'élèves formée au recoupement des faits.\n\n? Partenaires mobilisables :\nRadios de proximité, journalistes formateurs bénévoles, associations de presse locale.\n\n?? Mention de transparence :\nLes activités présentées sont des pistes de mise en œuvre. Leur réalisation dépendra des partenariats, des financements, des autorisations et des conditions locales.",
+    "contentEn": "School media clubs form the bedrock of the JEDDIAC model. Under teacher mentorship, students learn to detect community environmental stories, conduct rigorous interviews, and produce student gazettes, audio bulletins, and mobile video dispatches.\n\n? School Contribution:\nAppointing a faculty advisor, scheduling weekly sessions, providing a secure workspace, facilitating on-campus distribution.\n\n? Concrete Expected Outcomes:\nActive editorial calendar, published student newspapers or audio episodes, fact-checking skills validated.\n\n? Partner Network:\nCommunity radios, journalist mentors, local educational associations.\n\n?? Transparency Notice:\nThe activities presented are implementation roadmaps. Execution depends on partnerships, confirmed funding, authorizations, and local conditions.",
+    "tags": "Clubs Médias, Rédaction, Lycées, Expression Citoyenne, Cameroun",
+    "tagsEn": "Media Clubs, Newsroom, High Schools, Civic Youth, Cameroon",
+    "coverImage": "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-10-14T09:30:00.000Z",
+    "status": "active"
   },
   {
-    id: "a0000001-0000-4000-8000-000000000003",
-    title: "JEDDIAC Reporters : La jeunesse sur le terrain pour documenter les solutions de leurs communautés",
-    titleEn: "JEDDIAC Reporters: Youth in the field documenting grassroots community solutions",
-    category: "Production médiatique",
-    categoryEn: "Media Production",
-    summary: "Accompagnement éditorial personnalisé des jeunes diplômés et amateurs dans la réalisation d'enquêtes, reportages radios, vidéos et chroniques de solutions.",
-    summaryEn: "Personalized editorial mentoring supporting youth in producing in-depth investigations, radio shows, videos, and constructive solution stories.",
-    content: `À l'issue de leurs cycles d'apprentissage, les bénéficiaires intègrent le corps des « JEDDIAC Reporters ». Ce réseau de correspondants juniors est directement mobilisé sur le terrain pour ausculter les réalités locales et mettre en lumière les initiatives positives portées par les populations riveraines.
-
-Les productions soutenues englobent un large spectre médiatique :
-• Reportages de terrain et interviews de témoins clés
-• Articles de presse écrite et dossiers d'analyse thématique
-• Podcasts natifs diffusés sur les plateformes numériques et stations partenaires
-• Émissions radiophoniques interactives
-• Formats courts et percutants pour les réseaux sociaux
-• Chroniques environnementales hebdomadaires
-
-L'enjeu central est de faire de la création médiatique un levier d'action concrète : les sujets ne sont pas théoriques, mais ancrés dans le vécu des communautés face aux défis écologiques du Bassin du Congo. Chaque production fait l'objet d'un suivi éditorial rigoureux assurant équilibre et rigueur documentaire.`,
-    contentEn: `Following their initial training cycles, participants join the dedicated corps of 'JEDDIAC Reporters'. This network of junior correspondents deploys across local territories to investigate grassroots realities and highlight sustainable community solutions.
-
-Supported media outputs encompass a rich variety:
-• Field reports and in-depth witness interviews
-• Print press articles and thematic investigative dossiers
-• Native podcasts broadcast on digital platforms and partner community radios
-• Interactive radio shows
-• Engaging short-form video capsules for digital audiences
-• Weekly environmental columns
-
-The primary aim is to turn media creation into an empowering civic tool: reporting is deeply rooted in local realities and tangible solutions across the Congo Basin.`,
-    tags: "JEDDIAC Reporters, Podcasts, Enquêtes, Terrain, Solutions",
-    tagsEn: "JEDDIAC Reporters, Podcasts, Investigation, Field, Solutions",
-    coverImage: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=1200&auto=format&fit=crop&q=80",
-    publishedAt: "2026-10-02T14:15:00.000Z",
-    status: "active"
+    "id": "b0000001-0000-4000-8000-000000000003",
+    "title": "Ateliers pratiques de journalisme et fact-checking : L'esprit critique face à la désinformation climatique",
+    "titleEn": "Hands-on Journalism & Fact-Checking Workshops: Critical Thinking Against Climate Disinformation",
+    "category": "Médias & Formation",
+    "categoryEn": "Media & Training",
+    "summary": "Des séances pratiques intensives pour apprendre la recherche de sources fiables, la détection des fausses informations, l'écriture journalistique et la prise de son sur le terrain.",
+    "summaryEn": "Intensive training sessions teaching students reliable source hunting, image verification, mobile field reporting, and debunking climate rumors.",
+    "content": "Face à la prolifération des rumeurs environnementales sur les réseaux sociaux, JEDDIAC anime des ateliers pratiques centrés sur l'investigation factuelle. Les élèves sont formés aux techniques de base de l'information : recherche inversée d'images, vérification de déclarations publiques, prise de son au microphone et écriture concise.\n\nChaque session part d'un cas d'actualité local (inondations urbaines, gestion des déchets, déforestation) et aboutit à une courte production vérifiée et relue collectivement.\n\n? Contribution attendue de l'école :\nMobilisation d'un groupe de 15 à 30 élèves volontaires, présence d'un enseignant encadrant, salle équipée avec accès électrique et, si possible, connexion internet.\n\n? Résultats concrets & Livrables attendus :\nProductions d'exercice (articles courts, mini-interviews audio), compétences validées par une grille d'évaluation simple, fiches de vérification partagées.\n\n? Partenaires mobilisables :\nJournalistes professionnels, spécialistes du fact-checking, réseaux de médias scientifiques.\n\n?? Mention de transparence :\nLes activités présentées sont des pistes de mise en œuvre. Leur réalisation dépendra des partenariats, des financements, des autorisations et des conditions locales.",
+    "contentEn": "In an era of rampant online misinformation, JEDDIAC conducts hands-on media literacy sessions. Young participants master fact-checking techniques: reverse image search, cross-checking official records, voice capture, and concise reporting.\n\n? School Contribution:\nEnrolling 15 to 30 motivated students, faculty presence, room with electricity and internet access.\n\n? Concrete Expected Outcomes:\nShort verified articles, audio interview clips, evaluation rubric assessing acquired competencies.\n\n? Partner Network:\nProfessional reporters, fact-checking collectives, scientific media outlets.\n\n?? Transparency Notice:\nThe activities presented are implementation roadmaps. Execution depends on partnerships, confirmed funding, authorizations, and local conditions.",
+    "tags": "Fact-Checking, Esprit Critique, Journalisme, Médias, Formation",
+    "tagsEn": "Fact-Checking, Critical Thinking, Journalism, Media Literacy",
+    "coverImage": "https://images.unsplash.com/photo-1532619675605-1ede6c2ed2b0?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-10-13T10:15:00.000Z",
+    "status": "active"
   },
   {
-    id: "a0000001-0000-4000-8000-000000000004",
-    title: "Territoires en Action : Adapter le journalisme vert aux réalités des écosystèmes locaux",
-    titleEn: "Territories in Action: Tailoring green journalism to distinct local ecosystems",
-    category: "Journalisme de territoire",
-    categoryEn: "Territorial Journalism",
-    summary: "Des forêts équatoriales aux zones côtières et sahéliennes, les jeunes documentent la biodiversité, l'agroécologie et la résilience propre à chaque bassin de vie.",
-    summaryEn: "From equatorial rainforests to coastal and savannah zones, youth reporters document biodiversity, agroecology, and resilience specific to each territory.",
-    content: `L'un des piliers cardinaux de JEDDIAC est son approche résolument territorialisée. Plutôt que d'aborder la question environnementale de manière abstraite ou générique, le programme invite les jeunes à observer avec acuité leur écosystème immédiat :
-
-• Régions forestières du Sud et de l'Est : suivi de la déforestation, préservation des réserves de faune (Dja, Campo Ma'an), valorisation des savoirs ancestraux et droits des communautés autochtones.
-• Régions côtières (Littoral et Sud-Maritime) : surveillance de la mangrove, érosion côtière, pollution plastique marine et sauvegarde de la pêche artisanale durable.
-• Zones agricoles et hauts plateaux de l'Ouest : pratiques agroécologiques, préservation des semences paysannes et sécurité alimentaire.
-• Centres urbains (Yaoundé, Douala) : assainissement, gestion des déchets solides, recyclage et résilience face aux inondations.
-• Régions du Grand Nord : désertification, préservation des zones humides et adaptation aux sécheresses.
-
-À terme, les 10 régions du Cameroun accueilleront des équipes permanentes de correspondants jeunesse pour relater en temps réel les défis et solutions de leurs terroirs.`,
-    contentEn: `A central hallmark of JEDDIAC is its territorialized focus. Rather than framing sustainability in abstract terms, the programme guides young reporters to anchor investigations directly in their immediate living environments:
-
-• Rainforest zones: deforestation tracking, wildlife reserve conservation (Dja, Campo Ma'an), indigenous knowledge, and local forest governance.
-• Coastal zones: mangrove protection, sea level rise, marine plastic pollution, and sustainable artisanal fisheries.
-• Agricultural belts: agroecological methods, heirloom seeds, and food security.
-• Metropolitan hubs: waste management, urban recycling economies, and flood resilience.
-• Northern zones: combatting desertification and water resource governance.
-
-Eventually, all 10 regions of Cameroon will be covered by youth correspondents documenting the realities of their territories.`,
-    tags: "Territoires, Biodiversité, Bassin du Congo, Résilience, Régions",
-    tagsEn: "Territories, Biodiversity, Congo Basin, Resilience, Regions",
-    coverImage: "https://images.unsplash.com/photo-1448375240586-882707db888b?w=1200&auto=format&fit=crop&q=80",
-    publishedAt: "2026-09-29T11:00:00.000Z",
-    status: "active"
+    "id": "b0000001-0000-4000-8000-000000000004",
+    "title": "Opération « École propre » : Diagnostic des dépôts et collecte sécurisée en milieu scolaire",
+    "titleEn": "Clean School Campaign: Waste Mapping and Supervised Collection in Schools",
+    "category": "Environnement & Déchets",
+    "categoryEn": "Environment & Waste",
+    "summary": "Cartographier les zones d'accumulation de déchets dans l'établissement, trier par typologie et organiser une opération de ramassage hautement sécurisée avec filière d'évacuation garantie.",
+    "summaryEn": "Mapping waste accumulation spots on campus, analyzing waste categories, and executing a safe cleanup with verified disposal channels.",
+    "content": "L'opération « École propre » lie directement action environnementale et apprentissage de la rigueur. Les élèves réalisent d'abord un diagnostic visuel : où s'accumulent les déchets ? Quels sont les emballages les plus fréquents (sachets plastiques, bouteilles, papiers) ?\n\nL'opération de collecte s'effectue dans le strict respect des consignes de sécurité : gants de protection obligatoires, encadrement adulte permanent et exclusion formelle de tout déchet dangereux ou médical. L'évacuation est obligatoirement coordonnée avec le service municipal ou un collecteur agréé.\n\n? Contribution attendue de l'école :\nAutorisation officielle, encadrement pédagogique, délimitation des zones, fourniture de sacs et logistique d'évacuation confirmée avec les services compétents.\n\n? Résultats concrets & Livrables attendus :\nFiche de diagnostic des déchets, volume ou poids approximatif collecté, zone scolaire assainie et reportage photo/texte documentant l'action.\n\n? Partenaires mobilisables :\nServices techniques municipaux, entreprises de collecte, associations écocitoyennes.\n\n?? Mention de transparence :\nLes activités présentées sont des pistes de mise en œuvre. Leur réalisation dépendra des partenariats, des financements, des autorisations et des conditions locales.",
+    "contentEn": "The Clean School initiative bridges environmental action with rigorous data collection. Students start by inspecting litter hotspots, categorizing plastic wrappers and single-use packaging.\n\nCleanups follow strict safety protocols: protective gloves, full adult supervision, zero contact with hazardous items, and pre-arranged municipal disposal.\n\n? School Contribution:\nFormal campus authorization, faculty supervision, perimeter zoning, trash bags and logistics coordination.\n\n? Concrete Expected Outcomes:\nCampus waste audit report, documented volume removed, cleaned grounds, student photo-report.\n\n? Partner Network:\nMunicipal waste services, licensed waste haulers, civic sanitation associations.\n\n?? Transparency Notice:\nThe activities presented are implementation roadmaps. Execution depends on partnerships, confirmed funding, authorizations, and local conditions.",
+    "tags": "École Propre, Déchets, Salubrité, Jeunesse, Hygiène",
+    "tagsEn": "Clean School, Waste Management, Sanitation, Youth Action",
+    "coverImage": "https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-10-12T11:00:00.000Z",
+    "status": "active"
   },
   {
-    id: "a0000001-0000-4000-8000-000000000005",
-    title: "Campagnes JEDDIAC : Les jeunes créent et diffusent des campagnes d'impact communautaire",
-    titleEn: "JEDDIAC Campaigns: Young changemakers design and lead community advocacy drives",
-    category: "Sensibilisation & citoyenneté",
-    categoryEn: "Awareness & Citizenship",
-    summary: "Permettre aux jeunes de concevoir et piloter eux-mêmes des campagnes multimédias percutantes sur les déchets, l'eau, les énergies propres et la citoyenneté environnementale.",
-    summaryEn: "Equipping youth to build and execute multimedia campaigns addressing waste, clean water, renewable energy, and environmental civic duty.",
-    content: `JEDDIAC transforme les lycéens et étudiants en véritables leaders de la transition écologique en leur donnant les outils pour concevoir et déployer leurs propres campagnes de communication sociale.
-
-Les campagnes mobilisent des formats créatifs et percutants :
-• Campagnes numériques sur les réseaux sociaux (TikTok, Instagram, WhatsApp)
-• Affiches pédagogiques et bandes dessinées éducatives diffusées dans les collèges et lycées
-• Émissions et débats radiophoniques de sensibilisation
-• Capsules vidéo de vulgarisation scientifique
-• Actions de proximité citoyenne et nettoyages écologiques participatifs
-• Causeries éducatives au sein des communautés de quartier
-
-Les priorités thématiques incluent la lutte contre les pollutions plastiques, la préservation des nappes phréatiques, l'économie d'énergie, la reforestation participative et l'éveil d'une conscience civique pour préserver le patrimoine naturel commun.`,
-    contentEn: `JEDDIAC empowers secondary and university students to become catalysts of environmental change by designing and steering their own community advocacy campaigns.
-
-The campaigns leverage engaging communication formats:
-• Digital social media campaigns across platforms
-• Pedagogical posters, comics, and infographics displayed across campuses
-• Radio awareness broadcasts and community debates
-• Explanatory short video reels
-• Community clean-up drives and tree-planting initiatives
-• Peer-to-peer dialogues and public forums
-
-Core themes center on plastic waste reduction, clean water access, energy efficiency, reforestation, and fostering environmental citizenship.`,
-    tags: "Sensibilisation, Campagnes, Déchets, Eau, Éco-Citoyenneté",
-    tagsEn: "Awareness, Campaigns, Waste, Clean Water, Eco-Citizenship",
-    coverImage: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=1200&auto=format&fit=crop&q=80",
-    publishedAt: "2026-09-26T08:45:00.000Z",
-    status: "active"
+    "id": "b0000001-0000-4000-8000-000000000005",
+    "title": "Tri des déchets et points de collecte : Installer des filières de valorisation viables dans les cours",
+    "titleEn": "Campus Waste Sorting & Collection Hubs: Setting Up Viable Recycling Channels",
+    "category": "Environnement & Déchets",
+    "categoryEn": "Environment & Waste",
+    "summary": "Déployer des bacs de tri sélectif uniquement lorsqu'un circuit de recyclage local existe réellement, avec signalétique conçue par les élèves et pesée périodique des matières.",
+    "summaryEn": "Installing selective collection stations connected to real recycling outlets, backed by student-designed signage and periodic weighing.",
+    "content": "JEDDIAC refuse d'installer des poubelles de tri si les déchets finissent mélangés dans une décharge sauvage. Cette activité s'assure qu'une filière de valorisation (plastiques PET, papier, aluminium) existe localement avant d'implanter les points de collecte dans l'établissement.\n\nLes élèves élaborent les consignes visuelles, sensibilisent leurs camarades lors des récréations et assurent le suivi régulier des bacs.\n\n? Contribution attendue de l'école :\nAutorisation des emplacements stratégiques dans la cour, organisation du gardiennage et mise à disposition d'un local sécurisé pour le stockage intermédiaire.\n\n? Résultats concrets & Livrables attendus :\nSignalétique pédagogique installée, registre de pesée périodique, traçabilité prouvée de la destination finale vers un recycleur partenaire.\n\n? Partenaires mobilisables :\nPME de recyclage plastique, coopératives de valorisation, services de propreté urbaine.\n\n?? Mention de transparence :\nLes activités présentées sont des pistes de mise en œuvre. Leur réalisation dépendra des partenariats, des financements, des autorisations et des conditions locales.",
+    "contentEn": "JEDDIAC insists on genuine recyclability: no sorting bins are placed unless a validated recovery pathway exists locally.\n\nStudents create visual instructions, organize peer awareness during breaks, and monitor volume logs.\n\n? School Contribution:\nAllocating sheltered collection spots, storage security, and facilitating collector pick-ups.\n\n? Concrete Expected Outcomes:\nPermanent sorting stations, periodic weighing registry, certified proof of recycling destination.\n\n? Partner Network:\nPlastic recycling enterprises, local waste cooperatives, city sanitation teams.\n\n?? Transparency Notice:\nThe activities presented are implementation roadmaps. Execution depends on partnerships, confirmed funding, authorizations, and local conditions.",
+    "tags": "Tri Sélectif, Recyclage, Valorisation, Économie Circulaire",
+    "tagsEn": "Waste Sorting, Recycling, Circular Economy, Schools",
+    "coverImage": "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-10-11T14:20:00.000Z",
+    "status": "active"
   },
   {
-    id: "a0000001-0000-4000-8000-000000000006",
-    title: "Mentorat JEDDIAC : Mise en relation des jeunes producteurs avec des journalistes et scientifiques de renom",
-    titleEn: "JEDDIAC Mentorship: Connecting young creators with veteran journalists and scientists",
-    category: "Mentorat & accompagnement",
-    categoryEn: "Mentorship & Coaching",
-    summary: "Un programme de parrainage individuel et collectif reliant journalistes seniors, universitaires, chercheurs et experts médias à la jeune génération.",
-    summaryEn: "Dedicated individual and group mentoring pairing senior investigative journalists, scientists, and media producers with emerging talent.",
-    content: `Pour garantir la rigueur déontologique, la justesse scientifique et la portée éditoriale des contenus produits par les jeunes, JEDDIAC a institué un réseau d'excellence de mentors professionnels.
-
-Ce dispositif de mentorat assure un accompagnement personnalisé :
-• Séances régulières de mentorat individuel en binôme (mentor / jeune reporter)
-• Sessions collectives de travail et relecture critique de manuscrits
-• Retours éditoriaux approfondis sur les angles d'attaque et la vérification des sources
-• Rencontres avec des rédacteurs en chef de médias nationaux et internationaux
-• Ateliers spécialisés sur l'éthique de l'information et le journalisme de solutions
-
-Les mentors sont issus du grand journalisme d'investigation, du monde universitaire, de la recherche écologique et de la production audiovisuelle. Ils aident les participants à affiner leur regard, à surmonter les obstacles du terrain et à bâtir progressivement leur trajectoire professionnelle.`,
-    contentEn: `To ensure journalistic integrity, scientific accuracy, and maximum editorial impact, JEDDIAC has established a mentoring network of veteran professionals.
-
-This coaching network provides comprehensive personal support:
-• Individual 1-on-1 mentoring sessions pairing young reporters with senior mentors
-• Collaborative workshop sessions and manuscript peer review
-• Rigorous editorial feedback on story angles and investigative sources
-• Professional networking with national and international newsroom editors
-• Master workshops on ethical journalism and constructive reporting
-
-Mentors are drawn from investigative journalism, academia, environmental research, and audio/video production.`,
-    tags: "Mentorat, Accompagnement, Déontologie, Professionnels, Réseau",
-    tagsEn: "Mentorship, Coaching, Ethics, Professionals, Network",
-    coverImage: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=1200&auto=format&fit=crop&q=80",
-    publishedAt: "2026-09-23T15:20:00.000Z",
-    status: "active"
+    "id": "b0000001-0000-4000-8000-000000000006",
+    "title": "Jardin pédagogique scolaire : Observer la vie des sols, les semences locales et le cycle végétal",
+    "titleEn": "School Educational Garden: Observing Soil Life, Local Seeds and Plant Cycles",
+    "category": "Alimentation & Cantine",
+    "categoryEn": "Food & School Canteen",
+    "summary": "Transformer une parcelle d'école en laboratoire à ciel ouvert pour apprendre l'agronomie durable, la préservation des semences traditionnelles et la gestion économe de l'arrosage.",
+    "summaryEn": "Transforming school plots into open-air living labs for agroecology, indigenous seed conservation, and water-wise gardening.",
+    "content": "Lorsque l'établissement dispose d'un espace disponible, le jardin pédagogique offre un support d'enseignement interdisciplinaire d'une immense valeur. Les jeunes y découvrent la structure des sols, le rôle des micro-organismes, le cycle de l'eau et la richesse des cultures vivrières locales.\n\nLe jardin est dimensionné selon les ressources en eau et le temps d'encadrement disponible. Il ne vise pas l'autosuffisance alimentaire mais la compréhension du vivant.\n\n? Contribution attendue de l'école :\nAttribution d'une parcelle délimitée et sécurisée, accès régulier à un point d'eau non potable, adulte référent pour le suivi en période de vacances scolaires.\n\n? Résultats concrets & Livrables attendus :\nParcelle cultivée, carnet d'observation tenu par les élèves, panneaux explicatifs sur les variétés cultivées et fiches d'apprentissage en sciences de la vie.\n\n? Partenaires mobilisables :\nAgronomes locaux, associations paysannes, pépinières horticoles, centres de recherche agricole (IRAD).\n\n?? Mention de transparence :\nLes activités présentées sont des pistes de mise en œuvre. Leur réalisation dépendra des partenariats, des financements, des autorisations et des conditions locales.",
+    "contentEn": "School gardens serve as hands-on outdoor laboratories. Students explore soil fertility, organic pest management, local heirloom seeds, and natural irrigation techniques.\n\nThe garden is scaled realistically to available water and vacation schedules.\n\n? School Contribution:\nDesignated secure plot, access to water, holiday maintenance agreement.\n\n? Concrete Expected Outcomes:\nActive pedagogical plot, student-kept observation logbook, botanical label markers, botanical dispatches.\n\n? Partner Network:\nLocal agronomists, community farmers, nurseries, agricultural research institutes.\n\n?? Transparency Notice:\nThe activities presented are implementation roadmaps. Execution depends on partnerships, confirmed funding, authorizations, and local conditions.",
+    "tags": "Jardin Pédagogique, Agriculture Urbaine, Biodiversité, Sols",
+    "tagsEn": "School Garden, Urban Agriculture, Soil Health, Biodiversity",
+    "coverImage": "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-10-10T09:00:00.000Z",
+    "status": "active"
   },
   {
-    id: "a0000001-0000-4000-8000-000000000007",
-    title: "Prix JEDDIAC : Lancement prévu du concours récompensant les meilleures initiatives médiatiques de jeunesse",
-    titleEn: "JEDDIAC Awards: Annual competition planned to celebrate exceptional youth media initiatives",
-    category: "Concours & valorisation",
-    categoryEn: "Awards & Recognition",
-    summary: "Les Prix JEDDIAC récompenseront les reportages, podcasts, émissions radio et clubs scolaires les plus remarquables en faveur du développement durable.",
-    summaryEn: "An upcoming competitive prize recognizing top student reports, podcasts, radio shows, and newsrooms advancing environmental awareness.",
-    content: `Afin de stimuler la créativité, l'audace d'investigation et l'engagement citoyen des jeunes participants, JEDDIAC prépare le lancement officiel de son grand concours annuel : les Prix JEDDIAC du journalisme environnemental junior.
-
-Sept distinctions prestigieuses récompenseront les meilleures productions de la saison :
-• Prix du meilleur reportage écrit
-• Prix de la meilleure émission radio
-• Prix du meilleur podcast junior
-• Prix du meilleur club journal scolaire
-• Prix de l'innovation médiatique numérique
-• Prix du leadership jeunesse pour le climat
-• Prix de la meilleure initiative de sensibilisation communautaire
-
-Les lauréats bénéficieront de dotations en équipements techniques de reportage (enregistreurs, microphones, caméras mobiles), d'opportunités de stages au sein de médias partenaires et d'une mise à l'honneur lors de la cérémonie officielle du Forum National JEDDIAC.`,
-    contentEn: `To celebrate creativity, investigative excellence, and civic commitment among youth participants, JEDDIAC is preparing the launch of its annual competitive benchmark: the JEDDIAC Awards for Junior Environmental Journalism.
-
-Seven prestigious distinctions will honor standout productions:
-• Best Investigative Print Article Award
-• Best Local Radio Broadcast Award
-• Best Junior Podcast Award
-• Best School Newspaper Club Award
-• Digital Media Innovation Award
-• Youth Climate Leadership Award
-• Best Community Awareness Drive Award
-
-Winners will receive professional reporting equipment kits, internship placements with leading media outlets, and recognition during the National Forum.`,
-    tags: "Prix JEDDIAC, Concours, Reconnaissance, Podcasts, Innovation",
-    tagsEn: "JEDDIAC Awards, Competition, Recognition, Podcasts, Innovation",
-    coverImage: "https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=1200&auto=format&fit=crop&q=80",
-    publishedAt: "2026-09-20T16:00:00.000Z",
-    status: "active"
+    "id": "b0000001-0000-4000-8000-000000000007",
+    "title": "Compostage des déchets organiques : Transformer les restes végétaux en fertilisant naturel",
+    "titleEn": "Organic Waste Composting: Turning Plant Scraps into Natural Soil Fertilizer",
+    "category": "Alimentation & Cantine",
+    "categoryEn": "Food & School Canteen",
+    "summary": "Expérimenter le compostage à petite échelle pour valoriser les résidus de cantine et les feuilles mortes, en maîtrisant l'aération, l'humidité et les règles sanitaires.",
+    "summaryEn": "Small-scale composting to turn canteen peels and garden leaves into rich organic compost, learning proper moisture and hygiene control.",
+    "content": "Une part considérable des déchets scolaires est d'origine organique (épluchures de tubercules, fruits, restes végétaux). Cette activité forme les élèves au processus de décomposition aérobie : dosage entre matières azotées humides et matières carbonées sèches, contrôle des odeurs et de la température.\n\nLe compost mûr est ensuite réutilisé pour enrichir les bacs de plantation ou les espaces verts de l'école.\n\n? Contribution attendue de l'école :\nEmplacement aéré et abrité des fortes pluies, supervision adulte pour le brassage, respect des règles sanitaires (exclusion absolue des restes de viande ou poissons).\n\n? Résultats concrets & Livrables attendus :\nBac ou silo de compostage installé, guide illustré des matières acceptées, production de compost mûr utilisé dans la cour.\n\n? Partenaires mobilisables :\nMaîtres-composteurs, services municipaux d'espaces verts, associations écologiques.\n\n?? Mention de transparence :\nLes activités présentées sont des pistes de mise en œuvre. Leur réalisation dépendra des partenariats, des financements, des autorisations et des conditions locales.",
+    "contentEn": "Organic matter forms the largest share of school waste. Students manage the biological decomposition cycle: balancing green wet nitrogen with brown carbon leaves, monitoring aeration and temperature.\n\nThe mature organic humus is applied directly to school green zones.\n\n? School Contribution:\nShaded, well-drained compost location, adult supervision, strict hygiene guidelines.\n\n? Concrete Expected Outcomes:\nOperational compost bin, visual intake chart, harvested compost nourishing school soil.\n\n? Partner Network:\nCompost specialists, municipal park departments, local permaculture practitioners.\n\n?? Transparency Notice:\nThe activities presented are implementation roadmaps. Execution depends on partnerships, confirmed funding, authorizations, and local conditions.",
+    "tags": "Compostage, Déchets Organiques, Sols, Écologie Pratique",
+    "tagsEn": "Composting, Organic Waste, Soil Regeneration, Practical Ecology",
+    "coverImage": "https://images.unsplash.com/photo-1584467735871-8e85353a8413?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-10-09T11:45:00.000Z",
+    "status": "active"
   },
   {
-    id: "a0000001-0000-4000-8000-000000000008",
-    title: "Forum National JEDDIAC : Rassembler jeunes créateurs, institutions et experts du climat à Yaoundé",
-    titleEn: "JEDDIAC National Forum: Convening young creators, policymakers, and climate experts in Yaoundé",
-    category: "Forum & dialogue",
-    categoryEn: "National Forum",
-    summary: "Point d'orgue annuel du programme pour présenter les enquêtes des jeunes, valoriser les clubs partenaires et engager un dialogue direct avec les décideurs publics.",
-    summaryEn: "Annual high-level convention unveiling youth investigations, celebrating partner clubs, and opening direct dialogue with leaders.",
-    content: `Le Forum national JEDDIAC constituera le principal rendez-vous annuel prévu dans le programme pour célébrer la vitalité des jeunes voix pour la planète.
-
-Organisé à Yaoundé, cet événement d'envergure réunira :
-• Les jeunes bénéficiaires, reporters scolaires et animateurs de web-radios
-• Les représentants des clubs médias et établissements partenaires des 10 régions
-• Les directeurs des médias nationaux et internationaux
-• Les institutions publiques camerounaises (Ministère de l'Environnement, de la Jeunesse, de l'Éducation)
-• Les partenaires techniques, bailleurs de fonds et organisations internationales (COMIFAC, UNESCO)
-• Les scientifiques spécialistes de la forêt équatoriale et acteurs de terrain
-
-Durant trois journées de travaux, le Forum proposera des expositions de reportages photo, des écoutes collectives d'émissions radio et de podcasts, des tables rondes thématiques et la remise solennelle des distinctions de la première cohorte.`,
-    contentEn: `The JEDDIAC National Forum will serve as the premier annual convention showcasing the vitality of youth voices for sustainable development in Central Africa.
-
-Hosted in Yaoundé, this flagship gathering will bring together:
-• Youth beneficiaries, student reporters, and radio anchors
-• Representatives from partner media clubs across Cameroon's 10 regions
-• Directors of national and international media organizations
-• Government ministries and public policy leaders
-• International technical partners and funding institutions (COMIFAC, UNESCO)
-• Congo Basin climate researchers and environmental conservationists
-
-Across three intensive days, the Forum will feature photo reportage galleries, public listening sessions of student podcasts, thematic panel discussions, and the JEDDIAC Awards ceremony.`,
-    tags: "Forum National, Dialogue, Institutions, Yaoundé, COMIFAC",
-    tagsEn: "National Forum, Dialogue, Institutions, Yaoundé, COMIFAC",
-    coverImage: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=1200&auto=format&fit=crop&q=80",
-    publishedAt: "2026-09-18T09:30:00.000Z",
-    status: "active"
+    "id": "b0000001-0000-4000-8000-000000000008",
+    "title": "Audit de l'eau et gestes d'économie : Détecter les fuites et protéger la ressource hydrique",
+    "titleEn": "Water Audit & Conservation Actions: Detecting Leaks and Preserving School Water",
+    "category": "Eau & Biodiversité",
+    "categoryEn": "Water & Biodiversity",
+    "summary": "Sous supervision adulte, les élèves inspectent les robinets, chiffrer les pertes dues aux fuites et mènent une campagne d'affichage pour préserver l'eau potable.",
+    "summaryEn": "Supervised inspection of campus plumbing to quantify water lost to dripping taps, coupled with student-led conservation campaigns.",
+    "content": "L'accès à l'eau potable est un enjeu vital dans les métropoles et zones rurales d'Afrique Centrale. L'audit scolaire de l'eau apprend aux élèves à observer méthodiquement le réseau de l'école : mesure au chronomètre des débits de robinets qui gouttent, identification des gaspillages aux points de lavage et relevé des compteurs.\n\nLes élèves rédigent une note d'alerte pour l'administration et conçoivent des affichettes rappelant les gestes simples de fermeture.\n\n? Contribution attendue de l'école :\nAutoriser les relevés visuels, partager les factures ou données de consommation disponibles, faire intervenir un plombier pour réparer les fuites documentées.\n\n? Résultats concrets & Livrables attendus :\nTableau d'audit des points d'eau, estimation des volumes gaspillés, réparation des fuites effectives et campagne de sensibilisation auprès des classes.\n\n? Partenaires mobilisables :\nCompagnies distributrices d'eau, techniciens sanitaires, ONG spécialisées dans l'accès à l'eau (WASH).\n\n?? Mention de transparence :\nLes activités présentées sont des pistes de mise en œuvre. Leur réalisation dépendra des partenariats, des financements, des autorisations et des conditions locales.",
+    "contentEn": "Clean water preservation starts with meticulous tracking. Students conduct structured audits: timing leaky faucets, evaluating washing trough losses, and checking meter records.\n\nFindings are packaged into a technical brief for school leaders and visual conservation reminders near taps.\n\n? School Contribution:\nAccess to plumbing inspection, historical consumption logs if available, plumber repairs on flagged leaks.\n\n? Concrete Expected Outcomes:\nComprehensive water point audit table, estimated volume saved, repaired taps, peer awareness posters.\n\n? Partner Network:\nPublic water utilities, sanitation technicians, WASH NGOs.\n\n?? Transparency Notice:\nThe activities presented are implementation roadmaps. Execution depends on partnerships, confirmed funding, authorizations, and local conditions.",
+    "tags": "Eau, Audit Hydrique, Préservation, Économies d'Eau, Climat",
+    "tagsEn": "Water Conservation, Faucet Audit, Resource Protection, WASH",
+    "coverImage": "https://images.unsplash.com/photo-1559827291-72ee739d0d9a?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-10-08T15:00:00.000Z",
+    "status": "active"
   },
   {
-    id: "a0000001-0000-4000-8000-000000000009",
-    title: "Réseau JEDDIAC Afrique Centrale : Extension progressive dans les 6 pays du Bassin du Congo",
-    titleEn: "JEDDIAC Central Africa Network: Progressive expansion across 6 Congo Basin nations",
-    category: "Réseau régional",
-    categoryEn: "Regional Network",
-    summary: "Après la phase pilote au Cameroun, JEDDIAC tisse une alliance régionale pour connecter les jeunes médias et partager les savoirs écologiques à l'échelle sous-régionale.",
-    summaryEn: "Following the Cameroon pilot, JEDDIAC builds a regional coalition connecting student newsrooms and sharing environmental insights across 6 countries.",
-    content: `Après la phase pilote menée au Cameroun, JEDDIAC engagera son déploiement sous-régional pour fédérer les jeunes journalistes et clubs médias de l'ensemble du Bassin du Congo.
-
-Cette dynamique intégrée couvrira 6 pays prioritaires :
-• Cameroun
-• Gabon
-• République du Congo
-• République centrafricaine
-• Tchad
-• Guinée équatoriale
-
-Le Réseau JEDDIAC Afrique Centrale favorisera :
-• Les rencontres virtuelles régulières et les cycles de webinaires bilingues
-• Les échanges interrégionaux et les mobilités d'immersion journalistique
-• Les projets d'enquêtes collaboratives transnationales sur le fleuve Congo et les forêts denses
-• La production conjointe d'émissions et de dossiers multimédias
-• Le partage mutuel des bonnes pratiques pédagogiques entre clubs scolaires
-
-Cette ouverture régionale donnera aux nouvelles générations les moyens de faire entendre la voix singulière et unie de l'Afrique Centrale sur l'échiquier climatique international.`,
-    contentEn: `Following the pilot rollout in Cameroon, JEDDIAC will expand its regional footprint to interconnect youth newsrooms across the entire Congo Basin.
-
-This cohesive regional strategy targets 6 partner countries:
-• Cameroon
-• Gabon
-• Republic of the Congo
-• Central African Republic
-• Chad
-• Equatorial Guinea
-
-The JEDDIAC Central Africa Network will facilitate:
-• Regular virtual exchanges and bilingual webinars
-• Interregional journalistic immersions and mobility exchanges
-• Transnational collaborative investigations on shared river and forest ecosystems
-• Joint co-production of multi-platform dossiers and radio shows
-• Mutual sharing of pedagogical toolkits between school clubs
-
-This regional coalition will equip Central African youth with a strong, coordinated voice on global environmental stages.`,
-    tags: "Afrique Centrale, Bassin du Congo, Réseau Régional, Coopération, Gabon, Congo",
-    tagsEn: "Central Africa, Congo Basin, Regional Network, Cooperation, Gabon, Congo",
-    coverImage: "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=1200&auto=format&fit=crop&q=80",
-    publishedAt: "2026-09-15T11:00:00.000Z",
-    status: "active"
+    "id": "b0000001-0000-4000-8000-000000000009",
+    "title": "Biodiversité et végétalisation de la cour : Recenser les espèces et créer des îlots de fraîcheur",
+    "titleEn": "Courtyard Biodiversity & Green Canopies: Species Census and Creating Shade Islands",
+    "category": "Eau & Biodiversité",
+    "categoryEn": "Water & Biodiversity",
+    "summary": "Réaliser l'inventaire des arbres, insectes et oiseaux de l'établissement, puis planter des essences locales pour lutter contre les îlots de chaleur dans les cours scolaires.",
+    "summaryEn": "Cataloguing local trees, pollinators, and bird species on school grounds, followed by planting indigenous shade trees to cool schoolyards.",
+    "content": "Sous les climats équatoriaux et sahéliens, les cours d'école entièrement bétonnées deviennent des fournaises pendant les journées chaudes. Cette activité permet aux élèves de réaliser un inventaire naturaliste simple : quelles sont les espèces d'arbres présentes ? Quels oiseaux et pollinisateurs y trouvent refuge ?\n\nSur cette base, les élèves participent à la mise en terre d'espèces locales rustiques, choisies pour leur ombrage et leur faible besoin d'entretien.\n\n? Contribution attendue de l'école :\nAutoriser les plantations sur des zones adaptées ne gênant pas la sécurité, garantir l'arrosage initial et intégrer l'espace au plan d'entretien régulier.\n\n? Résultats concrets & Livrables attendus :\nHerbier numérique ou panneau d'inventaire de la faune/flore, jeunes arbres protégés par des tuteurs, création d'une zone d'ombre naturelle.\n\n? Partenaires mobilisables :\nBotanistes, ministères de l'Environnement et des Forêts, pépiniéristes locaux, associations écologistes.\n\n?? Mention de transparence :\nLes activités présentées sont des pistes de mise en œuvre. Leur réalisation dépendra des partenariats, des financements, des autorisations et des conditions locales.",
+    "contentEn": "Concrete schoolyards suffer intense heat spikes. Students map existing botanical species and wildlife, identifying native shade species to introduce.\n\nThey take charge of planting and staking indigenous saplings suited to local rainfall patterns.\n\n? School Contribution:\nDesignated planting perimeters, watering commitment, maintenance protocol inclusion.\n\n? Concrete Expected Outcomes:\nBiodiversity census board, planted native saplings with guards, micro-climate shade documentation.\n\n? Partner Network:\nBotanists, forestry agencies, community plant nurseries.\n\n?? Transparency Notice:\nThe activities presented are implementation roadmaps. Execution depends on partnerships, confirmed funding, authorizations, and local conditions.",
+    "tags": "Biodiversité, Végétalisation, Arbres, Climat, Ombres",
+    "tagsEn": "Biodiversity, Tree Planting, Urban Shade, Ecology",
+    "coverImage": "https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-10-07T14:30:00.000Z",
+    "status": "active"
+  },
+  {
+    "id": "b0000001-0000-4000-8000-000000000010",
+    "title": "Ateliers de fabrication et réparation écologique : Donner une seconde vie aux objets du quotidien",
+    "titleEn": "Eco-Fabrication & Repair Labs: Giving Everyday Items a Purposeful Second Life",
+    "category": "Innovation & Réemploi",
+    "categoryEn": "Innovation & Reuse",
+    "summary": "Concevoir des objets utiles et du petit mobilier pour la classe à partir de palettes de bois, chutes de tissus et emballages récupérés, avec règles d'atelier strictes.",
+    "summaryEn": "Designing classroom furniture and seed pots from discarded wooden pallets and fabric scraps, practicing hands-on repair and craft safety.",
+    "content": "L'obsolescence et le réflexe du « jeter pour racheter » pèsent lourdement sur l'environnement. Dans ces ateliers encadrés, les élèves apprennent à réparer de petits équipements non électriques, à réemployer des palettes en étagères ou bacs de semis, et à fabriquer des boîtes de tri en carton renforcé.\n\nLa sécurité est primordiale : les élèves travaillent uniquement avec des matériaux préalablement nettoyés et n'utilisent jamais d'outillage dangereux sans encadrement spécialisé.\n\n? Contribution attendue de l'école :\nEspace d'atelier sécurisé et bien éclairé, supervision d'un adulte habilité, stockage ordonné des matériaux propres récupérés.\n\n? Résultats concrets & Livrables attendus :\nObjets réalisés intégrés dans les classes (étagères, bacs à semis, rangements), fiches techniques de fabrication illustrées par les élèves.\n\n? Partenaires mobilisables :\nArtisans menuisiers locaux, fablabs solidaires, associations de ressourcerie et de réemploi.\n\n?? Mention de transparence :\nLes activités présentées sont des pistes de mise en œuvre. Leur réalisation dépendra des partenariats, des financements, des autorisations et des conditions locales.",
+    "contentEn": "Combating throwaway culture requires practical repair instincts. Supervised workshops teach students to repurpose reclaimed wooden pallets into planting boxes, library shelving, and seed containers.\n\nStrict safety guidelines ensure all materials are sanitized and tools operated under adult guidance.\n\n? School Contribution:\nDedicated workshop space, authorized faculty supervision, safe material storage.\n\n? Concrete Expected Outcomes:\nFinished utility objects in daily school use, student-authored DIY repair guides.\n\n? Partner Network:\nCarpentry craftspeople, local fablabs, community upcycling hubs.\n\n?? Transparency Notice:\nThe activities presented are implementation roadmaps. Execution depends on partnerships, confirmed funding, authorizations, and local conditions.",
+    "tags": "Réemploi, Réparation, Upcycling, Artisanat, Bricolage Écologique",
+    "tagsEn": "Upcycling, Repair, Circular Craft, Woodworking, Schools",
+    "coverImage": "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-10-06T11:15:00.000Z",
+    "status": "active"
+  },
+  {
+    "id": "a0000001-0000-4000-8000-000000000001",
+    "title": "Clubs Médias JEDDIAC : Déploiement des espaces d'expression citoyenne dans les lycées et universités",
+    "titleEn": "JEDDIAC Media Clubs: Rolling out civic expression spaces across schools and universities",
+    "category": "Médias scolaires & universitaires",
+    "categoryEn": "School & University Media",
+    "summary": "JEDDIAC lance la création et le renforcement de clubs journaux, web-radios étudiantes et cellules de communication pour permettre aux jeunes d'enquêter et de produire leurs propres récits écologiques.",
+    "summaryEn": "JEDDIAC establishes school newspapers, student web radios, and youth media hubs empowering students to investigate and report on environmental realities.",
+    "content": "Dans le cadre de sa phase pilote au Cameroun, JEDDIAC accompagne activement les établissements d'enseignement secondaire et supérieur dans la structuration d'espaces d'expression citoyenne et de pratique médiatique.\n\nCe dispositif novateur repose sur cinq formats complémentaires :\n• Clubs journaux au sein des lycées et collèges\n• Clubs médias pluridisciplinaires\n• Édition de journaux scolaires imprimés et numériques\n• Création de web-radios étudiantes participatives\n• Espaces de débat et d'expression citoyenne\n\nLes élèves et étudiants y développent progressivement les réflexes journalistiques fondamentaux : identification des sujets d'intérêt public, collecte des témoignages locaux, vérification des faits et rédaction d'articles percutants. \n\nLes thématiques prioritaires abordent de front le développement durable, la protection de la biodiversité, l'adaptation climatique, l'éco-citoyenneté et le droit à une information environnementale rigoureuse. Le programme assure un accompagnement continu des équipes pédagogiques pour pérenniser ces espaces d'expression citoyenne.",
+    "contentEn": "As part of its pilot phase in Cameroon, JEDDIAC actively supports secondary and higher education institutions in setting up civic communication spaces and student newsrooms.\n\nThis forward-looking framework relies on five complementary formats:\n• School press clubs in high schools and colleges\n• Multidisciplinary campus media clubs\n• Print and digital student newspapers\n• Participatory student web radios\n• Civic debate and citizen expression forums\n\nStudents progressively build core investigative journalism skills: identifying public-interest topics, collecting local testimonies, verifying facts, and crafting compelling solution-driven articles.\n\nPriority focus areas encompass sustainable development, biodiversity conservation, climate adaptation, environmental citizenship, and access to verified environmental reporting.",
+    "tags": "Clubs Médias, Éducation, Lycées, Citoyenneté, Cameroun",
+    "tagsEn": "Media Clubs, Education, Schools, Youth Civic, Cameroon",
+    "coverImage": "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-10-06T09:00:00.000Z",
+    "status": "active"
+  },
+  {
+    "id": "b0000001-0000-4000-8000-000000000011",
+    "title": "Défi d’éco-conception : Évaluer la valorisation des plastiques en matériaux durables",
+    "titleEn": "Eco-Design Challenge: Assessing Plastic Waste Upcycling into Resilient Materials",
+    "category": "Innovation & Réemploi",
+    "categoryEn": "Innovation & Reuse",
+    "summary": "Comprendre comment les plastiques non biodégradables peuvent devenir des ressources techniques (pavés, isolants), en étudiant les risques d'émissions et la faisabilité avec des ingénieurs.",
+    "summaryEn": "Understanding how non-biodegradable plastics can transform into technical materials (paving tiles), examining emissions and engineering feasibility.",
+    "content": "La transformation des plastiques en pavés ou briques écologiques suscite un vif enthousiasme en Afrique Centrale. Cependant, cette activité ne doit jamais être improvisée au détriment de la santé des élèves : la fonte thermique émet des fumées nocives si elle n'est pas confinée.\n\nJEDDIAC structure cette activité sous forme d'étude d'ingénierie : les élèves rédigent un cahier des charges, modélisent des maquettes et collaborent avec un laboratoire ou une entreprise spécialisée pour tester des échantillons.\n\n? Contribution attendue de l'école :\nEncadrement académique, mise à disposition de salles d'étude et autorisation de participer aux démonstrations techniques hors site.\n\n? Résultats concrets & Livrables attendus :\nCahier des charges d'éco-conception, maquettes à échelle réduite, rapport technique sur les émissions et la résistance mécanique des prototypes.\n\n? Partenaires mobilisables :\nÉcoles d'ingénieurs (Polytechnique, IUT), laboratoires de génie civil, entreprises certifiées de recyclage.\n\n?? Mention de transparence :\nLes activités présentées sont des pistes de mise en œuvre. Leur réalisation dépendra des partenariats, des financements, des autorisations et des conditions locales.",
+    "contentEn": "Plastic-to-tile recycling carries huge circular promise in Central Africa, but requires strict scientific rigor to avoid toxic fume exposure.\n\nJEDDIAC approaches this challenge as an engineering design study: students formulate technical specs, create scale models, and partner with university labs to assess tensile strength and emission safety.\n\n? School Contribution:\nAcademic guidance, study hall access, parental waivers for certified off-site demonstration visits.\n\n? Concrete Expected Outcomes:\nEngineering feasibility dossier, 3D scale prototypes, safety and emissions impact report.\n\n? Partner Network:\nEngineering colleges, civil engineering labs, certified green tech recyclers.\n\n?? Transparency Notice:\nThe activities presented are implementation roadmaps. Execution depends on partnerships, confirmed funding, authorizations, and local conditions.",
+    "tags": "Éco-Conception, Plastique, Pavés Écologiques, Ingénierie Verte",
+    "tagsEn": "Eco-Design, Plastic Recycling, Green Engineering, Innovation",
+    "coverImage": "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-10-05T09:30:00.000Z",
+    "status": "active"
+  },
+  {
+    "id": "b0000001-0000-4000-8000-000000000012",
+    "title": "Cantine scolaire et alimentation durable : Réduire le gaspillage et valoriser les producteurs locaux",
+    "titleEn": "Sustainable School Canteen: Slashing Food Waste and Celebrating Local Agriculture",
+    "category": "Alimentation & Cantine",
+    "categoryEn": "Food & School Canteen",
+    "summary": "Mesurer les restes alimentaires en fin de service, analyser la saisonnalité des produits et promouvoir les circuits courts d'approvisionnement en lien avec les cuisiniers de l'école.",
+    "summaryEn": "Tracking cafeteria leftovers to measure food waste, analyzing ingredient seasonality, and promoting local farm supply with school kitchen teams.",
+    "content": "En partenariat bienveillant avec le personnel de cantine, les élèves mènent des campagnes d'observation non intrusives : pesée des restes dans les assiettes, identification des aliments boudés ou mal dosés, et sensibilisation des convives aux efforts des producteurs.\n\nLe projet explore également les opportunités d'acheter des féculents, légumes et fruits cultivés dans les coopératives maraîchères de la région, compatibles avec le budget de l'établissement.\n\n? Contribution attendue de l'école :\nAccord de la direction et du gestionnaire de cantine, accès aux pesées de déchets de table et respect des protocoles d'hygiène alimentaire.\n\n? Résultats concrets & Livrables attendus :\nGraphique d'évolution du gaspillage avant/après sensibilisation, affiches d'information sur les produits de saison, rencontres élèves-producteurs.\n\n? Partenaires mobilisables :\nCoopératives agricoles locales, nutritionnistes, services municipaux de restauration scolaire.\n\n?? Mention de transparence :\nLes activités présentées sont des pistes de mise en œuvre. Leur réalisation dépendra des partenariats, des financements, des autorisations et des conditions locales.",
+    "contentEn": "Working constructively with kitchen staff, student reporters audit plate waste, investigate ingredient provenance, and encourage respectful eating habits.\n\nThe initiative also explores incorporating farm-to-school fresh seasonal produce within school budget parameters.\n\n? School Contribution:\nKitchen management agreement, controlled access for waste weigh-ins, strict hygiene protocol compliance.\n\n? Concrete Expected Outcomes:\nBefore-and-after food waste audit charts, seasonal food guide posters, school-farmer dialogue notes.\n\n? Partner Network:\nLocal farming cooperatives, registered dietitians, school food service authorities.\n\n?? Transparency Notice:\nThe activities presented are implementation roadmaps. Execution depends on partnerships, confirmed funding, authorizations, and local conditions.",
+    "tags": "Cantine, Alimentation Durable, Gaspillage, Circuits Courts, Nutrition",
+    "tagsEn": "School Canteen, Food Waste, Sustainable Food, Local Farming",
+    "coverImage": "https://images.unsplash.com/photo-1576867757603-05b134ebc379?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-10-04T13:00:00.000Z",
+    "status": "active"
+  },
+  {
+    "id": "a0000001-0000-4000-8000-000000000002",
+    "title": "École des Jeunes Médias : Un cursus pratique dédié aux fondamentaux du journalisme climatique",
+    "titleEn": "Young Media Academy: Practical curriculum dedicated to climate journalism fundamentals",
+    "category": "Formation",
+    "categoryEn": "Training",
+    "summary": "Former les jeunes aux fondamentaux du développement durable et aux pratiques journalistiques rigoureuses pour produire une information vérifiée et indépendante.",
+    "summaryEn": "Equipping youth with essential sustainability knowledge and investigative journalism techniques to produce reliable, fact-checked news.",
+    "content": "Véritable cœur battant du programme JEDDIAC, l'École des Jeunes Médias déploie un cursus intensif combinant maîtrise des sciences environnementales et apprentissage des techniques professionnelles de reportage.\n\nLe programme pédagogique s'articule autour de modules concrets et interactifs :\n• Ateliers pratiques d'écriture de presse et d'enquête de proximité\n• Masterclass dispensées par des journalistes d'investigation renommés\n• Formations de formateurs pour pérenniser l'animation des clubs\n• Méthodologies avancées de fact-checking et de lutte contre la désinformation\n• Rencontres immersives avec des professionnels des grands médias\n• Visites pédagogiques sur des sites écologiques sensibles et réserves naturelles\n\nLes thématiques enseignées couvrent l'urgence climatique, la préservation des forêts du Bassin du Congo, la gestion de l'eau, l'économie circulaire et le traitement des déchets, l'agriculture durable ainsi que la transition vers les énergies renouvelables. Les participants apprennent également à manier la captation audio pour la radio, la scénarisation de podcasts et le tournage de capsules vidéo mobiles.",
+    "contentEn": "As the beating heart of the JEDDIAC programme, the Young Media Academy deploys an intensive curriculum combining environmental sciences with professional reporting techniques.\n\nThe pedagogical journey revolves around hands-on, practical modules:\n• Practical print writing and local investigative workshops\n• Masterclasses delivered by renowned investigative journalists\n• Training-of-trainers to sustain media club leadership\n• Advanced fact-checking and anti-disinformation methodologies\n• Interactive meetings with veteran media figures\n• Field study visits to ecologically sensitive areas and national reserves\n\nKey curriculum pillars include the climate emergency, Congo Basin forest conservation, water management, waste recycling, sustainable agriculture, and renewable energy.",
+    "tags": "Formation, École des Médias, Fact-Checking, Climat, Journalisme",
+    "tagsEn": "Training, Media Academy, Fact-Checking, Climate, Journalism",
+    "coverImage": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-10-04T10:30:00.000Z",
+    "status": "active"
+  },
+  {
+    "id": "b0000001-0000-4000-8000-000000000013",
+    "title": "Cartographie citoyenne de quartier : Géolocaliser les points noirs écologiques et les initiatives positives",
+    "titleEn": "Neighborhood Citizen Mapping: Geolocating Ecological Hotspots and Community Solutions",
+    "category": "Médias & Formation",
+    "categoryEn": "Media & Training",
+    "summary": "Les jeunes recensent les dépôts sauvages, canaux encombrés, espaces verts et bornes-fontaines pour concevoir une carte d'alerte et de dialogue avec la mairie.",
+    "summaryEn": "Youth document open dumps, clogged runoff drains, and public water taps to build actionable community maps shared with local leaders.",
+    "content": "L'ancrage territorial est le cœur de la démarche journalistique de JEDDIAC. Dans cette activité, les élèves mènent des micro-enquêtes de voisinage sous encadrement adulte : repérage des zones d'inondation récurrentes, état des caniveaux, points d'accumulation d'ordures et initiatives citoyennes positives.\n\nLes données sont reportées sur une carte (papier grand format ou outil cartographique libre OpenStreetMap) sans stigmatiser aucun habitant.\n\n? Contribution attendue de l'école :\nValidation pédagogique du périmètre d'enquête, autorisations de sortie de proximité, sécurité renforcée lors des repérages extérieurs.\n\n? Résultats concrets & Livrables attendus :\nCarte des points noirs et ressources du quartier, dossier de restitution remis aux élus locaux et articles de presse rédigés par les élèves.\n\n? Partenaires mobilisables :\nServices techniques communaux, urbanistes, associations de quartier, cartographes bénévoles.\n\n?? Mention de transparence :\nLes activités présentées sont des pistes de mise en œuvre. Leur réalisation dépendra des partenariats, des financements, des autorisations et des conditions locales.",
+    "contentEn": "Territorial grounding drives youth investigation. Under teacher guidance, students carry out localized surveys: identifying clogged drains, uncollected debris clusters, and neighborhood green spaces.\n\nData is plotted onto community maps (OpenStreetMap or large printed visual charts) without personal intrusion.\n\n? School Contribution:\nSurvey zone authorization, walking excursion permits, chaperone adult coverage.\n\n? Concrete Expected Outcomes:\nDetailed neighborhood ecological diagnostic map, advocacy brief presented to municipal delegates.\n\n? Partner Network:\nCity hall planning officers, local civic associations, community cartographers.\n\n?? Transparency Notice:\nThe activities presented are implementation roadmaps. Execution depends on partnerships, confirmed funding, authorizations, and local conditions.",
+    "tags": "Cartographie, Quartier, Enquête Locale, Eau, Inondations",
+    "tagsEn": "Citizen Mapping, Neighborhood Survey, Local Media, OpenStreetMap",
+    "coverImage": "https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-10-03T10:00:00.000Z",
+    "status": "active"
+  },
+  {
+    "id": "b0000001-0000-4000-8000-000000000014",
+    "title": "Campagnes citoyennes conçues par les jeunes : Des messages percutants pour mobiliser les familles",
+    "titleEn": "Youth-Led Civic Campaigns: Impactful Messaging to Mobilize Families and Communities",
+    "category": "Médias & Formation",
+    "categoryEn": "Media & Training",
+    "summary": "Concevoir affiches, messages radio communautaires, sketchs et débats pour sensibiliser les pairs et les parents sans discours moralisateur, avec des solutions applicables au quotidien.",
+    "summaryEn": "Creating posters, community radio spots, short sketches, and town halls that inspire action without guilt, proposing realistic everyday solutions.",
+    "content": "La communication environnementale ne fonctionne pas par la culpabilisation. Les clubs JEDDIAC apprennent à concevoir des campagnes positives, valorisant les solutions concrètes et les gestes accessibles à tous les foyers : préservation de l'eau, réduction des sacs à usage unique, respect de la propreté des cours d'eau.\n\nLes formats s'adaptent aux canaux locaux : affiches percutantes, spots enregistrés pour les radios de quartier, pièces de théâtre-forum lors des réunions de parents.\n\n? Contribution attendue de l'école :\nMise à disposition d'espaces d'affichage dans les couloirs, temps de parole lors des rassemblements scolaires, validation du contenu des messages.\n\n? Résultats concrets & Livrables attendus :\nKit de campagne complet (visuels, spots audio de 30 secondes), diffusion prouvée sur les radios partenaires, retours qualitatifs des familles.\n\n? Partenaires mobilisables :\nGraphistes bénévoles, animateurs de radios communautaires, associations de parents d'élèves (APE).\n\n?? Mention de transparence :\nLes activités présentées sont des pistes de mise en œuvre. Leur réalisation dépendra des partenariats, des financements, des autorisations et des conditions locales.",
+    "contentEn": "Effective environmental communication avoids preaching. JEDDIAC youth learn to design empowering civic messages showcasing accessible, solution-first behavior.\n\nCampaign outputs range from hallway infographics to broadcast-ready 30-second radio public service announcements and participatory forum theater.\n\n? School Contribution:\nHallway display space, presentation slot during school assemblies, pedagogical message clearance.\n\n? Concrete Expected Outcomes:\nCampaign kit (posters, audio spots), radio airtime verification logs, feedback survey from families.\n\n? Partner Network:\nCivic graphic designers, community radio broadcasters, parent-teacher associations.\n\n?? Transparency Notice:\nThe activities presented are implementation roadmaps. Execution depends on partnerships, confirmed funding, authorizations, and local conditions.",
+    "tags": "Campagnes, Sensibilisation, Radio, Citoyenneté, Jeunesse",
+    "tagsEn": "Civic Campaigns, Awareness, Community Radio, Youth Leadership",
+    "coverImage": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-10-02T16:00:00.000Z",
+    "status": "active"
+  },
+  {
+    "id": "a0000001-0000-4000-8000-000000000003",
+    "title": "JEDDIAC Reporters : La jeunesse sur le terrain pour documenter les solutions de leurs communautés",
+    "titleEn": "JEDDIAC Reporters: Youth in the field documenting grassroots community solutions",
+    "category": "Production médiatique",
+    "categoryEn": "Media Production",
+    "summary": "Accompagnement éditorial personnalisé des jeunes diplômés et amateurs dans la réalisation d'enquêtes, reportages radios, vidéos et chroniques de solutions.",
+    "summaryEn": "Personalized editorial mentoring supporting youth in producing in-depth investigations, radio shows, videos, and constructive solution stories.",
+    "content": "À l'issue de leurs cycles d'apprentissage, les bénéficiaires intègrent le corps des « JEDDIAC Reporters ». Ce réseau de correspondants juniors est directement mobilisé sur le terrain pour ausculter les réalités locales et mettre en lumière les initiatives positives portées par les populations riveraines.\n\nLes productions soutenues englobent un large spectre médiatique :\n• Reportages de terrain et interviews de témoins clés\n• Articles de presse écrite et dossiers d'analyse thématique\n• Podcasts natifs diffusés sur les plateformes numériques et stations partenaires\n• Émissions radiophoniques interactives\n• Formats courts et percutants pour les réseaux sociaux\n• Chroniques environnementales hebdomadaires\n\nL'enjeu central est de faire de la création médiatique un levier d'action concrète : les sujets ne sont pas théoriques, mais ancrés dans le vécu des communautés face aux défis écologiques du Bassin du Congo. Chaque production fait l'objet d'un suivi éditorial rigoureux assurant équilibre et rigueur documentaire.",
+    "contentEn": "Following their initial training cycles, participants join the dedicated corps of 'JEDDIAC Reporters'. This network of junior correspondents deploys across local territories to investigate grassroots realities and highlight sustainable community solutions.\n\nSupported media outputs encompass a rich variety:\n• Field reports and in-depth witness interviews\n• Print press articles and thematic investigative dossiers\n• Native podcasts broadcast on digital platforms and partner community radios\n• Interactive radio shows\n• Engaging short-form video capsules for digital audiences\n• Weekly environmental columns\n\nThe primary aim is to turn media creation into an empowering civic tool: reporting is deeply rooted in local realities and tangible solutions across the Congo Basin.",
+    "tags": "JEDDIAC Reporters, Podcasts, Enquêtes, Terrain, Solutions",
+    "tagsEn": "JEDDIAC Reporters, Podcasts, Investigation, Field, Solutions",
+    "coverImage": "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-10-02T14:15:00.000Z",
+    "status": "active"
+  },
+  {
+    "id": "b0000001-0000-4000-8000-000000000015",
+    "title": "Rencontres métiers et immersions de terrain : Connecter les élèves aux acteurs de la transition",
+    "titleEn": "Professional Encounters & Field Immersions: Connecting Students with Transition Actors",
+    "category": "Rencontres & Restitution",
+    "categoryEn": "Dialogue & Restitution",
+    "summary": "Organiser des échanges et visites sécurisées auprès de chercheurs, techniciens de l'eau, agents de collecte, botanistes et journalistes pour ouvrir des perspectives d'orientation.",
+    "summaryEn": "Arranging structured visits and dialogues with climate researchers, water engineers, waste workers, and journalists to broaden career horizons.",
+    "content": "Découvrir les métiers verts sur le terrain donne corps aux apprentissages scolaires. JEDDIAC facilite la mise en relation entre les clubs médias et des professionnels engagés : hydrologues mesurant la qualité des cours d'eau, techniciens gérant les stations de tri, agriculteurs biologiques et grands reporters.\n\nLes élèves préparent minutieusement leurs questions en amont, mènent l'interview sur place et publient un compte rendu ou podcast documentaire.\n\n? Contribution attendue de l'école :\nOrganisation administrative des sorties, recueil des autorisations parentales, accompagnement par au moins deux adultes référents.\n\n? Résultats concrets & Livrables attendus :\nFiches métiers documentées, podcasts ou reportages d'immersion publiés, meilleure compréhension des débouchés professionnels du développement durable.\n\n? Partenaires mobilisables :\nInstituts de recherche, stations d'épuration ou de traitement de l'eau, entreprises de recyclage, médias partenaires.\n\n?? Mention de transparence :\nLes activités présentées sont des pistes de mise en œuvre. Leur réalisation dépendra des partenariats, des financements, des autorisations et des conditions locales.",
+    "contentEn": "Meeting green practitioners in real work environments demystifies ecological vocations. Students prepare questionnaires for hydrologists, waste facility managers, and environmental journalists.\n\nInterviews conducted on-site feed directly into student investigative articles and career profile briefs.\n\n? School Contribution:\nOff-site logistics, parental consent collection, mandated chaperone accompaniment.\n\n? Concrete Expected Outcomes:\nGreen career fact sheets, field audio reports, student orientation insight portfolios.\n\n? Partner Network:\nScientific research institutes, water treatment facilities, circular enterprise facilities, media houses.\n\n?? Transparency Notice:\nThe activities presented are implementation roadmaps. Execution depends on partnerships, confirmed funding, authorizations, and local conditions.",
+    "tags": "Métiers Verts, Immersion, Rencontres, Orientation, Journalisme",
+    "tagsEn": "Green Careers, Field Visit, Science Communication, Mentorship",
+    "coverImage": "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-10-01T11:00:00.000Z",
+    "status": "active"
+  },
+  {
+    "id": "b0000001-0000-4000-8000-000000000016",
+    "title": "Forum scolaire des solutions : L'événement annuel de restitution des initiatives de jeunesse",
+    "titleEn": "Annual School Solutions Forum: The Culmination Event Showcasing Youth Field Initiatives",
+    "category": "Rencontres & Restitution",
+    "categoryEn": "Dialogue & Restitution",
+    "summary": "À l'issue du cycle, les clubs scolaires présentent leurs journaux, prototypes, bilans de tri et leçons apprises devant les parents, les élus et les partenaires institutionnels.",
+    "summaryEn": "At cycle end, student clubs present their investigations, prototypes, recycling logs, and key lessons learned before families, civic leaders, and partners.",
+    "content": "L'action des jeunes prend tout son sens lorsqu'elle est partagée et reconnue. Le Forum annuel des solutions réunit la communauté éducative, les représentants associatifs et les autorités locales pour valoriser les réalisations de l'année.\n\nLoin d'être une célébration coûteuse, il s'agit d'un moment sobre et exigeant : stands d'exposition tenus par les élèves, écoute collective des meilleurs podcasts, débat public sur les freins rencontrés et annonce des chantiers prioritaires pour l'année suivante.\n\n? Contribution attendue de l'école :\nMise à disposition de la cour ou d'une salle polyvalente, mobilisation des enseignants et invitation des familles et représentants du quartier.\n\n? Résultats concrets & Livrables attendus :\nRestitution publique documentée, recueil des apprentissages publié, sélection des projets pérennisés et attestations de participation remises aux jeunes.\n\n? Partenaires mobilisables :\nMédias de couverture, municipalités, ministères de tutelle, fondations partenaires.\n\n?? Mention de transparence :\nLes activités présentées sont des pistes de mise en œuvre. Leur réalisation dépendra des partenariats, des financements, des autorisations et des conditions locales.",
+    "contentEn": "Youth action achieves true validation when witnessed and debated by the wider community. The annual School Solutions Forum brings together families, school boards, and municipal leaders.\n\nConceived as a focused, high-impact gathering: student-curated exposition booths, collective podcast listening, candid review of obstacles, and scaling roadmap.\n\n? School Contribution:\nCourtyard or assembly hall booking, educator mobilization, invitations to families and neighborhood delegates.\n\n? Concrete Expected Outcomes:\nPublicly recorded symposium, published lesson synthesis booklet, project continuation awards.\n\n? Partner Network:\nPress correspondents, municipal delegations, partner foundations.\n\n?? Transparency Notice:\nThe activities presented are implementation roadmaps. Execution depends on partnerships, confirmed funding, authorizations, and local conditions.",
+    "tags": "Forum, Restitution, Solutions, Événement, Communauté",
+    "tagsEn": "Solutions Forum, Restitution, Youth Impact, Community Engagement",
+    "coverImage": "https://images.unsplash.com/photo-1511578314322-379afb476865?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-09-30T10:00:00.000Z",
+    "status": "active"
+  },
+  {
+    "id": "a0000001-0000-4000-8000-000000000004",
+    "title": "Territoires en Action : Adapter le journalisme vert aux réalités des écosystèmes locaux",
+    "titleEn": "Territories in Action: Tailoring green journalism to distinct local ecosystems",
+    "category": "Journalisme de territoire",
+    "categoryEn": "Territorial Journalism",
+    "summary": "Des forêts équatoriales aux zones côtières et sahéliennes, les jeunes documentent la biodiversité, l'agroécologie et la résilience propre à chaque bassin de vie.",
+    "summaryEn": "From equatorial rainforests to coastal and savannah zones, youth reporters document biodiversity, agroecology, and resilience specific to each territory.",
+    "content": "L'un des piliers cardinaux de JEDDIAC est son approche résolument territorialisée. Plutôt que d'aborder la question environnementale de manière abstraite ou générique, le programme invite les jeunes à observer avec acuité leur écosystème immédiat :\n\n• Régions forestières du Sud et de l'Est : suivi de la déforestation, préservation des réserves de faune (Dja, Campo Ma'an), valorisation des savoirs ancestraux et droits des communautés autochtones.\n• Régions côtières (Littoral et Sud-Maritime) : surveillance de la mangrove, érosion côtière, pollution plastique marine et sauvegarde de la pêche artisanale durable.\n• Zones agricoles et hauts plateaux de l'Ouest : pratiques agroécologiques, préservation des semences paysannes et sécurité alimentaire.\n• Centres urbains (Yaoundé, Douala) : assainissement, gestion des déchets solides, recyclage et résilience face aux inondations.\n• Régions du Grand Nord : désertification, préservation des zones humides et adaptation aux sécheresses.\n\nÀ terme, les 10 régions du Cameroun accueilleront des équipes permanentes de correspondants jeunesse pour relater en temps réel les défis et solutions de leurs terroirs.",
+    "contentEn": "A central hallmark of JEDDIAC is its territorialized focus. Rather than framing sustainability in abstract terms, the programme guides young reporters to anchor investigations directly in their immediate living environments:\n\n• Rainforest zones: deforestation tracking, wildlife reserve conservation (Dja, Campo Ma'an), indigenous knowledge, and local forest governance.\n• Coastal zones: mangrove protection, sea level rise, marine plastic pollution, and sustainable artisanal fisheries.\n• Agricultural belts: agroecological methods, heirloom seeds, and food security.\n• Metropolitan hubs: waste management, urban recycling economies, and flood resilience.\n• Northern zones: combatting desertification and water resource governance.\n\nEventually, all 10 regions of Cameroon will be covered by youth correspondents documenting the realities of their territories.",
+    "tags": "Territoires, Biodiversité, Bassin du Congo, Résilience, Régions",
+    "tagsEn": "Territories, Biodiversity, Congo Basin, Resilience, Regions",
+    "coverImage": "https://images.unsplash.com/photo-1448375240586-882707db888b?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-09-29T11:00:00.000Z",
+    "status": "active"
+  },
+  {
+    "id": "b0000001-0000-4000-8000-000000000017",
+    "title": "Partenariats éducatifs JEDDIAC : Comment les établissements s'engagent concrètement et sans frais financiers",
+    "titleEn": "JEDDIAC Educational Partnerships: Concrete, Zero-Fee Engagement for Schools and Universities",
+    "category": "Rencontres & Restitution",
+    "categoryEn": "Dialogue & Restitution",
+    "summary": "Rejoindre le réseau JEDDIAC ne requiert aucune contribution financière : les établissements apportent un référent adulte, des locaux, du temps dédié et l'accès sécurisé aux élèves.",
+    "summaryEn": "Joining the JEDDIAC network requires zero financial fees: schools provide a designated faculty advisor, room access, scheduled time, and student safety supervision.",
+    "content": "JEDDIAC réaffirme un principe fondateur : la participation d'une école ou d'une université ne doit jamais être conditionnée à un financement de sa part. L'engagement repose sur des apports en nature réalistes, sécurisés et valorisants pour l'équipe pédagogique.\n\nCe que l'école apporte :\n• Un référent pédagogique chargé de faire le lien avec notre coordination\n• Un créneau régulier dans l'emploi du temps extrascolaire\n• Une salle pour les réunions et ateliers des clubs\n• Les autorisations parentales et le respect des règles de protection des mineurs\n• Un espace de stockage sécurisé pour le matériel confié\n\nCe que JEDDIAC apporte en retour :\n• Une méthode d'animation et des guides pédagogiques éprouvés\n• L'accompagnement à la formation des jeunes journalistes et éco-délégués\n• La mise en relation avec des médias professionnels, mentors et experts\n• La valorisation des productions scolaires à l'échelle nationale et régionale\n\n? Contribution attendue de l'école :\nSignature de la convention partenariale d'engagement mutuel et désignation du professeur référent.\n\n? Résultats concrets & Livrables attendus :\nConvention bilatérale établie, club accrédité, calendrier d'ateliers calé sur l'année académique.\n\n? Partenaires mobilisables :\nMinistère des Enseignements Secondaires, inspections d'académie, collectifs d'enseignants.\n\n?? Mention de transparence :\nLes activités présentées sont des pistes de mise en œuvre. Leur réalisation dépendra des partenariats, des financements, des autorisations et des conditions locales.",
+    "contentEn": "JEDDIAC operates on an equity-first premise: participating institutions are never asked to pay program fees. All partnership commitments are in-kind, educational, and safety-oriented.\n\nSchool contributions:\n• Designated faculty advisor\n• Regular extracurricular time slot\n• Workshop room & safe equipment storage\n• Parental consents & student protection adherence\n\nJEDDIAC support:\n• Field-tested curriculum guides & toolkits\n• Hands-on coaching for youth reporters & green delegates\n• Access to professional media mentors & national broadcasting windows\n\n? School Contribution:\nSigned bilateral collaboration agreement and appointed faculty advisor.\n\n? Concrete Expected Outcomes:\nActive partnership agreement, chartered school media club, aligned academic year activity schedule.\n\n? Partner Network:\nSecondary Education Ministries, school district boards, educator unions.\n\n?? Transparency Notice:\nThe activities presented are implementation roadmaps. Execution depends on partnerships, confirmed funding, authorizations, and local conditions.",
+    "tags": "Partenariat, Convention, Écoles, Gratuité, Engagement",
+    "tagsEn": "Partnership, School Agreement, Zero Fee, Institutional Cooperation",
+    "coverImage": "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-09-28T09:00:00.000Z",
+    "status": "active"
+  },
+  {
+    "id": "a0000001-0000-4000-8000-000000000005",
+    "title": "Campagnes JEDDIAC : Les jeunes créent et diffusent des campagnes d'impact communautaire",
+    "titleEn": "JEDDIAC Campaigns: Young changemakers design and lead community advocacy drives",
+    "category": "Sensibilisation & citoyenneté",
+    "categoryEn": "Awareness & Citizenship",
+    "summary": "Permettre aux jeunes de concevoir et piloter eux-mêmes des campagnes multimédias percutantes sur les déchets, l'eau, les énergies propres et la citoyenneté environnementale.",
+    "summaryEn": "Equipping youth to build and execute multimedia campaigns addressing waste, clean water, renewable energy, and environmental civic duty.",
+    "content": "JEDDIAC transforme les lycéens et étudiants en véritables leaders de la transition écologique en leur donnant les outils pour concevoir et déployer leurs propres campagnes de communication sociale.\n\nLes campagnes mobilisent des formats créatifs et percutants :\n• Campagnes numériques sur les réseaux sociaux (TikTok, Instagram, WhatsApp)\n• Affiches pédagogiques et bandes dessinées éducatives diffusées dans les collèges et lycées\n• Émissions et débats radiophoniques de sensibilisation\n• Capsules vidéo de vulgarisation scientifique\n• Actions de proximité citoyenne et nettoyages écologiques participatifs\n• Causeries éducatives au sein des communautés de quartier\n\nLes priorités thématiques incluent la lutte contre les pollutions plastiques, la préservation des nappes phréatiques, l'économie d'énergie, la reforestation participative et l'éveil d'une conscience civique pour préserver le patrimoine naturel commun.",
+    "contentEn": "JEDDIAC empowers secondary and university students to become catalysts of environmental change by designing and steering their own community advocacy campaigns.\n\nThe campaigns leverage engaging communication formats:\n• Digital social media campaigns across platforms\n• Pedagogical posters, comics, and infographics displayed across campuses\n• Radio awareness broadcasts and community debates\n• Explanatory short video reels\n• Community clean-up drives and tree-planting initiatives\n• Peer-to-peer dialogues and public forums\n\nCore themes center on plastic waste reduction, clean water access, energy efficiency, reforestation, and fostering environmental citizenship.",
+    "tags": "Sensibilisation, Campagnes, Déchets, Eau, Éco-Citoyenneté",
+    "tagsEn": "Awareness, Campaigns, Waste, Clean Water, Eco-Citizenship",
+    "coverImage": "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-09-26T08:45:00.000Z",
+    "status": "active"
+  },
+  {
+    "id": "a0000001-0000-4000-8000-000000000006",
+    "title": "Mentorat JEDDIAC : Mise en relation des jeunes producteurs avec des journalistes et scientifiques de renom",
+    "titleEn": "JEDDIAC Mentorship: Connecting young creators with veteran journalists and scientists",
+    "category": "Mentorat & accompagnement",
+    "categoryEn": "Mentorship & Coaching",
+    "summary": "Un programme de parrainage individuel et collectif reliant journalistes seniors, universitaires, chercheurs et experts médias à la jeune génération.",
+    "summaryEn": "Dedicated individual and group mentoring pairing senior investigative journalists, scientists, and media producers with emerging talent.",
+    "content": "Pour garantir la rigueur déontologique, la justesse scientifique et la portée éditoriale des contenus produits par les jeunes, JEDDIAC a institué un réseau d'excellence de mentors professionnels.\n\nCe dispositif de mentorat assure un accompagnement personnalisé :\n• Séances régulières de mentorat individuel en binôme (mentor / jeune reporter)\n• Sessions collectives de travail et relecture critique de manuscrits\n• Retours éditoriaux approfondis sur les angles d'attaque et la vérification des sources\n• Rencontres avec des rédacteurs en chef de médias nationaux et internationaux\n• Ateliers spécialisés sur l'éthique de l'information et le journalisme de solutions\n\nLes mentors sont issus du grand journalisme d'investigation, du monde universitaire, de la recherche écologique et de la production audiovisuelle. Ils aident les participants à affiner leur regard, à surmonter les obstacles du terrain et à bâtir progressivement leur trajectoire professionnelle.",
+    "contentEn": "To ensure journalistic integrity, scientific accuracy, and maximum editorial impact, JEDDIAC has established a mentoring network of veteran professionals.\n\nThis coaching network provides comprehensive personal support:\n• Individual 1-on-1 mentoring sessions pairing young reporters with senior mentors\n• Collaborative workshop sessions and manuscript peer review\n• Rigorous editorial feedback on story angles and investigative sources\n• Professional networking with national and international newsroom editors\n• Master workshops on ethical journalism and constructive reporting\n\nMentors are drawn from investigative journalism, academia, environmental research, and audio/video production.",
+    "tags": "Mentorat, Accompagnement, Déontologie, Professionnels, Réseau",
+    "tagsEn": "Mentorship, Coaching, Ethics, Professionals, Network",
+    "coverImage": "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-09-23T15:20:00.000Z",
+    "status": "active"
+  },
+  {
+    "id": "a0000001-0000-4000-8000-000000000007",
+    "title": "Prix JEDDIAC : Lancement prévu du concours récompensant les meilleures initiatives médiatiques de jeunesse",
+    "titleEn": "JEDDIAC Awards: Annual competition planned to celebrate exceptional youth media initiatives",
+    "category": "Concours & valorisation",
+    "categoryEn": "Awards & Recognition",
+    "summary": "Les Prix JEDDIAC récompenseront les reportages, podcasts, émissions radio et clubs scolaires les plus remarquables en faveur du développement durable.",
+    "summaryEn": "An upcoming competitive prize recognizing top student reports, podcasts, radio shows, and newsrooms advancing environmental awareness.",
+    "content": "Afin de stimuler la créativité, l'audace d'investigation et l'engagement citoyen des jeunes participants, JEDDIAC prépare le lancement officiel de son grand concours annuel : les Prix JEDDIAC du journalisme environnemental junior.\n\nSept distinctions prestigieuses récompenseront les meilleures productions de la saison :\n• Prix du meilleur reportage écrit\n• Prix de la meilleure émission radio\n• Prix du meilleur podcast junior\n• Prix du meilleur club journal scolaire\n• Prix de l'innovation médiatique numérique\n• Prix du leadership jeunesse pour le climat\n• Prix de la meilleure initiative de sensibilisation communautaire\n\nLes lauréats bénéficieront de dotations en équipements techniques de reportage (enregistreurs, microphones, caméras mobiles), d'opportunités de stages au sein de médias partenaires et d'une mise à l'honneur lors de la cérémonie officielle du Forum National JEDDIAC.",
+    "contentEn": "To celebrate creativity, investigative excellence, and civic commitment among youth participants, JEDDIAC is preparing the launch of its annual competitive benchmark: the JEDDIAC Awards for Junior Environmental Journalism.\n\nSeven prestigious distinctions will honor standout productions:\n• Best Investigative Print Article Award\n• Best Local Radio Broadcast Award\n• Best Junior Podcast Award\n• Best School Newspaper Club Award\n• Digital Media Innovation Award\n• Youth Climate Leadership Award\n• Best Community Awareness Drive Award\n\nWinners will receive professional reporting equipment kits, internship placements with leading media outlets, and recognition during the National Forum.",
+    "tags": "Prix JEDDIAC, Concours, Reconnaissance, Podcasts, Innovation",
+    "tagsEn": "JEDDIAC Awards, Competition, Recognition, Podcasts, Innovation",
+    "coverImage": "https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-09-20T16:00:00.000Z",
+    "status": "active"
+  },
+  {
+    "id": "a0000001-0000-4000-8000-000000000008",
+    "title": "Forum National JEDDIAC : Rassembler jeunes créateurs, institutions et experts du climat à Yaoundé",
+    "titleEn": "JEDDIAC National Forum: Convening young creators, policymakers, and climate experts in Yaoundé",
+    "category": "Forum & dialogue",
+    "categoryEn": "National Forum",
+    "summary": "Point d'orgue annuel du programme pour présenter les enquêtes des jeunes, valoriser les clubs partenaires et engager un dialogue direct avec les décideurs publics.",
+    "summaryEn": "Annual high-level convention unveiling youth investigations, celebrating partner clubs, and opening direct dialogue with leaders.",
+    "content": "Le Forum national JEDDIAC constituera le principal rendez-vous annuel prévu dans le programme pour célébrer la vitalité des jeunes voix pour la planète.\n\nOrganisé à Yaoundé, cet événement d'envergure réunira :\n• Les jeunes bénéficiaires, reporters scolaires et animateurs de web-radios\n• Les représentants des clubs médias et établissements partenaires des 10 régions\n• Les directeurs des médias nationaux et internationaux\n• Les institutions publiques camerounaises (Ministère de l'Environnement, de la Jeunesse, de l'Éducation)\n• Les partenaires techniques, bailleurs de fonds et organisations internationales (COMIFAC, UNESCO)\n• Les scientifiques spécialistes de la forêt équatoriale et acteurs de terrain\n\nDurant trois journées de travaux, le Forum proposera des expositions de reportages photo, des écoutes collectives d'émissions radio et de podcasts, des tables rondes thématiques et la remise solennelle des distinctions de la première cohorte.",
+    "contentEn": "The JEDDIAC National Forum will serve as the premier annual convention showcasing the vitality of youth voices for sustainable development in Central Africa.\n\nHosted in Yaoundé, this flagship gathering will bring together:\n• Youth beneficiaries, student reporters, and radio anchors\n• Representatives from partner media clubs across Cameroon's 10 regions\n• Directors of national and international media organizations\n• Government ministries and public policy leaders\n• International technical partners and funding institutions (COMIFAC, UNESCO)\n• Congo Basin climate researchers and environmental conservationists\n\nAcross three intensive days, the Forum will feature photo reportage galleries, public listening sessions of student podcasts, thematic panel discussions, and the JEDDIAC Awards ceremony.",
+    "tags": "Forum National, Dialogue, Institutions, Yaoundé, COMIFAC",
+    "tagsEn": "National Forum, Dialogue, Institutions, Yaoundé, COMIFAC",
+    "coverImage": "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-09-18T09:30:00.000Z",
+    "status": "active"
+  },
+  {
+    "id": "a0000001-0000-4000-8000-000000000009",
+    "title": "Réseau JEDDIAC Afrique Centrale : Extension progressive dans les 6 pays du Bassin du Congo",
+    "titleEn": "JEDDIAC Central Africa Network: Progressive expansion across 6 Congo Basin nations",
+    "category": "Réseau régional",
+    "categoryEn": "Regional Network",
+    "summary": "Après la phase pilote au Cameroun, JEDDIAC tisse une alliance régionale pour connecter les jeunes médias et partager les savoirs écologiques à l'échelle sous-régionale.",
+    "summaryEn": "Following the Cameroon pilot, JEDDIAC builds a regional coalition connecting student newsrooms and sharing environmental insights across 6 countries.",
+    "content": "Après la phase pilote menée au Cameroun, JEDDIAC engagera son déploiement sous-régional pour fédérer les jeunes journalistes et clubs médias de l'ensemble du Bassin du Congo.\n\nCette dynamique intégrée couvrira 6 pays prioritaires :\n• Cameroun\n• Gabon\n• République du Congo\n• République centrafricaine\n• Tchad\n• Guinée équatoriale\n\nLe Réseau JEDDIAC Afrique Centrale favorisera :\n• Les rencontres virtuelles régulières et les cycles de webinaires bilingues\n• Les échanges interrégionaux et les mobilités d'immersion journalistique\n• Les projets d'enquêtes collaboratives transnationales sur le fleuve Congo et les forêts denses\n• La production conjointe d'émissions et de dossiers multimédias\n• Le partage mutuel des bonnes pratiques pédagogiques entre clubs scolaires\n\nCette ouverture régionale donnera aux nouvelles générations les moyens de faire entendre la voix singulière et unie de l'Afrique Centrale sur l'échiquier climatique international.",
+    "contentEn": "Following the pilot rollout in Cameroon, JEDDIAC will expand its regional footprint to interconnect youth newsrooms across the entire Congo Basin.\n\nThis cohesive regional strategy targets 6 partner countries:\n• Cameroon\n• Gabon\n• Republic of the Congo\n• Central African Republic\n• Chad\n• Equatorial Guinea\n\nThe JEDDIAC Central Africa Network will facilitate:\n• Regular virtual exchanges and bilingual webinars\n• Interregional journalistic immersions and mobility exchanges\n• Transnational collaborative investigations on shared river and forest ecosystems\n• Joint co-production of multi-platform dossiers and radio shows\n• Mutual sharing of pedagogical toolkits between school clubs\n\nThis regional coalition will equip Central African youth with a strong, coordinated voice on global environmental stages.",
+    "tags": "Afrique Centrale, Bassin du Congo, Réseau Régional, Coopération, Gabon, Congo",
+    "tagsEn": "Central Africa, Congo Basin, Regional Network, Cooperation, Gabon, Congo",
+    "coverImage": "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=1200&auto=format&fit=crop&q=80",
+    "publishedAt": "2026-09-15T11:00:00.000Z",
+    "status": "active"
   }
 ];

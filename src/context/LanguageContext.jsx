@@ -157,8 +157,8 @@ export const translations = {
 
     // All News Page
     allNewsTag: "Actualités & Communiqués Officiels",
-    allNewsTitle: "Centre de Presse &",
-    allNewsTitleHighlight: "Communiqués JEDDIAC",
+    allNewsTitle: "Le Programme",
+    allNewsTitleHighlight: "en Action",
     allNewsSubtitle: "Retrouvez l'intégralité des annonces publiques, conventions institutionnelles, comptes-rendus de missions et jalons du déploiement en Afrique Centrale.",
     allNewsSearchPlaceholder: "Rechercher dans les actualités (titre, sujet, mot-clé)...",
     allNewsViewAllBtn: "Voir toutes les Actualités & Communiqués",
@@ -361,8 +361,8 @@ export const translations = {
 
     // All News Page
     allNewsTag: "Official News & Press Releases",
-    allNewsTitle: "Press Center &",
-    allNewsTitleHighlight: "JEDDIAC Dispatches",
+    allNewsTitle: "The Program",
+    allNewsTitleHighlight: "in Action",
     allNewsSubtitle: "Access all public announcements, institutional agreements, mission reports, and deployment milestones across Central Africa.",
     allNewsSearchPlaceholder: "Search news (title, topic, keyword)...",
     allNewsViewAllBtn: "View all News & Press Releases",

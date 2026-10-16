@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { Bell, Calendar, ArrowRight, ArrowLeft, Clock, Search, X, Tag, Sparkles, Filter } from "lucide-react";
+import { Bell, Calendar, ArrowRight, ArrowLeft, Clock, Search, X, Tag, Sparkles, Filter, Layers } from "lucide-react";
 import { api, getMediaUrl } from "../services/api";
 import { useLanguage } from "../context/LanguageContext";
-
+import EnrichedArticleContent from "../components/EnrichedArticleContent";
 import { OFFICIAL_NEWS } from "../data/officialNews";
 
-export default function AllNewsPage({ onBackToHome }) {
+export const THEMATIC_CATEGORIES = [
+  { fr: "Médias & Formation", en: "Media & Training", icon: "🎙️" },
+  { fr: "Environnement & Déchets", en: "Environment & Waste", icon: "🌱" },
+  { fr: "Eau & Biodiversité", en: "Water & Biodiversity", icon: "💧" },
+  { fr: "Alimentation & Cantine", en: "Food & School Canteen", icon: "🥗" },
+  { fr: "Innovation & Réemploi", en: "Innovation & Reuse", icon: "🔄" },
+  { fr: "Rencontres & Restitution", en: "Dialogue & Restitution", icon: "🏛️" }
+];
+
+export default function AllNewsPage({ onBackToHome, onOpenApplication, initialCategory = "all" }) {
   const { t, isEnglish } = useLanguage();
   const [news, setNews] = useState(OFFICIAL_NEWS);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [sortOrder, setSortOrder] = useState("newest");
   const [selectedNews, setSelectedNews] = useState(null);
 
@@ -18,6 +27,12 @@ export default function AllNewsPage({ onBackToHome }) {
     window.scrollTo({ top: 0, behavior: "smooth" });
     loadNews();
   }, []);
+
+  useEffect(() => {
+    if (initialCategory) {
+      setSelectedCategory(initialCategory);
+    }
+  }, [initialCategory]);
 
   const loadNews = async () => {
     try {
@@ -36,14 +51,34 @@ export default function AllNewsPage({ onBackToHome }) {
     }
   };
 
-  // Derive categories (both FR and EN if available)
-  const categories = ["all", ...new Set(news.map((item) => (isEnglish && item.categoryEn) ? item.categoryEn : item.category).filter(Boolean))];
+  // Derive categories with 6 official thematic priorities first
+  const priorityThematicNames = THEMATIC_CATEGORIES.map((c) => isEnglish ? c.en : c.fr);
+  const allExistingCategories = Array.from(
+    new Set(news.map((item) => (isEnglish && item.categoryEn) ? item.categoryEn : item.category).filter(Boolean))
+  );
+  const otherCategories = allExistingCategories.filter((c) => !priorityThematicNames.includes(c));
+
+  const categories = [
+    "all",
+    ...priorityThematicNames,
+    ...otherCategories
+  ];
 
   // Filter and sort
   const filteredNews = news
     .filter((item) => {
       const itemCat = (isEnglish && item.categoryEn) ? item.categoryEn : item.category;
-      const matchCat = selectedCategory === "all" || itemCat === selectedCategory || item.category === selectedCategory || item.categoryEn === selectedCategory;
+      
+      const matchCat =
+        selectedCategory === "all" ||
+        itemCat === selectedCategory ||
+        item.category === selectedCategory ||
+        item.categoryEn === selectedCategory ||
+        THEMATIC_CATEGORIES.some((tc) => 
+          (selectedCategory === tc.fr || selectedCategory === tc.en) &&
+          (item.category === tc.fr || item.categoryEn === tc.en)
+        );
+
       const q = searchQuery.toLowerCase().trim();
       const matchSearch =
         !q ||
@@ -132,17 +167,24 @@ export default function AllNewsPage({ onBackToHome }) {
           </div>
         </div>
 
-        {/* Category Pills */}
+        {/* Category Pills with 6 Thematic Priorities */}
         <div className="dedicated-category-pills">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`dedicated-cat-btn ${selectedCategory === cat ? "active" : ""}`}
-            >
-              {cat === "all" ? t("allNewsFilterAll") : cat}
-            </button>
-          ))}
+          {categories.map((cat) => {
+            const thematicObj = THEMATIC_CATEGORIES.find((tc) => tc.fr === cat || tc.en === cat);
+            const isThematic = Boolean(thematicObj);
+
+            return (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`dedicated-cat-btn ${isThematic ? "thematic-priority-btn" : ""} ${selectedCategory === cat ? "active" : ""}`}
+              >
+                {thematicObj && <span className="cat-pill-icon">{thematicObj.icon}</span>}
+                <span>{cat === "all" ? t("allNewsFilterAll") : cat}</span>
+                {isThematic && <span className="cat-thematic-dot" title="Axe thématique officiel"></span>}
+              </button>
+            );
+          })}
         </div>
 
         {/* Loading State */}
@@ -310,7 +352,17 @@ export default function AllNewsPage({ onBackToHome }) {
                     {modalSummary}
                   </p>
                 )}
-                <p style={{ whiteSpace: "pre-line" }}>{modalContent}</p>
+                <EnrichedArticleContent
+                  content={modalContent}
+                  title={modalTitle}
+                  isEnglish={isEnglish}
+                  onProposeInitiative={(title) => {
+                    setSelectedNews(null);
+                    if (onOpenApplication) {
+                      onOpenApplication(title);
+                    }
+                  }}
+                />
               </div>
 
               {modalTags && (
