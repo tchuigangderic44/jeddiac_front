@@ -67,7 +67,6 @@ export default function NewsSection({ onNavigateAllNews, onOpenApplication }) {
                 className="news-home-thematic-pill"
                 title={isEnglish ? `View all ${cat.en} initiatives` : `Voir toutes les actions ${cat.fr}`}
               >
-                <span className="thematic-pill-icon">{cat.icon}</span>
                 <span>{isEnglish ? cat.en : cat.fr}</span>
               </button>
             ))}
@@ -119,20 +118,6 @@ export default function NewsSection({ onNavigateAllNews, onOpenApplication }) {
                   </div>
 
                   <div className="news-card-body">
-                    <div className="news-meta-row">
-                      <span className="news-meta-date">
-                        <Calendar size={13} />
-                        {new Date(item.publishedAt || item.createdAt).toLocaleDateString(isEnglish ? "en-US" : "fr-FR", {
-                          day: "numeric",
-                          month: "short",
-                          year: "numeric"
-                        })}
-                      </span>
-                      <span className="news-meta-readtime">
-                        <Clock size={13} />
-                        {isEnglish ? "3 min read" : "3 min de lecture"}
-                      </span>
-                    </div>
 
                     <h3 className="news-card-title">{title}</h3>
                     <p className="news-card-excerpt">{summary}</p>
