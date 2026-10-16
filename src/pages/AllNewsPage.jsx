@@ -179,7 +179,6 @@ export default function AllNewsPage({ onBackToHome, onOpenApplication, initialCa
                 onClick={() => setSelectedCategory(cat)}
                 className={`dedicated-cat-btn ${isThematic ? "thematic-priority-btn" : ""} ${selectedCategory === cat ? "active" : ""}`}
               >
-                {thematicObj && <span className="cat-pill-icon">{thematicObj.icon}</span>}
                 <span>{cat === "all" ? t("allNewsFilterAll") : cat}</span>
                 {isThematic && <span className="cat-thematic-dot" title="Axe thématique officiel"></span>}
               </button>
