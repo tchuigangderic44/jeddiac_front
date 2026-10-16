@@ -216,11 +216,6 @@ export default function AllNewsPage({ onBackToHome, onOpenApplication, initialCa
               const category = (isEnglish && item.categoryEn) ? item.categoryEn : (item.category || (isEnglish ? "Official Dispatch" : "Communiqué"));
               const summary = (isEnglish && item.summaryEn) ? item.summaryEn : item.summary;
               const tags = (isEnglish && item.tagsEn) ? item.tagsEn : item.tags;
-              const dateStr = new Date(item.publishedAt || item.createdAt).toLocaleDateString(
-                isEnglish ? "en-US" : "fr-FR",
-                { day: "numeric", month: "long", year: "numeric" }
-              );
-
               return (
                 <article key={item.id} className="news-editorial-card">
                   <div className="news-card-photo-wrap">
@@ -247,17 +242,6 @@ export default function AllNewsPage({ onBackToHome, onOpenApplication, initialCa
                   </div>
 
                   <div className="news-card-body">
-                    <div className="news-meta-row">
-                      <span className="news-meta-date">
-                        <Calendar size={13} />
-                        {dateStr}
-                      </span>
-                      <span className="news-meta-readtime">
-                        <Clock size={13} />
-                        {isEnglish ? "3 min read" : "3 min de lecture"}
-                      </span>
-                    </div>
-
                     <h3 className="news-card-title">{title}</h3>
                     <p className="news-card-excerpt">{summary}</p>
 
