@@ -12,11 +12,50 @@
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://www.jeddiac.org/" />
 
-    <!-- Favicon & Icons -->
-    <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+    <!-- Favicon & Icons conforming to Google Search & modern browsers -->
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="shortcut icon" href="/favicon.png" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#13221B" />
+
+    <!-- Schema.org JSON-LD Structured Data for Google Search Brand & Logo -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://www.jeddiac.org/#organization",
+          "name": "JEDDIAC",
+          "alternateName": "Jeunesse Engagée pour la Durabilité, le Développement et l'Information en Afrique Centrale",
+          "url": "https://www.jeddiac.org",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.jeddiac.org/favicon.png",
+            "width": 192,
+            "height": 192
+          },
+          "image": "https://www.jeddiac.org/assets/og-image.jpg",
+          "description": "Programme régional de formation et de mobilisation des jeunes médias en faveur du développement durable dans le Bassin du Congo et la zone Cemac."
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://www.jeddiac.org/#website",
+          "url": "https://www.jeddiac.org",
+          "name": "JEDDIAC",
+          "alternateName": "JEDDIAC — Jeunesse, Médias & Durabilité en Afrique Centrale",
+          "publisher": {
+            "@id": "https://www.jeddiac.org/#organization"
+          }
+        }
+      ]
+    }
+    </script>
 
     <!-- Open Graph / Facebook / WhatsApp / LinkedIn / Telegram -->
     <meta property="og:type" content="website" />

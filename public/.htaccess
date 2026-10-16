@@ -41,15 +41,22 @@
     ExpiresByType image/webp "access plus 1 year"
     ExpiresByType image/png "access plus 1 year"
     ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType image/vnd.microsoft.icon "access plus 1 year"
+    ExpiresByType application/manifest+json "access plus 1 week"
     ExpiresByType audio/wav "access plus 1 year"
     ExpiresByType audio/mpeg "access plus 1 year"
 </IfModule>
 
 # ==============================================================================
-# SÉCURITÉ COMPLÉMENTAIRE
+# SÉCURITÉ & CORS POUR FAVICONS ET ASSETS
 # ==============================================================================
 <IfModule mod_headers.c>
     Header always set X-Content-Type-Options "nosniff"
     Header always set X-XSS-Protection "1; mode=block"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    
+    <FilesMatch "\.(ico|png|svg|jpg|jpeg|webp|webmanifest|json|txt|xml)$">
+        Header set Access-Control-Allow-Origin "*"
+    </FilesMatch>
 </IfModule>
