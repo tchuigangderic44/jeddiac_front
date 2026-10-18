@@ -247,7 +247,7 @@ export default function AgendaSection({ onOpenApplication, onNavigateAllAgenda }
             <div className="divider-line" />
             <span className="divider-tag">
               <Compass size={14} />
-              <span>{t("progCalendarEyebrow", "03 · Calendrier")}</span>
+              <span>{t("progCalendarEyebrow", "Calendrier")}</span>
             </span>
             <div className="divider-line" />
           </div>
