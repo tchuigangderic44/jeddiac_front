@@ -53,24 +53,6 @@ export default function ProgramSection({ onOpenApplication, onExploreAxes, onNav
     { num: t("progComp10Num"), title: t("progComp10Title"), desc: t("progComp10Desc") },
   ];
 
-  const CALENDAR_STEPS = [
-    {
-      year: t("progCalPhase1Year"),
-      title: t("progCalPhase1Title"),
-      desc: t("progCalPhase1Desc")
-    },
-    {
-      year: t("progCalPhase2Year"),
-      title: t("progCalPhase2Title"),
-      desc: t("progCalPhase2Desc")
-    },
-    {
-      year: t("progCalPhase3Year"),
-      title: t("progCalPhase3Title"),
-      desc: t("progCalPhase3Desc")
-    }
-  ];
-
   return (
     <section id="programme" className="program-editorial-section">
       <div className="container">
@@ -128,29 +110,6 @@ export default function ProgramSection({ onOpenApplication, onExploreAxes, onNav
             <p className="program-note-text">
               {t("progNote")}
             </p>
-          </div>
-        </div>
-
-        {/* Progressive Timeline / Calendar Module */}
-        <div className="program-calendar-block">
-          <div className="program-calendar-header">
-            <span className="program-calendar-eyebrow">
-              <Calendar size={14} />
-              <span>{t("progCalendarEyebrow")}</span>
-            </span>
-            <h3 className="program-calendar-title">
-              {t("progCalendarTitle")} <span className="text-highlight-gold">{t("progCalendarTitleHighlight")}</span>
-            </h3>
-          </div>
-
-          <div className="program-timeline-grid">
-            {CALENDAR_STEPS.map((step, idx) => (
-              <div key={idx} className="program-timeline-card">
-                <div className="program-timeline-badge">{step.year}</div>
-                <h4 className="program-timeline-card-title">{step.title}</h4>
-                <p className="program-timeline-card-desc">{step.desc}</p>
-              </div>
-            ))}
           </div>
         </div>
 

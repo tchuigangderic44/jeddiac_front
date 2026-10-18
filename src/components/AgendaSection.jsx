@@ -63,6 +63,30 @@ const PREMIUM_COHORTS = [
   }
 ];
 
+const CALENDAR_STEPS = [
+  {
+    year: "2026 – 2029",
+    title: "Phase pilote · Cameroun",
+    titleEn: "Pilot Phase · Cameroon",
+    desc: "Déploiement progressif dans les 10 régions, en s'appuyant sur les établissements scolaires et universitaires, les radios communautaires et les structures de jeunesse.",
+    descEn: "Gradual deployment across the 10 administrative regions, partnering with academic institutions, community radios, and youth hubs."
+  },
+  {
+    year: "2026 – 2036",
+    title: "Extension régionale · CEMAC",
+    titleEn: "Regional Expansion · CEMAC",
+    desc: "Élargissement progressif au Gabon, au Congo, à la République centrafricaine, au Tchad et à la Guinée équatoriale.",
+    descEn: "Progressive expansion into Gabon, Republic of Congo, Central African Republic, Chad, and Equatorial Guinea."
+  },
+  {
+    year: "Horizon",
+    title: "Réseau régional de référence",
+    titleEn: "Flagship Regional Network",
+    desc: "Le premier réseau régional de jeunes médias engagés pour le développement durable en Afrique centrale.",
+    descEn: "Central Africa's premier youth-led media network dedicated to sustainable ecological development."
+  }
+];
+
 export default function AgendaSection({ onOpenApplication, onNavigateAllAgenda }) {
   const { t, isEnglish } = useLanguage();
   const [agendas, setAgendas] = useState(PREMIUM_COHORTS);
@@ -100,7 +124,40 @@ export default function AgendaSection({ onOpenApplication, onNavigateAllAgenda }
   return (
     <section id="agenda" className="agenda-editorial-section">
       <div className="container">
-        <div className="section-header">
+        {/* =========================================================
+            03 · CALENDRIER STRATÉGIQUE (Une montée en puissance progressive)
+            Feuille de route pluriannuelle : 2026–2029, 2026–2036, Horizon
+            ========================================================= */}
+        <div className="agenda-roadmap-card">
+          <div className="roadmap-header">
+            <div className="roadmap-tag-pill">
+              <Calendar size={14} />
+              <span>{t("progCalendarEyebrow", "03 · Calendrier")}</span>
+            </div>
+            <h2 className="roadmap-title">
+              {t("progCalendarTitle", "Une montée en puissance")}{" "}
+              <span className="text-highlight-gold">{t("progCalendarTitleHighlight", "progressive")}</span>
+            </h2>
+          </div>
+
+          <div className="roadmap-tl">
+            {CALENDAR_STEPS.map((step, idx) => (
+              <div key={idx} className="roadmap-tl-item">
+                <div className="roadmap-tl-marker">
+                  <span className="roadmap-tl-dot" />
+                </div>
+                <div className="roadmap-tl-body">
+                  <div className="roadmap-tl-year">{step.year}</div>
+                  <h3 className="roadmap-tl-heading">{isEnglish ? step.titleEn : step.title}</h3>
+                  <p className="roadmap-tl-desc">{isEnglish ? step.descEn : step.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Section Header for Upcoming Sessions & Cohorts */}
+        <div className="section-header agenda-sessions-header">
           <div className="section-tag-pill">
             <Calendar size={16} />
             <span>{t("agendaKicker")}</span>
