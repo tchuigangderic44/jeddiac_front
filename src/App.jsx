@@ -5,7 +5,7 @@ import AssociationSection from "./components/AssociationSection";
 import StrategicAxes from "./components/StrategicAxes";
 import TeamSection from "./components/TeamSection";
 import TerritoriesMap from "./components/TerritoriesMap";
-import NewsSection from "./components/NewsSection";
+import ProgramSection from "./components/ProgramSection";
 import AgendaSection from "./components/AgendaSection";
 import AfriveSpotlight from "./components/AfriveSpotlight";
 import ContactSection from "./components/ContactSection";
@@ -296,8 +296,13 @@ function AppContent() {
             }}
           />
 
-          {/* Program News & Press Announcements */}
-          <NewsSection 
+          {/* 02 Le Programme - Former, Produire, Diffuser, Mettre en réseau */}
+          <ProgramSection 
+            onOpenApplication={openApplication}
+            onExploreAxes={() => {
+              const el = document.getElementById("piliers");
+              if (el) el.scrollIntoView({ behavior: "smooth" });
+            }}
             onNavigateAllNews={(cat = "all") => {
               setNewsCategory(cat);
               navigateTo(
@@ -307,7 +312,6 @@ function AppContent() {
                 isEnglish ? "Fetching official press releases and updates" : "Récupération des dépêches officielles et annonces JEDDIAC"
               );
             }} 
-            onOpenApplication={openApplication}
           />
 
           {/* Our Team & User Profiles (inspired by Climate Chance Qui sommes-nous / Équipe - strictly non-admin) */}
