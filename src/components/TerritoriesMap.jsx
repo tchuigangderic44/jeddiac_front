@@ -200,7 +200,7 @@ export default function TerritoriesMap({ onOpenApplication }) {
         <div className="section-header">
           <div className="section-tag-pill">
             <Globe size={16} />
-            <span>{t("territoriesKicker", "Ancrage Géographique & Écosystèmes")}</span>
+            <span>{t("territoriesKicker", "Déploiement terrain")}</span>
           </div>
           <h2 className="section-title-editorial">
             {t("territoriesTitle", "Territoires d'Intervention &")}{" "}

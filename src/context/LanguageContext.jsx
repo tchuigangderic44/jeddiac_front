@@ -26,8 +26,8 @@ export const translations = {
     axesKeyObjective: "Objectif Clé :",
     axesJoinBtn: "Participer à cet axe",
 
-    // Territories (Ancrage Géographique & Écosystèmes)
-    territoriesKicker: "Ancrage Géographique & Écosystèmes",
+    // Territories (Déploiement terrain)
+    territoriesKicker: "Déploiement terrain",
     territoriesTitle: "Territoires d'Intervention &",
     territoriesTitleHighlight: "Bassin du Congo",
     territoriesSubtitle: "Du cœur de la forêt tropicale aux rives des fleuves et zones sahéliennes, JEDDIAC connecte les jeunes voix de 6 pays d'Afrique Centrale.",
@@ -230,8 +230,8 @@ export const translations = {
     axesKeyObjective: "Key Objective :",
     axesJoinBtn: "Join this pillar",
 
-    // Territories (Geographical Footprint & Ecosystems)
-    territoriesKicker: "Geographical Footprint & Ecosystems",
+    // Territories (Field Deployment)
+    territoriesKicker: "Field Deployment",
     territoriesTitle: "Target Territories &",
     territoriesTitleHighlight: "Congo Basin",
     territoriesSubtitle: "From the heart of the tropical rainforest to riverbanks and Sahelian zones, JEDDIAC connects youth voices across 6 Central African nations.",
