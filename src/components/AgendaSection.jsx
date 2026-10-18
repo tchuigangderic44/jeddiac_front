@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Calendar, MapPin, Clock, ArrowRight, Sparkles, CheckCircle2 } from "lucide-react";
+import { Calendar, MapPin, Clock, ArrowRight, Sparkles, CheckCircle2, Globe, Compass } from "lucide-react";
 import { api } from "../services/api";
 import { useLanguage } from "../context/LanguageContext";
 
@@ -66,24 +66,33 @@ const PREMIUM_COHORTS = [
 const CALENDAR_STEPS = [
   {
     year: "2026 – 2029",
+    phase: "01",
     title: "Phase pilote · Cameroun",
     titleEn: "Pilot Phase · Cameroon",
     desc: "Déploiement progressif dans les 10 régions, en s'appuyant sur les établissements scolaires et universitaires, les radios communautaires et les structures de jeunesse.",
-    descEn: "Gradual deployment across the 10 administrative regions, partnering with academic institutions, community radios, and youth hubs."
+    descEn: "Gradual deployment across the 10 administrative regions, partnering with academic institutions, community radios, and youth hubs.",
+    tag: "10 régions couvertes",
+    tagEn: "10 Regions Covered"
   },
   {
     year: "2026 – 2036",
+    phase: "02",
     title: "Extension régionale · CEMAC",
     titleEn: "Regional Expansion · CEMAC",
     desc: "Élargissement progressif au Gabon, au Congo, à la République centrafricaine, au Tchad et à la Guinée équatoriale.",
-    descEn: "Progressive expansion into Gabon, Republic of Congo, Central African Republic, Chad, and Equatorial Guinea."
+    descEn: "Progressive expansion into Gabon, Republic of Congo, Central African Republic, Chad, and Equatorial Guinea.",
+    tag: "6 pays de la CEMAC",
+    tagEn: "6 CEMAC Nations"
   },
   {
     year: "Horizon",
+    phase: "03",
     title: "Réseau régional de référence",
     titleEn: "Flagship Regional Network",
     desc: "Le premier réseau régional de jeunes médias engagés pour le développement durable en Afrique centrale.",
-    descEn: "Central Africa's premier youth-led media network dedicated to sustainable ecological development."
+    descEn: "Central Africa's premier youth-led media network dedicated to sustainable ecological development.",
+    tag: "Communauté pérenne",
+    tagEn: "Long-term Impact"
   }
 ];
 
@@ -124,40 +133,8 @@ export default function AgendaSection({ onOpenApplication, onNavigateAllAgenda }
   return (
     <section id="agenda" className="agenda-editorial-section">
       <div className="container">
-        {/* =========================================================
-            03 · CALENDRIER STRATÉGIQUE (Une montée en puissance progressive)
-            Feuille de route pluriannuelle : 2026–2029, 2026–2036, Horizon
-            ========================================================= */}
-        <div className="agenda-roadmap-card">
-          <div className="roadmap-header">
-            <div className="roadmap-tag-pill">
-              <Calendar size={14} />
-              <span>{t("progCalendarEyebrow", "03 · Calendrier")}</span>
-            </div>
-            <h2 className="roadmap-title">
-              {t("progCalendarTitle", "Une montée en puissance")}{" "}
-              <span className="text-highlight-gold">{t("progCalendarTitleHighlight", "progressive")}</span>
-            </h2>
-          </div>
-
-          <div className="roadmap-tl">
-            {CALENDAR_STEPS.map((step, idx) => (
-              <div key={idx} className="roadmap-tl-item">
-                <div className="roadmap-tl-marker">
-                  <span className="roadmap-tl-dot" />
-                </div>
-                <div className="roadmap-tl-body">
-                  <div className="roadmap-tl-year">{step.year}</div>
-                  <h3 className="roadmap-tl-heading">{isEnglish ? step.titleEn : step.title}</h3>
-                  <p className="roadmap-tl-desc">{isEnglish ? step.descEn : step.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* Section Header for Upcoming Sessions & Cohorts */}
-        <div className="section-header agenda-sessions-header">
+        <div className="section-header">
           <div className="section-tag-pill">
             <Calendar size={16} />
             <span>{t("agendaKicker")}</span>
@@ -258,6 +235,68 @@ export default function AgendaSection({ onOpenApplication, onNavigateAllAgenda }
             ? "Session dates and formats are indicative and will be confirmed according to mobilized partnerships and local conditions." 
             : "Les dates et formats des sessions sont indicatifs et seront confirmés selon les partenariats mobilisés et les conditions locales."
           )}
+        </div>
+
+        {/* =========================================================
+            03 · CALENDRIER STRATÉGIQUE (Une montée en puissance progressive)
+            Feuille de route pluriannuelle : 2026–2029, 2026–2036, Horizon
+            Harmonisé avec le style clair & institutionnel du site
+            ========================================================= */}
+        <div className="agenda-roadmap-module">
+          <div className="agenda-roadmap-divider">
+            <div className="divider-line" />
+            <span className="divider-tag">
+              <Compass size={14} />
+              <span>{t("progCalendarEyebrow", "03 · Calendrier")}</span>
+            </span>
+            <div className="divider-line" />
+          </div>
+
+          <div className="agenda-roadmap-header">
+            <h3 className="agenda-roadmap-title">
+              {t("progCalendarTitle", "Une montée en puissance")}{" "}
+              <span className="text-highlight-green">{t("progCalendarTitleHighlight", "progressive")}</span>
+            </h3>
+            <p className="agenda-roadmap-subtitle">
+              {isEnglish 
+                ? "A structured three-phase rollout, from the Cameroonian pilot laboratory to the Central African regional network." 
+                : "Une feuille de route structurée en trois phases clés, du laboratoire pilote camerounais au réseau régional de référence."}
+            </p>
+          </div>
+
+          <div className="agenda-roadmap-grid">
+            {CALENDAR_STEPS.map((step, idx) => (
+              <div key={idx} className="roadmap-phase-card">
+                <div className="roadmap-phase-top">
+                  <span className="roadmap-phase-badge">
+                    {`Phase ${step.phase}`}
+                  </span>
+                  <span className="roadmap-phase-year">{step.year}</span>
+                </div>
+
+                <div className="roadmap-phase-icon-wrap">
+                  {idx === 0 && <MapPin size={22} />}
+                  {idx === 1 && <Globe size={22} />}
+                  {idx === 2 && <Sparkles size={22} />}
+                </div>
+
+                <h4 className="roadmap-phase-title">
+                  {isEnglish ? step.titleEn : step.title}
+                </h4>
+
+                <p className="roadmap-phase-desc">
+                  {isEnglish ? step.descEn : step.desc}
+                </p>
+
+                <div className="roadmap-phase-footer">
+                  <span className="roadmap-phase-pill">
+                    <CheckCircle2 size={13} />
+                    <span>{isEnglish ? step.tagEn : step.tag}</span>
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* View All Agenda Action */}
