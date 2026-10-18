@@ -13,8 +13,8 @@ const COUNTRIES_DATA = [
     statusBadgeEn: "PILOT PHASE · 2026–2029",
     statusNote: "🇨🇲 Pays pilote de la CEMAC",
     statusNoteEn: "🇨🇲 CEMAC Pilot Country",
-    identity: "✦ Le laboratoire régional de JEDDIAC",
-    identityEn: "✦ The regional laboratory of JEDDIAC",
+    identity: "Le laboratoire régional de JEDDIAC",
+    identityEn: "The regional laboratory of JEDDIAC",
     description: "Déploiement initial dans les 10 régions du pays à travers les établissements scolaires et universitaires, les clubs médias, les radios communautaires et les réseaux de jeunes.",
     descriptionEn: "Initial rollout across the country's 10 regions through secondary and higher education institutions, media clubs, community radio stations, and youth networks.",
     priorities: [

@@ -109,7 +109,7 @@ function AppContent() {
     window.addEventListener("keydown", handleKeyDown);
 
     // ScrollSpy for active section in navbar (only active on home landing page)
-    const sections = ["accueil", "association", "programme", "territoires", "piliers", "equipe", "agenda", "contact"];
+    const sections = ["accueil", "association", "programme", "piliers", "territoires", "equipe", "agenda", "contact"];
     const handleScroll = () => {
       if (currentView !== "home") return;
       const scrollPos = window.scrollY + 200;
@@ -314,14 +314,14 @@ function AppContent() {
             }} 
           />
 
-          {/* Central Africa Territories & Regional Hubs (Ancrage géographique · zone CEMAC) */}
-          <TerritoriesMap
-            onOpenApplication={() => openApplication("Candidature Pôle Régional")}
-          />
-
           {/* The 5 Strategic Axes of JEDDIAC (Méthodologie & Cadre Opérationnel) */}
           <StrategicAxes
             onOpenApplication={() => openApplication("Participation aux 5 Piliers")}
+          />
+
+          {/* Central Africa Territories & Regional Hubs (Ancrage géographique · zone CEMAC) */}
+          <TerritoriesMap
+            onOpenApplication={() => openApplication("Candidature Pôle Régional")}
           />
 
           {/* Our Team & User Profiles (inspired by Climate Chance Qui sommes-nous / Équipe - strictly non-admin) */}
