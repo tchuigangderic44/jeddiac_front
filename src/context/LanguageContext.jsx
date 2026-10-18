@@ -136,7 +136,7 @@ export const translations = {
     afriveVisionPhotoAlt: "Forêt du Bassin du Congo",
 
     // L'Association Section
-    assocTag: "01 · Qui sommes-nous",
+    assocTag: "Qui sommes-nous",
     assocTitle: "JEDDIAC, une histoire qui commence par",
     assocTitleHighlight: "une passion",
     assocSubtitle: "Derrière le programme, il y a un récit : celui d'un enfant des médias devenu bâtisseur d'une génération d'impact.",
@@ -178,7 +178,7 @@ export const translations = {
     assocDiscoverProgramBtn: "Découvrir le programme qui en est né",
 
     // 02 Le Programme Section
-    progTag: "02 · Le Programme",
+    progTag: "Le Programme",
     progTitle: "Former, produire, diffuser,",
     progTitleHighlight: "mettre en réseau",
     progSubtitle: "Renforcer la culture du développement durable et de la citoyenneté environnementale en développant les compétences médiatiques des jeunes de 14 à 25 ans.",
@@ -224,7 +224,7 @@ export const translations = {
     progComp10Title: "Suivi, évaluation, capitalisation",
     progComp10Desc: "Indicateurs, missions de terrain, bonnes pratiques.",
     progNote: "Les activités présentées sont des pistes de mise en œuvre. Leur réalisation dépendra des partenariats, des financements, des autorisations et des conditions locales.",
-    progCalendarEyebrow: "03 · Calendrier",
+    progCalendarEyebrow: "Calendrier",
     progCalendarTitle: "Une montée en puissance",
     progCalendarTitleHighlight: "progressive",
     progCalPhase1Year: "2026 – 2029",
@@ -317,6 +317,7 @@ export const translations = {
     agendaDefaultLocation: "Yaoundé & En ligne (Bimodal)",
     agendaDefaultDuration: "Session intensive 3 jours",
     agendaDefaultType: "Formation Régionale",
+    agendaDisclaimerNote: "Les dates et formats des sessions sont indicatifs et seront confirmés selon les partenariats mobilisés et les conditions locales.",
     allAgendaTag: "Calendrier Pédagogique & Masterclasses",
     allAgendaTitle: "Calendrier Intégral &",
     allAgendaTitleHighlight: "Formations Régionales",
@@ -470,7 +471,7 @@ export const translations = {
     afriveVisionPhotoAlt: "Congo Basin Forest",
 
     // L'Association Section
-    assocTag: "01 · About Us",
+    assocTag: "About Us",
     assocTitle: "JEDDIAC, a story born from",
     assocTitleHighlight: "a passion",
     assocSubtitle: "Behind the program lies a personal journey: that of a youth media advocate dedicated to building a generation of impact.",
@@ -512,7 +513,7 @@ export const translations = {
     assocDiscoverProgramBtn: "Discover the program born from this journey",
 
     // 02 The Program Section
-    progTag: "02 · The Program",
+    progTag: "The Program",
     progTitle: "Train, produce, broadcast,",
     progTitleHighlight: "build networks",
     progSubtitle: "Fostering sustainable development awareness and environmental citizenship by developing the media competencies of youth aged 14 to 25.",
@@ -558,7 +559,7 @@ export const translations = {
     progComp10Title: "Monitoring, Evaluation & Capitalization",
     progComp10Desc: "Impact indicators, field missions, capitalization of best practices.",
     progNote: "The presented activities reflect operational blueprints. Their rollout depends on partnerships, funding, authorizations, and local field conditions.",
-    progCalendarEyebrow: "03 · Timeline",
+    progCalendarEyebrow: "Timeline",
     progCalendarTitle: "A progressive",
     progCalendarTitleHighlight: "scaling-up",
     progCalPhase1Year: "2026 – 2029",
@@ -651,6 +652,7 @@ export const translations = {
     agendaDefaultLocation: "Yaoundé & Online (Hybrid)",
     agendaDefaultDuration: "3-day intensive session",
     agendaDefaultType: "Regional Training",
+    agendaDisclaimerNote: "Session dates and formats are indicative and will be confirmed according to mobilized partnerships and local conditions.",
     allAgendaTag: "Pedagogical Calendar & Masterclasses",
     allAgendaTitle: "Full Calendar &",
     allAgendaTitleHighlight: "Regional Trainings",

@@ -3,10 +3,70 @@ import { Calendar, MapPin, Clock, ArrowRight, Sparkles, CheckCircle2 } from "luc
 import { api } from "../services/api";
 import { useLanguage } from "../context/LanguageContext";
 
+const PREMIUM_COHORTS = [
+  {
+    id: "cohort-1",
+    day: "11",
+    month: "Nov",
+    year: "2026",
+    startDate: "2026-11-11T09:00:00.000Z",
+    type: "Formation régionale",
+    typeEn: "Regional Training",
+    seats: "40 places",
+    seatsEn: "40 seats",
+    title: "Investigation climat & écriture de solutions",
+    titleEn: "Climate Investigation & Solutions Reporting",
+    description: "Atelier intensif de 3 jours réunissant 40 délégués de clubs de presse : cartographie des sources, déconstruction des fausses nouvelles écologiques et interview de terrain.",
+    descriptionEn: "3-day intensive workshop convening 40 press club delegates: mapping sources, debunking ecological fake news, and field interviews.",
+    location: "Yaoundé · Centre régional des médias & hybride",
+    locationEn: "Yaoundé · Regional Media Hub & Hybrid",
+    duration: "Session intensive 3 jours",
+    durationEn: "3-day intensive session"
+  },
+  {
+    id: "cohort-2",
+    day: "19",
+    month: "Nov",
+    year: "2026",
+    startDate: "2026-11-19T14:00:00.000Z",
+    type: "Masterclass virtuelle",
+    typeEn: "Virtual Masterclass",
+    seats: "Accès libre",
+    seatsEn: "Open access",
+    title: "Podcast environnemental avec un smartphone",
+    titleEn: "Environmental Podcast with a Smartphone",
+    description: "Les bases de la prise de son mobile, du montage audio léger et du storytelling sonore au cœur des forêts et des quartiers urbains africains.",
+    descriptionEn: "The fundamentals of mobile field recording, lightweight audio editing, and sound storytelling in the heart of African forests and urban neighborhoods.",
+    location: "En direct sur JEDDIAC Live & radios partenaires",
+    locationEn: "Live on JEDDIAC Stream & partner radios",
+    duration: "Masterclass 2h30 + exercice",
+    durationEn: "2.5-hour masterclass + exercise"
+  },
+  {
+    id: "cohort-3",
+    day: "13",
+    month: "Déc",
+    year: "2026",
+    startDate: "2026-12-13T09:00:00.000Z",
+    type: "Conférence régionale",
+    typeEn: "Regional Conference",
+    seats: "Délégations",
+    seatsEn: "Delegations",
+    title: "Forum des jeunes médias d'Afrique centrale",
+    titleEn: "Central African Youth Media Forum",
+    description: "Rencontre plénière des délégations des pays de la CEMAC autour de la jeunesse médiatique et du développement durable.",
+    descriptionEn: "Plenary summit of CEMAC youth delegations focused on youth media and sustainable development.",
+    location: "Douala · Retransmission panafricaine",
+    locationEn: "Douala · Panafrican Broadcast",
+    duration: "Forum de 2 jours",
+    durationEn: "2-day forum"
+  }
+];
+
 export default function AgendaSection({ onOpenApplication, onNavigateAllAgenda }) {
   const { t, isEnglish } = useLanguage();
-  const [agendas, setAgendas] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [agendas, setAgendas] = useState(PREMIUM_COHORTS);
+  const [loading, setLoading] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
 
   useEffect(() => {
@@ -15,18 +75,25 @@ export default function AgendaSection({ onOpenApplication, onNavigateAllAgenda }
 
   const loadAgendas = async () => {
     try {
-      setLoading(true);
       const res = await api.getAgendas("?limit=3");
-      if (res && res.values) {
-        setAgendas(res.values.slice(0, 3));
+      if (res && res.values && res.values.length > 0) {
+        // Harmonize with API registration IDs while guaranteeing exact official text
+        const merged = PREMIUM_COHORTS.map((cohort, idx) => {
+          const apiItem = res.values[idx];
+          if (!apiItem) return cohort;
+          return {
+            ...cohort,
+            id: apiItem.id || cohort.id,
+            registrationLink: apiItem.registrationLink
+          };
+        });
+        setAgendas(merged);
       } else {
-        setAgendas([]);
+        setAgendas(PREMIUM_COHORTS);
       }
     } catch (err) {
-      console.error("Failed to load agendas from API:", err);
-      setAgendas([]);
-    } finally {
-      setLoading(false);
+      console.warn("Using official pedagogical cohorts reference:", err.message);
+      setAgendas(PREMIUM_COHORTS);
     }
   };
 
@@ -61,12 +128,11 @@ export default function AgendaSection({ onOpenApplication, onNavigateAllAgenda }
         ) : (
           <div className="agenda-cards-grid">
             {agendas.map((item) => {
-              const dateObj = new Date(item.startDate || item.createdAt);
-              const dayStr = dateObj.toLocaleDateString(isEnglish ? "en-US" : "fr-FR", { day: "2-digit" });
-              const monthStr = dateObj
-                .toLocaleDateString(isEnglish ? "en-US" : "fr-FR", { month: "short" })
-                .toUpperCase();
-              const yearStr = dateObj.getFullYear();
+              const displayDay = item.day || (item.startDate ? new Date(item.startDate).toLocaleDateString(isEnglish ? "en-US" : "fr-FR", { day: "2-digit" }) : "11");
+              const displayMonth = isEnglish 
+                ? (item.month === "Déc" ? "DEC" : (item.month || "NOV").toUpperCase())
+                : (item.month || "NOV").toUpperCase();
+              const displayYear = item.year || (item.startDate ? new Date(item.startDate).getFullYear() : "2026");
 
               const displayTitle = (isEnglish && item.titleEn) ? item.titleEn : item.title;
               const displayDesc = (isEnglish && item.descriptionEn) ? item.descriptionEn : item.description;
@@ -88,9 +154,9 @@ export default function AgendaSection({ onOpenApplication, onNavigateAllAgenda }
                   <div className="agenda-card-top">
                     {/* Big Date Stamp */}
                     <div className="agenda-date-stamp">
-                      <span className="agenda-day">{dayStr}</span>
-                      <span className="agenda-month">{monthStr}</span>
-                      <span className="agenda-year">{yearStr}</span>
+                      <span className="agenda-day">{displayDay}</span>
+                      <span className="agenda-month">{displayMonth}</span>
+                      <span className="agenda-year">{displayYear}</span>
                     </div>
 
                     <div className="agenda-meta-badges">
@@ -119,7 +185,7 @@ export default function AgendaSection({ onOpenApplication, onNavigateAllAgenda }
                       className="btn btn-forest"
                       style={{ width: "100%", justifyContent: "center" }}
                     >
-                      <span>{t("agendaApplyBtn")}</span>
+                      <span>{isEnglish ? "Apply →" : "Postuler →"}</span>
                       <ArrowRight size={16} />
                     </button>
                   </div>
@@ -128,6 +194,14 @@ export default function AgendaSection({ onOpenApplication, onNavigateAllAgenda }
             })}
           </div>
         )}
+
+        {/* Disclaimer Note from jeddiac_site_premium.html */}
+        <div className="agenda-disclaimer-note">
+          {t("agendaDisclaimerNote", isEnglish 
+            ? "Session dates and formats are indicative and will be confirmed according to mobilized partnerships and local conditions." 
+            : "Les dates et formats des sessions sont indicatifs et seront confirmés selon les partenariats mobilisés et les conditions locales."
+          )}
+        </div>
 
         {/* View All Agenda Action */}
         <div className="section-footer-action">
