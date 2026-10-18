@@ -11,151 +11,151 @@ export default function StrategicAxes({ onOpenApplication }) {
       id: "axe-1",
       number: isEnglish ? "PILLAR 01" : "AXE 01",
       title: isEnglish ? "Identify & Map" : "Identifier & Cartographier",
-      subtitle: isEnglish ? "Mobilizing key actors on the ground" : "Repérer les forces vives sur le terrain",
+      subtitle: isEnglish ? "Identifying grassroots forces" : "Repérer les forces vives",
       icon: Search,
       photo: "https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&auto=format&fit=crop&q=80",
       description: isEnglish
-        ? "JEDDIAC begins by thoroughly mapping partner organizations territory by territory: newspaper clubs, school radio stations, university and community radios, and youth associations."
-        : "JEDDIAC commence par cartographier minutieusement les structures partenaires territoire par territoire : clubs journaux, radios scolaires, radios universitaires et communautaires, et associations de jeunesse.",
+        ? "JEDDIAC maps partner structures territory by territory: school press clubs, student, university and community radios, and youth associations."
+        : "JEDDIAC cartographie les structures partenaires territoire par territoire : clubs journaux, radios scolaires, universitaires et communautaires, et associations de jeunesse.",
       points: isEnglish
         ? [
-            "Mapping media clubs and school radios across urban and rural zones",
-            "Technical assessment of newsrooms' equipment and pedagogical needs",
-            "Close engagement of educational mentors and community broadcasters",
-            "Territorial review to ensure equitable representation across all regions"
+            "Mapping media clubs and radios in urban and rural areas",
+            "Assessment of newsrooms' material and pedagogical needs",
+            "Engagement of local educators and community broadcasters",
+            "Territorial review ensuring equitable representation"
           ]
         : [
-            "Repérage des clubs médias et radios scolaires en zones urbaines et rurales",
-            "Diagnostic technique des besoins matériels et pédagogiques des rédactions",
-            "Implication étroite des encadreurs éducatifs et des diffuseurs de proximité",
-            "Bilan territorial pour une représentativité équitable de tous les terroirs"
+            "Repérage des clubs médias et radios en zones urbaines et rurales",
+            "Diagnostic des besoins matériels et pédagogiques des rédactions",
+            "Implication des encadreurs et diffuseurs de proximité",
+            "Bilan territorial pour une représentativité équitable"
           ],
       kpi: isEnglish
-        ? "90+ organizations mapped across Cameroon's 10 regions"
-        : "90+ structures cartographiées dans les 10 régions du Cameroun",
+        ? "90+ structures mapped across Cameroon's 10 regions."
+        : "90+ structures cartographiées dans les 10 régions du Cameroun.",
       quote: isEnglish
-        ? "Building on existing foundations to secure an unshakeable community anchor."
-        : "Construire sur l'existant pour garantir un ancrage communautaire indestructible."
+        ? "Building on existing foundations for a lasting community anchor."
+        : "Construire sur l'existant pour un ancrage communautaire durable."
     },
     {
       id: "axe-2",
       number: isEnglish ? "PILLAR 02" : "AXE 02",
       title: isEnglish ? "Create & Strengthen" : "Créer & Renforcer",
-      subtitle: isEnglish ? "Empowering youth expression spaces" : "Faire vivre les espaces d'expression des jeunes",
+      subtitle: isEnglish ? "Building youth expression spaces" : "Bâtir des espaces",
       icon: PenTool,
       photo: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800&auto=format&fit=crop&q=80",
       description: isEnglish
-        ? "JEDDIAC establishes new expression hubs and equips existing clubs with mobile recording kits, ethical handbooks, and environmental commitment charters."
-        : "JEDDIAC crée de nouvelles cellules d'expression et dote les clubs existants de kits mobiles d'enregistrement, de guides déontologiques et de chartes d'engagement pour l'environnement.",
+        ? "Consolidating existing structures and supporting the creation of new spaces of expression where they are lacking."
+        : "Consolider les structures existantes et accompagner la création de nouveaux espaces d'expression là où ils manquent.",
       points: isEnglish
         ? [
-            "Provision of mobile kits for smartphone reporting, lavalier mics, and recorders",
-            "Setting up junior editorial boards and regular local mentorship sessions",
-            "High priority on rural areas often left out of mainstream news flows",
-            "Structuring free, constructive, and scientifically grounded expression spaces"
+            "Creation of newspaper and media clubs",
+            "Support for school radios and university web radios",
+            "Pedagogical kits and methodological guides",
+            "Leadership support for youth editorial boards"
           ]
         : [
-            "Dotation en kits mobiles pour reportage smartphone, micros cravates et enregistreurs",
-            "Mise en place de comités de rédaction juniors et de mentorats locaux réguliers",
-            "Priorité absolue aux zones rurales souvent exclues des grands flux d'information",
-            "Structuration d'espaces d'expression libres, constructifs et scientifiques"
+            "Création de clubs journaux et clubs médias",
+            "Appui aux radios scolaires et web-radios universitaires",
+            "Kits pédagogiques et guides méthodologiques",
+            "Accompagnement des équipes dirigeantes"
           ],
       kpi: isEnglish
-        ? "90 school newsrooms and junior studios equipped"
-        : "90 rédactions scolaires et studios juniors équipés",
+        ? "Viable and sustainable structures in each pilot territory."
+        : "Des structures viables et pérennes dans chaque territoire pilote.",
       quote: isEnglish
-        ? "Giving youth the technical tools to raise their voices with rigor and pride."
-        : "Donner aux jeunes les moyens techniques de porter leur voix avec rigueur et fierté."
+        ? "Lasting spaces of expression, driven by youth."
+        : "Des espaces d'expression durables, animés par les jeunes."
     },
     {
       id: "axe-3",
       number: isEnglish ? "PILLAR 03" : "AXE 03",
       title: isEnglish ? "Train & Mentor" : "Former & Accompagner",
-      subtitle: isEnglish ? "Journalistic skills & sustainability challenges" : "Techniques journalistiques & enjeux de durabilité",
+      subtitle: isEnglish ? "Building capacity & skills" : "Monter en compétences",
       icon: GraduationCap,
       photo: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&auto=format&fit=crop&q=80",
       description: isEnglish
-        ? "Youth are trained in the fundamentals of climate science and Congo Basin biodiversity, while mastering modern journalism skills and fact-checking."
-        : "Les jeunes sont formés aux fondamentaux des sciences du climat et de la biodiversité du Bassin du Congo, tout en maîtrisant les compétences du journalisme moderne et du fact-checking.",
+        ? "A practical and progressive curriculum combining sustainability challenges and media techniques."
+        : "Un parcours pratique et progressif alliant enjeux de durabilité et techniques médiatiques.",
       points: isEnglish
         ? [
-            "Climate science, biodiversity, Congo Basin forests, and UN SDGs",
-            "Field investigation methods, source verification, and environmental fact-checking",
-            "Audio production: designing radio broadcasts and documentary podcasts",
-            "Mobile video and social media storytelling to reach millions of peers"
+            "Workshops, masterclasses and train-the-trainer programs",
+            "Fact-checking and combating disinformation",
+            "Meetings and masterclasses with professional journalists",
+            "Individualized mentorship for young newsrooms"
           ]
         : [
-            "Sciences du climat, biodiversité, forêts du Bassin du Congo et ODD des Nations unies",
-            "Techniques d'enquête terrain, vérification des sources et fact-checking environnemental",
-            "Production audio : conception d'émissions radio et de podcasts documentaires",
-            "Vidéo mobile et narration sur les réseaux sociaux pour toucher des millions de pairs"
+            "Ateliers, masterclass et formations de formateurs",
+            "Fact-checking et lutte contre la désinformation",
+            "Rencontres avec des journalistes professionnels",
+            "Mentorat individualisé des jeunes rédactions"
           ],
       kpi: isEnglish
-        ? "+20,000 aspiring young journalists and students trained"
-        : "+20 000 jeunes journalistes en herbe et élèves formés",
+        ? "20,000 youth directly trained across the entire program."
+        : "20 000 jeunes formés directement sur l'ensemble du programme.",
       quote: isEnglish
-        ? "Scientific rigor combined with the creative drive of African youth."
-        : "La rigueur scientifique combinée à l'énergie créative de la jeunesse africaine."
+        ? "From climate literacy to solutions journalism."
+        : "De l'alphabétisation climatique au journalisme de solutions."
     },
     {
       id: "axe-4",
       number: isEnglish ? "PILLAR 04" : "AXE 04",
       title: isEnglish ? "Produce & Broadcast" : "Produire & Diffuser",
-      subtitle: isEnglish ? "High-impact stories made by and for youth" : "Des contenus d'impact créés par et pour les jeunes",
+      subtitle: isEnglish ? "Amplifying youth voices" : "Donner de la voix",
       icon: Radio,
       photo: "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=800&auto=format&fit=crop&q=80",
       description: isEnglish
-        ? "Young journalists' productions are broadcast at scale: local radio columns, immersive podcasts, investigative features, and school magazines."
-        : "Les productions des jeunes journalistes sont diffusées à grande échelle : chroniques radio locales, podcasts immersifs, articles d'investigation et magazines scolaires.",
+        ? "Transforming learnings into concrete editorial outputs and civic campaigns."
+        : "Transformer les apprentissages en contenus concrets et en campagnes citoyennes.",
       points: isEnglish
         ? [
-            "Dedicated programming slots on partner school and community radio stations",
-            "Distribution across youth-focused digital platforms and social networks",
-            "Editorial synergy and syndication with major national and regional media",
-            "Building a continuous newsfeed spotlighting local climate solutions"
+            "School newspapers, radio broadcasts, podcasts, reports, videos",
+            "Awareness campaigns conceived and led by youth",
+            "Broadcast via radio, digital platforms, and events",
+            "Media promotion via strategic partner AFRIVE"
           ]
         : [
-            "Grilles de programmes dédiées sur les radios scolaires et communautaires partenaires",
-            "Diffusion sur les plateformes numériques et réseaux sociaux jeunesse",
-            "Synergie éditoriale et reprises avec les grands médias nationaux et sous-régionaux",
-            "Création d'un fil d'information continu sur les solutions climatiques locales"
+            "Journaux scolaires, émissions radio, podcasts, reportages, vidéos",
+            "Campagnes de sensibilisation conçues par les jeunes",
+            "Diffusion via radios, plateformes et événements",
+            "Valorisation médiatique via le partenaire AFRIVE"
           ],
       kpi: isEnglish
-        ? "Hundreds of broadcast hours and 100+ field investigations"
-        : "Des centaines d'heures de programmes radio et 100+ enquêtes de terrain",
+        ? "5,000+ contents produced and broadcast on sustainability."
+        : "5 000+ contenus produits et diffusés sur la durabilité.",
       quote: isEnglish
-        ? "Grassroots reporting that touches hearts and sparks civic action."
-        : "Une information de proximité qui touche les cœurs et déclenche l'action civique."
+        ? "Reliable information, championed by youth."
+        : "Une information fiable, portée par la jeunesse."
     },
     {
       id: "axe-5",
       number: isEnglish ? "PILLAR 05" : "AXE 05",
       title: isEnglish ? "Sustain & Unite" : "Pérenniser & Fédérer",
-      subtitle: isEnglish ? "A lasting network across Central Africa" : "Un réseau durable à l'échelle de l'Afrique Centrale",
+      subtitle: isEnglish ? "Anchoring for the long term" : "Inscrire dans la durée",
       icon: Network,
       photo: "https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&auto=format&fit=crop&q=80",
       description: isEnglish
-        ? "To ensure lasting impact, JEDDIAC weaves a robust sub-regional network connecting Cameroon, Gabon, Congo, DRC, CAR, and Chad, featuring annual grants and a flagship forum."
-        : "Pour que l'impact perdure, JEDDIAC tisse un réseau sous-régional solide reliant le Cameroun, le Gabon, le Congo, la RDC, la RCA et le Tchad, avec des bourses annuelles et un grand forum.",
+        ? "Consolidating achievements and building an enduring regional network of youth media."
+        : "Consolider les acquis et bâtir un réseau régional durable de jeunes médias.",
       points: isEnglish
         ? [
-            "Annual excellence grants for standout junior reporting and investigations",
-            "Establishment of the Sub-Regional Youth Climate Media Network (SYCMN)",
-            "Institutional advocacy with Ministries of Education and the Environment",
-            "Intergenerational dialogue bridging traditional wisdom with scientific insights"
+            "National then regional networking across Central Africa",
+            "Interregional exchanges and joint reporting",
+            "Engaged digital community",
+            "Institutional and international partnerships"
           ]
         : [
-            "Bourses annuelles d'excellence pour les meilleurs reportages et enquêtes juniors",
-            "Création du Réseau Sous-Régional des Jeunes Médias pour le Climat (RSJMC)",
-            "Plaidoyer institutionnel auprès des ministères de l'Éducation et de l'Environnement",
-            "Dialogue intergénérationnel et mutualisation des savoirs traditionnels et scientifiques"
+            "Mise en réseau nationale puis régionale",
+            "Échanges interrégionaux et productions conjointes",
+            "Communauté numérique engagée",
+            "Partenariats institutionnels et internationaux"
           ],
       kpi: isEnglish
-        ? "6 interconnected nations and a standing annual sub-regional forum"
-        : "6 pays interconnectés et un forum annuel sous-régional pérenne",
+        ? "20,000+ members in the engaged digital community."
+        : "20 000+ membres dans la communauté numérique engagée.",
       quote: isEnglish
-        ? "Deeply rooting solution journalism in the DNA of new generations."
-        : "Ancrer durablement le journalisme de solutions dans l'ADN des nouvelles générations."
+        ? "A community of practice spanning the CEMAC region."
+        : "Une communauté de pratique à l'échelle de la CEMAC."
     }
   ];
 
@@ -168,14 +168,14 @@ export default function StrategicAxes({ onOpenApplication }) {
         <div className="section-header">
           <div className="section-tag-pill">
             <Sparkles size={16} />
-            <span>{t("axesKicker", "Méthodologie & Cadre Opérationnel")}</span>
+            <span>{t("axesKicker", "⚙ Méthodologie & cadre opérationnel")}</span>
           </div>
           <h2 className="section-title-editorial">
             {t("axesTitle", "Les 5 Piliers Stratégiques")}{" "}
             <span className="text-highlight-green">{t("axesTitleHighlight", "du Programme")}</span>
           </h2>
           <p className="section-subtitle-editorial">
-            {t("axesSubtitle", "Une approche globale et structurée qui guide chaque jeune de l'alphabétisation climatique à la production médiatique professionnelle.")}
+            {t("axesSubtitle", "Une approche structurée qui guide chaque jeune, de l'alphabétisation climatique à la production médiatique professionnelle.")}
           </p>
         </div>
 

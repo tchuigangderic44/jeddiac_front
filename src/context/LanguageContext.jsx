@@ -20,11 +20,11 @@ export const translations = {
     applyNow: "Candidater / Rejoindre le Réseau",
 
     // Strategic Axes (Méthodologie & Cadre Opérationnel)
-    axesKicker: "Méthodologie & Cadre Opérationnel",
+    axesKicker: "⚙ Méthodologie & cadre opérationnel",
     axesTitle: "Les 5 Piliers Stratégiques",
     axesTitleHighlight: "du Programme",
-    axesSubtitle: "Une approche globale et structurée qui guide chaque jeune de l'alphabétisation climatique à la production médiatique professionnelle.",
-    axesKeyObjective: "Objectif Clé :",
+    axesSubtitle: "Une approche structurée qui guide chaque jeune, de l'alphabétisation climatique à la production médiatique professionnelle.",
+    axesKeyObjective: "Objectif clé :",
     axesJoinBtn: "Participer à cet axe",
 
     // Territories (Ancrage Géographique & Écosystèmes)
@@ -330,12 +330,12 @@ export const translations = {
     applyNow: "Apply / Join the Network",
 
     // Strategic Axes (Methodology & Operational Framework)
-    axesKicker: "Methodology & Operational Framework",
+    axesKicker: "⚙ Methodology & Operational Framework",
     axesTitle: "The 5 Strategic Pillars",
     axesTitleHighlight: "of the Program",
-    axesSubtitle: "A comprehensive and structured approach guiding every youth from climate literacy to professional media production.",
-    axesKeyObjective: "Key Objective :",
-    axesJoinBtn: "Join this pillar",
+    axesSubtitle: "A structured approach guiding every youth, from climate literacy to professional media production.",
+    axesKeyObjective: "Key objective :",
+    axesJoinBtn: "Participate in this pillar",
 
     // Territories (Geographical Footprint & Ecosystems)
     territoriesKicker: "Geographical Footprint & Ecosystems",

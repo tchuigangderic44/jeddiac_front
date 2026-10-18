@@ -109,7 +109,7 @@ function AppContent() {
     window.addEventListener("keydown", handleKeyDown);
 
     // ScrollSpy for active section in navbar (only active on home landing page)
-    const sections = ["accueil", "association", "programme", "equipe", "piliers", "podcasts", "agenda", "territoires", "contact"];
+    const sections = ["accueil", "association", "programme", "piliers", "equipe", "territoires", "agenda", "contact"];
     const handleScroll = () => {
       if (currentView !== "home") return;
       const scrollPos = window.scrollY + 200;
@@ -314,6 +314,11 @@ function AppContent() {
             }} 
           />
 
+          {/* The 5 Strategic Axes of JEDDIAC (Méthodologie & Cadre Opérationnel) */}
+          <StrategicAxes
+            onOpenApplication={() => openApplication("Participation aux 5 Piliers")}
+          />
+
           {/* Our Team & User Profiles (inspired by Climate Chance Qui sommes-nous / Équipe - strictly non-admin) */}
           <TeamSection 
             onOpenApplication={openApplication}
@@ -326,11 +331,6 @@ function AppContent() {
                 isEnglish ? "Synchronizing 90 partner hubs and network journalists" : "Synchronisation des 90 structures et journalistes du réseau"
               );
             }} 
-          />
-
-          {/* The 5 Strategic Axes of JEDDIAC */}
-          <StrategicAxes
-            onOpenApplication={() => openApplication("Participation aux 5 Piliers")}
           />
 
           {/* Central Africa Territories & Regional Hubs */}
