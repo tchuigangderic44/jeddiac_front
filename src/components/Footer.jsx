@@ -50,6 +50,7 @@ export default function Footer({ onOpenApplication, onNavigateLegal, onNavigateP
           <div className="footer-col-links">
             <h4 className="footer-col-heading">{t("footerColProgram")}</h4>
             <ul className="footer-nav-list">
+              <li><a href="#association">{t("navAssociation")}</a></li>
               <li><a href="#programme">{t("footerLinkContext")}</a></li>
               <li><a href="#piliers">{t("footerLinkPillars")}</a></li>
               <li><a href="#equipe">{t("footerLinkTeam")}</a></li>

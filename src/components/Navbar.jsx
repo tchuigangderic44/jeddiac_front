@@ -37,6 +37,7 @@ export default function Navbar({ onOpenApplication, activeSection, onNavigateSec
 
   const navLinks = [
     { label: t("navHome"), href: "#accueil" },
+    { label: t("navAssociation"), href: "#association" },
     { label: t("navProgram"), href: "#programme" },
     { label: t("navAxes"), href: "#piliers" },
     { label: t("navTerritories"), href: "#territoires" },

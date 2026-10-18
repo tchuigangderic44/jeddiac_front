@@ -200,7 +200,7 @@ export default function TerritoriesMap({ onOpenApplication }) {
         <div className="section-header">
           <div className="section-tag-pill">
             <Globe size={16} />
-            <span>{t("territoriesKicker", "Déploiement terrain")}</span>
+            <span>{t("territoriesKicker", "Ancrage Géographique & Écosystèmes")}</span>
           </div>
           <h2 className="section-title-editorial">
             {t("territoriesTitle", "Territoires d'Intervention &")}{" "}
@@ -216,8 +216,8 @@ export default function TerritoriesMap({ onOpenApplication }) {
           {/* 1. CAMEROON — Visually dominant pilot card */}
           <div className="territory-card territory-card-pilot">
             <div className="territory-pilot-visual">
-              <img 
-                src={pilotCountry.image} 
+              <img
+                src={pilotCountry.image}
                 alt={isEnglish ? pilotCountry.landmarkEn : pilotCountry.landmark}
                 className="territory-pilot-photo"
                 loading="lazy"
@@ -313,11 +313,11 @@ export default function TerritoriesMap({ onOpenApplication }) {
                 <div key={c.id} className="territory-card territory-card-expansion">
                   {/* Card Photo Header */}
                   <div className="territory-card-photo-wrap">
-                    <img 
-                      src={c.image} 
-                      alt={landmark} 
-                      className="territory-card-photo" 
-                      loading="lazy" 
+                    <img
+                      src={c.image}
+                      alt={landmark}
+                      className="territory-card-photo"
+                      loading="lazy"
                     />
                     <div className="territory-card-photo-overlay" />
                     <span className="territory-card-status-badge">

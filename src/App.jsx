@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Navbar from "./components/Navbar";
 import HeroSection from "./components/HeroSection";
-import ImpactGallery from "./components/ImpactGallery";
+import AssociationSection from "./components/AssociationSection";
 import StrategicAxes from "./components/StrategicAxes";
 import TeamSection from "./components/TeamSection";
 import TerritoriesMap from "./components/TerritoriesMap";
@@ -109,7 +109,7 @@ function AppContent() {
     window.addEventListener("keydown", handleKeyDown);
 
     // ScrollSpy for active section in navbar (only active on home landing page)
-    const sections = ["accueil", "programme", "equipe", "piliers", "podcasts", "agenda", "territoires", "contact"];
+    const sections = ["accueil", "association", "programme", "equipe", "piliers", "podcasts", "agenda", "territoires", "contact"];
     const handleScroll = () => {
       if (currentView !== "home") return;
       const scrollPos = window.scrollY + 200;
@@ -288,8 +288,13 @@ function AppContent() {
             }}
           />
 
-          {/* Visual Impact Photography Mosaic / Congo Basin Dispatch */}
-          <ImpactGallery />
+          {/* Institutional Association Presentation & Roots */}
+          <AssociationSection 
+            onExploreProgram={() => {
+              const el = document.getElementById("programme");
+              if (el) el.scrollIntoView({ behavior: "smooth" });
+            }}
+          />
 
           {/* Program News & Press Announcements */}
           <NewsSection 
