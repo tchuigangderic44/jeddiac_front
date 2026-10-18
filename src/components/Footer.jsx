@@ -52,9 +52,9 @@ export default function Footer({ onOpenApplication, onNavigateLegal, onNavigateP
             <ul className="footer-nav-list">
               <li><a href="#association">{t("navAssociation")}</a></li>
               <li><a href="#programme">{t("footerLinkContext")}</a></li>
+              <li><a href="#territoires">{t("footerLinkTerritories")}</a></li>
               <li><a href="#piliers">{t("footerLinkPillars")}</a></li>
               <li><a href="#equipe">{t("footerLinkTeam")}</a></li>
-              <li><a href="#territoires">{t("footerLinkTerritories")}</a></li>
               <li><a href="#agenda">{t("footerLinkAgenda")}</a></li>
             </ul>
           </div>

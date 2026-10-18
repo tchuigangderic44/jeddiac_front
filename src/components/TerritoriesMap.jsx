@@ -11,24 +11,24 @@ const COUNTRIES_DATA = [
     isPilot: true,
     statusBadge: "PHASE PILOTE · 2026–2029",
     statusBadgeEn: "PILOT PHASE · 2026–2029",
-    statusNote: "Pays central · Laboratoire régional",
-    statusNoteEn: "Central country · Regional laboratory",
-    identity: "Le laboratoire régional de JEDDIAC",
-    identityEn: "The regional laboratory of JEDDIAC",
+    statusNote: "🇨🇲 Pays pilote de la CEMAC",
+    statusNoteEn: "🇨🇲 CEMAC Pilot Country",
+    identity: "✦ Le laboratoire régional de JEDDIAC",
+    identityEn: "✦ The regional laboratory of JEDDIAC",
     description: "Déploiement initial dans les 10 régions du pays à travers les établissements scolaires et universitaires, les clubs médias, les radios communautaires et les réseaux de jeunes.",
     descriptionEn: "Initial rollout across the country's 10 regions through secondary and higher education institutions, media clubs, community radio stations, and youth networks.",
     priorities: [
       "Journalisme environnemental",
       "Formation",
       "Clubs médias",
-      "Production de contenus",
+      "Production",
       "Campagnes locales"
     ],
     prioritiesEn: [
       "Environmental journalism",
       "Training",
       "Media clubs",
-      "Content production",
+      "Production",
       "Local campaigns"
     ],
     landmark: "Chutes d'Ekom Nkam & Forêt équatoriale du Dja",
@@ -45,21 +45,17 @@ const COUNTRIES_DATA = [
     statusBadgeEn: "CEMAC EXPANSION",
     identity: "Forêts, biodiversité & territoires",
     identityEn: "Forests, biodiversity & territories",
-    description: "Déployer le modèle JEDDIAC auprès des jeunes médias et structures éducatives en s'appuyant sur les enjeux de forêt, biodiversité, ressources naturelles et résilience des territoires.",
-    descriptionEn: "Roll out the JEDDIAC model with young media and educational institutions, leveraging forest, biodiversity, natural resources, and territorial resilience challenges.",
+    description: "Déployer le modèle JEDDIAC auprès des jeunes médias en s'appuyant sur les enjeux de forêt, biodiversité et résilience des territoires.",
+    descriptionEn: "Roll out the JEDDIAC model with young media, leveraging forest, biodiversity, and territorial resilience challenges.",
     priorities: [
       "Forêts",
       "Biodiversité",
-      "Climat",
-      "Ressources naturelles",
-      "Médias jeunesse"
+      "Climat"
     ],
     prioritiesEn: [
       "Forests",
       "Biodiversity",
-      "Climate",
-      "Natural resources",
-      "Youth media"
+      "Climate"
     ],
     landmark: "Parc National de Loango & Canopée de l'Ivindo",
     landmarkEn: "Loango National Park & Ivindo Canopy",
@@ -68,28 +64,24 @@ const COUNTRIES_DATA = [
   {
     id: "cg",
     flag: "🇨🇬",
-    name: "République du Congo",
-    nameEn: "Republic of the Congo",
+    name: "Congo",
+    nameEn: "Congo",
     isPilot: false,
     statusBadge: "EXPANSION CEMAC",
     statusBadgeEn: "CEMAC EXPANSION",
     identity: "Forêts, villes & communautés",
     identityEn: "Forests, cities & communities",
-    description: "Adapter le programme aux réalités des territoires forestiers et urbains, en renforçant les capacités des jeunes à produire une information locale sur l'environnement et le développement durable.",
-    descriptionEn: "Tailor the program to the realities of forested and urban territories, boosting youth capacity to produce local reporting on the environment and sustainable development.",
+    description: "Adapter le programme aux territoires forestiers et urbains, en renforçant la capacité des jeunes à produire une information locale.",
+    descriptionEn: "Tailor the program to forested and urban territories, boosting youth capacity to produce local reporting.",
     priorities: [
       "Forêts",
-      "Biodiversité",
       "Déchets",
-      "Villes",
-      "Communautés"
+      "Villes"
     ],
     prioritiesEn: [
       "Forests",
-      "Biodiversity",
       "Waste management",
-      "Cities",
-      "Communities"
+      "Cities"
     ],
     landmark: "Sanctuaire des Tourbières & Fleuve Congo",
     landmarkEn: "Peatlands Sanctuary & Congo River",
@@ -98,28 +90,24 @@ const COUNTRIES_DATA = [
   {
     id: "cf",
     flag: "🇨🇫",
-    name: "République Centrafricaine",
+    name: "Centrafrique",
     nameEn: "Central African Republic",
     isPilot: false,
     statusBadge: "EXPANSION CEMAC",
     statusBadgeEn: "CEMAC EXPANSION",
     identity: "Jeunesse, territoires & résilience",
     identityEn: "Youth, territories & resilience",
-    description: "Développer des espaces de formation, de production médiatique et de sensibilisation adaptés aux réalités locales et aux besoins des communautés.",
-    descriptionEn: "Establish training, media production, and awareness hubs tailored to local realities and community needs.",
+    description: "Développer des espaces de formation, de production médiatique et de sensibilisation adaptés aux réalités locales.",
+    descriptionEn: "Establish training, media production, and awareness hubs tailored to local realities.",
     priorities: [
       "Résilience",
       "Environnement",
-      "Agriculture",
-      "Citoyenneté",
-      "Information"
+      "Citoyenneté"
     ],
     prioritiesEn: [
       "Resilience",
       "Environment",
-      "Agriculture",
-      "Citizenship",
-      "Information"
+      "Citizenship"
     ],
     landmark: "Réserve de Dzanga-Sangha & Forêt dense",
     landmarkEn: "Dzanga-Sangha Reserve & Dense Forest",
@@ -135,21 +123,17 @@ const COUNTRIES_DATA = [
     statusBadgeEn: "CEMAC EXPANSION",
     identity: "Climat, eau & adaptation",
     identityEn: "Climate, water & adaptation",
-    description: "Adapter les contenus et les formations aux enjeux des territoires sahéliens et aux réalités vécues par les jeunes : eau, changement climatique, agriculture et résilience.",
-    descriptionEn: "Adapt educational modules to the stakes of Sahelian territories and youths' lived experiences: water access, climate change, agriculture, and resilience.",
+    description: "Adapter les contenus aux enjeux sahéliens : eau, changement climatique, agriculture et résilience.",
+    descriptionEn: "Adapt educational modules to the stakes of Sahelian territories: water access, climate change, agriculture, and resilience.",
     priorities: [
       "Eau",
       "Climat",
-      "Agriculture",
-      "Résilience",
-      "Information de proximité"
+      "Agriculture"
     ],
     prioritiesEn: [
       "Water",
       "Climate",
-      "Agriculture",
-      "Resilience",
-      "Community reporting"
+      "Agriculture"
     ],
     landmark: "Bassin du Lac Tchad & Oasis sahéliennes",
     landmarkEn: "Lake Chad Basin & Sahelian Oasis",
@@ -165,21 +149,17 @@ const COUNTRIES_DATA = [
     statusBadgeEn: "CEMAC EXPANSION",
     identity: "Littoral, biodiversité & jeunesse",
     identityEn: "Coastline, biodiversity & youth",
-    description: "Développer progressivement les capacités des jeunes médias autour des enjeux liés au littoral, aux écosystèmes, aux ressources naturelles et à la sensibilisation environnementale.",
-    descriptionEn: "Progressively build young media capacity around coastal ecosystems, marine biodiversity, natural resources, and environmental sensitization.",
+    description: "Développer les capacités des jeunes médias autour du littoral, des écosystèmes et de la sensibilisation.",
+    descriptionEn: "Develop young media capacity around coastal ecosystems, biodiversity, and environmental sensitization.",
     priorities: [
       "Littoral",
       "Biodiversité",
-      "Environnement",
-      "Jeunesse",
-      "Médias"
+      "Jeunesse"
     ],
     prioritiesEn: [
       "Coastline",
       "Biodiversity",
-      "Environment",
-      "Youth",
-      "Media"
+      "Youth"
     ],
     landmark: "Littoral sauvage de Bioko & Pico Basile",
     landmarkEn: "Wild Coastline of Bioko & Pico Basile",
@@ -200,14 +180,14 @@ export default function TerritoriesMap({ onOpenApplication }) {
         <div className="section-header">
           <div className="section-tag-pill">
             <Globe size={16} />
-            <span>{t("territoriesKicker", "Ancrage Géographique & Écosystèmes")}</span>
+            <span>{t("territoriesKicker", "Ancrage géographique · zone CEMAC")}</span>
           </div>
           <h2 className="section-title-editorial">
-            {t("territoriesTitle", "Territoires d'Intervention &")}{" "}
-            <span className="text-highlight-green">{t("territoriesTitleHighlight", "Bassin du Congo")}</span>
+            {t("territoriesTitle", "Territoires d'intervention en")}{" "}
+            <span className="text-highlight-green">{t("territoriesTitleHighlight", "Afrique centrale")}</span>
           </h2>
           <p className="section-subtitle-editorial">
-            {t("territoriesSubtitle", "Du cœur de la forêt tropicale aux rives des fleuves et zones sahéliennes, JEDDIAC connecte les jeunes voix de 6 pays d'Afrique Centrale.")}
+            {t("territoriesSubtitle", "JEDDIAC intervient dans les six pays de la CEMAC. Le Cameroun, pays pilote, ouvre la voie ; l'ensemble s'inscrit dans le contexte écologique du bassin du Congo.")}
           </p>
         </div>
 
@@ -294,7 +274,7 @@ export default function TerritoriesMap({ onOpenApplication }) {
           <div className="territories-expansion-divider">
             <div className="divider-line" />
             <span className="divider-tag">
-              {isEnglish ? "Progressive CEMAC Regional Expansion" : "Extension Progressive — 5 Pays de la CEMAC"}
+              {t("territoriesExpansionTag", isEnglish ? "Progressive expansion — 5 other CEMAC nations" : "Extension progressive — 5 autres pays de la CEMAC")}
             </span>
             <div className="divider-line" />
           </div>
@@ -368,6 +348,22 @@ export default function TerritoriesMap({ onOpenApplication }) {
                 </div>
               );
             })}
+
+            {/* Context · Congo Basin Card */}
+            <div className="territory-card territory-card-congo-context">
+              <div className="congo-context-content">
+                <span className="congo-context-badge">
+                  <Trees size={15} />
+                  <span>{isEnglish ? "Ecological Sanctuary" : "Sanctuaire Écologique"}</span>
+                </span>
+                <h4 className="congo-context-title">
+                  {t("territoriesCongoContextTitle", "Contexte · Bassin du Congo")}
+                </h4>
+                <p className="congo-context-desc">
+                  {t("territoriesCongoContextDesc", "2ᵉ forêt tropicale du monde, ~70 % du couvert forestier africain. JEDDIAC inscrit son action dans cet écosystème, aux côtés des six pays de la CEMAC.")}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

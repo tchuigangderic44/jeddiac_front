@@ -20,18 +20,21 @@ export const translations = {
     applyNow: "Candidater / Rejoindre le Réseau",
 
     // Strategic Axes (Méthodologie & Cadre Opérationnel)
-    axesKicker: "⚙ Méthodologie & cadre opérationnel",
+    axesKicker: "Méthodologie & cadre opérationnel",
     axesTitle: "Les 5 Piliers Stratégiques",
     axesTitleHighlight: "du Programme",
     axesSubtitle: "Une approche structurée qui guide chaque jeune, de l'alphabétisation climatique à la production médiatique professionnelle.",
     axesKeyObjective: "Objectif clé :",
     axesJoinBtn: "Participer à cet axe",
 
-    // Territories (Ancrage Géographique & Écosystèmes)
-    territoriesKicker: "Ancrage Géographique & Écosystèmes",
-    territoriesTitle: "Territoires d'Intervention &",
-    territoriesTitleHighlight: "Bassin du Congo",
-    territoriesSubtitle: "Du cœur de la forêt tropicale aux rives des fleuves et zones sahéliennes, JEDDIAC connecte les jeunes voix de 6 pays d'Afrique Centrale.",
+    // Territories (Ancrage géographique · zone CEMAC)
+    territoriesKicker: "Ancrage géographique · zone CEMAC",
+    territoriesTitle: "Territoires d'intervention en",
+    territoriesTitleHighlight: "Afrique centrale",
+    territoriesSubtitle: "JEDDIAC intervient dans les six pays de la CEMAC. Le Cameroun, pays pilote, ouvre la voie ; l'ensemble s'inscrit dans le contexte écologique du bassin du Congo.",
+    territoriesExpansionTag: "Extension progressive — 5 autres pays de la CEMAC",
+    territoriesCongoContextTitle: "Contexte · Bassin du Congo",
+    territoriesCongoContextDesc: "2ᵉ forêt tropicale du monde, ~70 % du couvert forestier africain. JEDDIAC inscrit son action dans cet écosystème, aux côtés des six pays de la CEMAC.",
     territoryPilotTag: "Pilote",
     territoryCoverageLabel: "Couverture Territoriale",
     territoryYouthLabel: "Jeunesse Cible",
@@ -330,18 +333,21 @@ export const translations = {
     applyNow: "Apply / Join the Network",
 
     // Strategic Axes (Methodology & Operational Framework)
-    axesKicker: "⚙ Methodology & Operational Framework",
+    axesKicker: "Methodology & Operational Framework",
     axesTitle: "The 5 Strategic Pillars",
     axesTitleHighlight: "of the Program",
     axesSubtitle: "A structured approach guiding every youth, from climate literacy to professional media production.",
     axesKeyObjective: "Key objective :",
     axesJoinBtn: "Participate in this pillar",
 
-    // Territories (Geographical Footprint & Ecosystems)
-    territoriesKicker: "Geographical Footprint & Ecosystems",
-    territoriesTitle: "Target Territories &",
-    territoriesTitleHighlight: "Congo Basin",
-    territoriesSubtitle: "From the heart of the tropical rainforest to riverbanks and Sahelian zones, JEDDIAC connects youth voices across 6 Central African nations.",
+    // Territories (Geographical Footprint · CEMAC Zone)
+    territoriesKicker: "Geographical Footprint · CEMAC Zone",
+    territoriesTitle: "Action Territories in",
+    territoriesTitleHighlight: "Central Africa",
+    territoriesSubtitle: "JEDDIAC operates across the six CEMAC nations. Cameroon, the pilot country, leads the way; the entire initiative is anchored in the ecological context of the Congo Basin.",
+    territoriesExpansionTag: "Progressive expansion — 5 other CEMAC nations",
+    territoriesCongoContextTitle: "Context · Congo Basin",
+    territoriesCongoContextDesc: "2nd largest rainforest in the world, ~70% of Africa's forest cover. JEDDIAC roots its action in this ecosystem, alongside the six CEMAC nations.",
     territoryPilotTag: "Pilot",
     territoryCoverageLabel: "Territorial Coverage",
     territoryYouthLabel: "Target Youth",
