@@ -218,7 +218,6 @@ export default function TerritoriesMap({ onOpenApplication }) {
             <div className="territory-pilot-body">
               <div className="territory-pilot-header">
                 <div className="territory-country-badge-row">
-                  <span className="territory-flag-big">{pilotCountry.flag}</span>
                   <div>
                     <span className="territory-kicker-pilot">
                       {isEnglish ? pilotCountry.statusNoteEn : pilotCountry.statusNote}
