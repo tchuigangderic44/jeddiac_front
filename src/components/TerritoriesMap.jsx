@@ -4,27 +4,9 @@ import {
   ArrowRight, 
   Trees, 
   Sparkles, 
-  CheckCircle2, 
-  Compass, 
-  Users, 
-  UserCheck, 
-  MapPin, 
-  ShieldCheck 
+  CheckCircle2 
 } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
-
-const PILOT_REGIONS = [
-  { id: "adamaoua", name: "Adamaoua", nameEn: "Adamawa" },
-  { id: "centre", name: "Centre", nameEn: "Centre" },
-  { id: "est", name: "Est", nameEn: "East" },
-  { id: "extreme-nord", name: "Extrême-Nord", nameEn: "Far North" },
-  { id: "littoral", name: "Littoral", nameEn: "Littoral" },
-  { id: "nord", name: "Nord", nameEn: "North" },
-  { id: "nord-ouest", name: "Nord-Ouest", nameEn: "North-West" },
-  { id: "ouest", name: "Ouest", nameEn: "West" },
-  { id: "sud", name: "Sud", nameEn: "South" },
-  { id: "sud-ouest", name: "Sud-Ouest", nameEn: "South-West" }
-];
 
 const COUNTRIES_DATA = [
   {
@@ -55,9 +37,9 @@ const COUNTRIES_DATA = [
       "Production",
       "Local campaigns"
     ],
-    landmark: "Chutes d'Ekom Nkam & Forêt équatoriale du Dja",
-    landmarkEn: "Ekom Nkam Falls & Dja Rainforest",
-    image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=1000&auto=format&fit=crop&q=85"
+    landmark: "Monument de la Réunification, Yaoundé",
+    landmarkEn: "Reunification Monument, Yaoundé",
+    image: "/assets/monument-reunification.png"
   },
   {
     id: "ga",
@@ -289,106 +271,6 @@ export default function TerritoriesMap({ onOpenApplication }) {
                 <span className="territory-pilot-statut-pill">
                   {isEnglish ? "Status : Pilot phase" : "Statut : Phase pilote"}
                 </span>
-              </div>
-            </div>
-          </div>
-
-          {/* =========================================================
-              05 · DÉPLOIEMENT TERRAIN / L'ÉQUIPE OPÉRATIONNELLE
-              Phase pilote Cameroun : Coordination nationale & 10 régions
-              ========================================================= */}
-          <div className="territories-ops-deployment">
-            {/* Header / Sub-section eyebrow */}
-            <div className="ops-header">
-              <div className="ops-tag-pill">
-                <Compass size={15} />
-                <span>{t("opsTag", "05 · Déploiement terrain")}</span>
-              </div>
-              <h3 className="ops-main-title">
-                {t("opsTitle", "L'Équipe")}{" "}
-                <span className="text-highlight-green">{t("opsTitleHighlight", "Opérationnelle")}</span>
-              </h3>
-              <p className="ops-main-subtitle">
-                {t("opsSubtitle", "Pour la phase pilote au Cameroun, JEDDIAC s'appuie sur une coordination nationale et des binômes régionaux, au plus près des établissements et des communautés.")}
-              </p>
-            </div>
-
-            {/* Ops Hero Split: National Coordination + Key Numbers */}
-            <div className="ops-hero-split">
-              {/* Left: National Coordination Card */}
-              <div className="ops-coord-card">
-                <div className="ops-coord-badge-wrap">
-                  <span className="ops-coord-badge">
-                    <ShieldCheck size={14} />
-                    {t("opsCoordBadge", "Coordination nationale")}
-                  </span>
-                </div>
-                <h4 className="ops-coord-heading">
-                  {t("opsCoordHeading", "Un pilotage national, un ancrage régional")}
-                </h4>
-                <p className="ops-coord-text">
-                  {t("opsCoordP1", "Un ")}
-                  <span className="ops-text-accent">{t("opsCoordHighlight1", "responsable national")}</span>
-                  {t("opsCoordP2", " coordonne le déploiement sur l'ensemble du territoire. Dans chacune des 10 régions, ")}
-                  <span className="ops-text-accent">{t("opsCoordHighlight2", "deux responsables régionaux")}</span>
-                  {t("opsCoordP3", " animent les structures partenaires, accompagnent les clubs et assurent la remontée des activités.")}
-                </p>
-              </div>
-
-              {/* Right: 3 Key Metrics */}
-              <div className="ops-metrics-column">
-                <div className="ops-metric-card">
-                  <div className="ops-metric-icon-wrap">
-                    <UserCheck size={22} />
-                  </div>
-                  <div className="ops-metric-content">
-                    <div className="ops-metric-number">{t("opsStat1Num", "1")}</div>
-                    <div className="ops-metric-label">{t("opsStat1Label", "Responsable national")}</div>
-                  </div>
-                </div>
-
-                <div className="ops-metric-card">
-                  <div className="ops-metric-icon-wrap">
-                    <MapPin size={22} />
-                  </div>
-                  <div className="ops-metric-content">
-                    <div className="ops-metric-number">{t("opsStat2Num", "10")}</div>
-                    <div className="ops-metric-label">{t("opsStat2Label", "Régions couvertes")}</div>
-                  </div>
-                </div>
-
-                <div className="ops-metric-card">
-                  <div className="ops-metric-icon-wrap">
-                    <Users size={22} />
-                  </div>
-                  <div className="ops-metric-content">
-                    <div className="ops-metric-number">{t("opsStat3Num", "20")}</div>
-                    <div className="ops-metric-label">{t("opsStat3Label", "Responsables régionaux (2 / région)")}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* 10 Pilot Regions Section */}
-            <div className="ops-regions-section">
-              <div className="ops-regions-eyebrow">
-                <span className="ops-regions-eyebrow-text">
-                  {t("opsRegionsEyebrow", "Les 10 régions pilotes · 2 responsables chacune")}
-                </span>
-              </div>
-
-              <div className="ops-regions-grid">
-                {PILOT_REGIONS.map((region) => (
-                  <div key={region.id} className="ops-region-card">
-                    <div className="ops-region-name">
-                      {isEnglish ? region.nameEn : region.name}
-                    </div>
-                    <div className="ops-region-coordinators">
-                      <span className="ops-dots">●●</span>
-                      <span>{t("opsCoordinatorsLabel", "2 responsables")}</span>
-                    </div>
-                  </div>
-                ))}
               </div>
             </div>
           </div>

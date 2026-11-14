@@ -8,7 +8,6 @@ import {
   ArrowRight, 
   Calendar, 
   Info, 
-  Sparkles,
   CheckCircle2,
   Newspaper
 } from "lucide-react";
@@ -124,17 +123,6 @@ export default function ProgramSection({ onOpenApplication, onExploreAxes, onNav
             <ArrowRight size={17} />
           </button>
 
-          {onExploreAxes && (
-            <button 
-              type="button"
-              onClick={onExploreAxes}
-              className="btn btn-outline btn-lg"
-            >
-              <span>{t("progSeePillarsBtn")}</span>
-              <Sparkles size={16} />
-            </button>
-          )}
-
           {onNavigateAllNews && (
             <button
               type="button"
@@ -142,7 +130,7 @@ export default function ProgramSection({ onOpenApplication, onExploreAxes, onNav
               className="btn btn-ghost btn-lg"
             >
               <Newspaper size={16} />
-              <span>{t("progNewsDispatchesBtn")}</span>
+              <span>{t("progNewsDispatchesBtn", "Le programme en Action")}</span>
             </button>
           )}
         </div>

@@ -31,7 +31,7 @@ export default function AssociationSection({ onExploreProgram }) {
     {
       year: "Lycée",
       yearEn: "High School",
-      title: "Rédaction en chef de l'émission Juvénile",
+      title: "Rédacteur en chef de l'émission Juvénile",
       titleEn: "Editor-in-Chief of Juvénile Radio Broadcast",
       desc: "Une émission de référence des radios de l'Ouest. Attestation d'honneur du délégué régional de la communication.",
       descEn: "A flagship youth program on Western regional radio. Awarded an official commendation from the Regional Delegate of Communication."
@@ -124,7 +124,7 @@ export default function AssociationSection({ onExploreProgram }) {
           </p>
         </div>
 
-        {/* 4 Key Figures */}
+        {/* Key Figures */}
         <div className="assoc-facts-grid">
           <div className="assoc-fact-card">
             <div className="assoc-fact-num">{t("assocFact1Num")}</div>
@@ -138,10 +138,12 @@ export default function AssociationSection({ onExploreProgram }) {
             <div className="assoc-fact-num">{t("assocFact3Num")}</div>
             <div className="assoc-fact-label">{t("assocFact3Label")}</div>
           </div>
-          <div className="assoc-fact-card">
-            <div className="assoc-fact-num">{t("assocFact4Num")}</div>
-            <div className="assoc-fact-label">{t("assocFact4Label")}</div>
-          </div>
+          {t("assocFact4Num") && (
+            <div className="assoc-fact-card">
+              <div className="assoc-fact-num">{t("assocFact4Num")}</div>
+              <div className="assoc-fact-label">{t("assocFact4Label")}</div>
+            </div>
+          )}
         </div>
 
         {/* Two Columns: Story & Timeline */}

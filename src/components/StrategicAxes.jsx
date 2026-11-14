@@ -43,7 +43,7 @@ export default function StrategicAxes({ onOpenApplication }) {
       title: isEnglish ? "Create & Strengthen" : "Créer & Renforcer",
       subtitle: isEnglish ? "Building youth expression spaces" : "Bâtir des espaces",
       icon: PenTool,
-      photo: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800&auto=format&fit=crop&q=80",
+      photo: "/assets/creer-renforcer.png",
       description: isEnglish
         ? "Consolidating existing structures and supporting the creation of new spaces of expression where they are lacking."
         : "Consolider les structures existantes et accompagner la création de nouveaux espaces d'expression là où ils manquent.",
@@ -73,7 +73,7 @@ export default function StrategicAxes({ onOpenApplication }) {
       title: isEnglish ? "Train & Mentor" : "Former & Accompagner",
       subtitle: isEnglish ? "Building capacity & skills" : "Monter en compétences",
       icon: GraduationCap,
-      photo: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&auto=format&fit=crop&q=80",
+      photo: "/assets/former-accompagner.png",
       description: isEnglish
         ? "A practical and progressive curriculum combining sustainability challenges and media techniques."
         : "Un parcours pratique et progressif alliant enjeux de durabilité et techniques médiatiques.",

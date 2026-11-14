@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Calendar, MapPin, Clock, ArrowRight, ArrowLeft, Search, X, Sparkles, Filter, CheckCircle2, Award, Users } from "lucide-react";
+import { Calendar, MapPin, Clock, ArrowRight, ArrowLeft, Search, X } from "lucide-react";
 import { api } from "../services/api";
 import { useLanguage } from "../context/LanguageContext";
+import { OFFICIAL_AGENDA } from "../data/officialAgenda";
 
 export default function AllAgendaPage({ onBackToHome, onOpenApplication }) {
   const { t, isEnglish } = useLanguage();
-  const [agendas, setAgendas] = useState([]);
+  const [agendas, setAgendas] = useState(OFFICIAL_AGENDA);
   const [loading, setLoading] = useState(true);
-  const [selectedType, setSelectedType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
@@ -19,39 +19,22 @@ export default function AllAgendaPage({ onBackToHome, onOpenApplication }) {
     try {
       setLoading(true);
       const res = await api.getAgendas("?limit=100");
-      if (res && res.values) {
+      if (res && res.values && res.values.length > 0) {
         setAgendas(res.values);
       } else {
-        setAgendas([]);
+        setAgendas(OFFICIAL_AGENDA);
       }
     } catch (err) {
-      console.error("Failed to load agendas from API:", err);
-      setAgendas([]);
+      console.warn("Using fallback official agendas:", err);
+      setAgendas(OFFICIAL_AGENDA);
     } finally {
       setLoading(false);
     }
   };
 
-  const sessionTypes = [
-    { id: "all", label: isEnglish ? "All Sessions" : "Toutes les sessions" },
-    { id: "Formation Régionale", label: isEnglish ? "Regional Trainings" : "Formations Régionales" },
-    { id: "Masterclass Virtuelle", label: isEnglish ? "Virtual Masterclasses" : "Masterclasses Virtuelles" },
-    { id: "Conférence Régionale", label: isEnglish ? "Forums & Conferences" : "Forums & Conférences" }
-  ];
-
   const filteredAgendas = agendas.filter((item) => {
-    const itemTypeFr = item.type || "";
-    const itemTypeEn = item.typeEn || "";
-
-    const matchType =
-      selectedType === "all" ||
-      itemTypeFr === selectedType ||
-      (selectedType === "Formation Régionale" && (itemTypeFr.includes("Formation") || itemTypeEn.includes("Training"))) ||
-      (selectedType === "Masterclass Virtuelle" && (itemTypeFr.includes("Masterclass") || itemTypeEn.includes("Masterclass"))) ||
-      (selectedType === "Conférence Régionale" && (itemTypeFr.includes("Conférence") || itemTypeFr.includes("Forum") || itemTypeEn.includes("Conference") || itemTypeEn.includes("Forum")));
-
     const q = searchQuery.toLowerCase().trim();
-    const matchSearch =
+    return (
       !q ||
       (item.title && item.title.toLowerCase().includes(q)) ||
       (item.titleEn && item.titleEn.toLowerCase().includes(q)) ||
@@ -60,10 +43,18 @@ export default function AllAgendaPage({ onBackToHome, onOpenApplication }) {
       (item.location && item.location.toLowerCase().includes(q)) ||
       (item.locationEn && item.locationEn.toLowerCase().includes(q)) ||
       (item.type && item.type.toLowerCase().includes(q)) ||
-      (item.typeEn && item.typeEn.toLowerCase().includes(q));
-
-    return matchType && matchSearch;
+      (item.typeEn && item.typeEn.toLowerCase().includes(q))
+    );
   });
+
+  const handleCardClick = (item) => {
+    const title = isEnglish && item.titleEn ? item.titleEn : item.title;
+    if (onOpenApplication) {
+      onOpenApplication(`Mission Cameroun — ${title}`);
+    } else {
+      window.location.hash = "#contact";
+    }
+  };
 
   return (
     <div className="dedicated-page-wrapper">
@@ -75,7 +66,6 @@ export default function AllAgendaPage({ onBackToHome, onOpenApplication }) {
             <span>{t("allAgendaTag")}</span>
           </div>
 
-          {/* Bouton de retour avant la classe dedicated-page-title */}
           <div className="dedicated-back-btn-wrapper">
             <button 
               onClick={onBackToHome} 
@@ -125,19 +115,6 @@ export default function AllAgendaPage({ onBackToHome, onOpenApplication }) {
           </div>
         </div>
 
-        {/* Type Filter Pills */}
-        <div className="dedicated-category-pills">
-          {sessionTypes.map((type) => (
-            <button
-              key={type.id}
-              onClick={() => setSelectedType(type.id)}
-              className={`dedicated-cat-btn ${selectedType === type.id ? "active" : ""}`}
-            >
-              {type.label}
-            </button>
-          ))}
-        </div>
-
         {/* Loading or Empty or Grid */}
         {loading ? (
           <div className="loading-state-container">
@@ -147,59 +124,54 @@ export default function AllAgendaPage({ onBackToHome, onOpenApplication }) {
         ) : filteredAgendas.length === 0 ? (
           <div className="dedicated-empty-state">
             <Calendar size={48} />
-            <p>{isEnglish ? "No training session found matching your criteria." : "Aucune session trouvée dans cette catégorie."}</p>
+            <p>{isEnglish ? "No training session found matching your criteria." : "Aucune étape trouvée pour cette recherche."}</p>
             <button
-              onClick={() => {
-                setSelectedType("all");
-                setSearchQuery("");
-              }}
+              onClick={() => setSearchQuery("")}
               className="btn btn-outline-forest btn-sm"
               style={{ marginTop: "1rem" }}
             >
-              {isEnglish ? "Reset Filters" : "Réinitialiser les filtres"}
+              {isEnglish ? "Reset Search" : "Réinitialiser la recherche"}
             </button>
           </div>
         ) : (
           <div className="agenda-cards-grid dedicated-grid">
-            {filteredAgendas.map((item) => {
-              const dateObj = new Date(item.startDate || item.createdAt);
-              const dayStr = dateObj.toLocaleDateString(isEnglish ? "en-US" : "fr-FR", { day: "2-digit" });
-              const monthStr = dateObj
-                .toLocaleDateString(isEnglish ? "en-US" : "fr-FR", { month: "short" })
-                .toUpperCase();
-              const yearStr = dateObj.getFullYear();
+            {filteredAgendas.map((item, idx) => {
+              const matchedOfficial = OFFICIAL_AGENDA.find((o) => o.id === item.id || o.title === item.title) || OFFICIAL_AGENDA[idx] || {};
 
+              const day = item.day || matchedOfficial.day || (item.startDate ? new Date(item.startDate).toLocaleDateString(isEnglish ? "en-US" : "fr-FR", { day: "2-digit" }) : "20");
+              const month = (isEnglish && (item.monthEn || matchedOfficial.monthEn)) ? (item.monthEn || matchedOfficial.monthEn) : (item.month || matchedOfficial.month || "Nov 2026");
+              
               const displayTitle = (isEnglish && item.titleEn) ? item.titleEn : item.title;
               const displayDesc = (isEnglish && item.descriptionEn) ? item.descriptionEn : item.description;
               const displayLocation = (isEnglish && item.locationEn) 
                 ? item.locationEn 
-                : (item.location || (isEnglish ? "Yaoundé & Online (Hybrid)" : "Yaoundé & En ligne (Bimodal)"));
+                : (item.location || matchedOfficial.location || "Cameroun");
               const displayDuration = (isEnglish && item.durationEn) 
                 ? item.durationEn 
-                : (item.duration || (isEnglish ? "3-day intensive session" : "Session intensive 3 jours"));
-              const displayType = (isEnglish && item.typeEn) 
-                ? item.typeEn 
-                : (item.type || (isEnglish ? "Regional Training" : "Formation"));
-              const displaySeats = (isEnglish && item.seatsEn) 
-                ? item.seatsEn 
-                : (item.seats || (isEnglish ? "Limited Seats" : "Places Limitées"));
-              const displayAudience = (isEnglish && item.audienceEn) 
-                ? item.audienceEn 
-                : item.audience;
+                : (item.duration || matchedOfficial.duration || "Mission 2026");
+
+              const badge1 = (isEnglish && (item.badge1En || matchedOfficial.badge1En))
+                ? (item.badge1En || matchedOfficial.badge1En)
+                : (item.badge1 || matchedOfficial.badge1 || item.type);
+              const badge2 = (isEnglish && (item.badge2En || matchedOfficial.badge2En))
+                ? (item.badge2En || matchedOfficial.badge2En)
+                : (item.badge2 || matchedOfficial.badge2 || item.seats);
 
               return (
                 <div key={item.id} className="agenda-card">
                   <div className="agenda-card-top">
-                    {/* Big Date Stamp */}
                     <div className="agenda-date-stamp">
-                      <span className="agenda-day">{dayStr}</span>
-                      <span className="agenda-month">{monthStr}</span>
-                      <span className="agenda-year">{yearStr}</span>
+                      <div className="agenda-day">{day}</div>
+                      <div className="agenda-month">{month}</div>
                     </div>
 
                     <div className="agenda-meta-badges">
-                      <span className="badge badge-green-light">{displayType}</span>
-                      <span className="badge badge-gold-light">{displaySeats}</span>
+                      {badge1 && <span className="agenda-mission-badge">{badge1}</span>}
+                      {badge2 && (
+                        <span className={`agenda-mission-badge ${matchedOfficial.isBadge2Gold !== false ? "badge-gold" : ""}`}>
+                          {badge2}
+                        </span>
+                      )}
                     </div>
                   </div>
 
@@ -208,31 +180,20 @@ export default function AllAgendaPage({ onBackToHome, onOpenApplication }) {
 
                   <div className="agenda-card-details">
                     <div className="agenda-detail-row">
-                      <MapPin size={15} className="detail-icon" />
-                      <span>{displayLocation}</span>
+                      <span>📍 {displayLocation}</span>
                     </div>
                     <div className="agenda-detail-row">
-                      <Clock size={15} className="detail-icon" />
-                      <span>{displayDuration}</span>
+                      <span>⏱ {displayDuration}</span>
                     </div>
-                    {displayAudience && (
-                      <div className="agenda-detail-row">
-                        <Users size={15} className="detail-icon" />
-                        <span>{displayAudience}</span>
-                      </div>
-                    )}
                   </div>
 
-                  <div className="agenda-card-footer">
-                    <button
-                      onClick={() => onOpenApplication(`Inscription Session: ${displayTitle}`)}
-                      className="btn btn-forest"
-                      style={{ width: "100%", justifyContent: "center" }}
-                    >
-                      <span>{t("allAgendaApplyBtn")}</span>
-                      <ArrowRight size={16} />
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleCardClick(item)}
+                    className="agenda-card-cta-btn"
+                  >
+                    <span>{t("agendaCardCta", "Nous contacter pour en savoir plus →")}</span>
+                  </button>
                 </div>
               );
             })}

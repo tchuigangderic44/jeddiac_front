@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Mail, Phone, MapPin, Send, CheckCircle2, MessageSquare, Clock, Globe, ArrowRight } from "lucide-react";
+import { Mail, Phone, MapPin, Send, CheckCircle2, MessageSquare, Clock, Globe, ArrowRight, ChevronDown } from "lucide-react";
 import { api } from "../services/api";
 import { useLanguage } from "../context/LanguageContext";
 
@@ -178,7 +178,7 @@ export default function ContactSection() {
                     <input
                       type="text"
                       required
-                      placeholder={isEnglish ? "e.g. Samuel Lobe" : "Ex: Samuel Lobe"}
+                      placeholder="Association JEDDIAC"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       className="form-control-input"
@@ -190,7 +190,7 @@ export default function ContactSection() {
                     <input
                       type="email"
                       required
-                      placeholder="votre.email@domaine.com"
+                      placeholder="contact@jeddiac.org"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       className="form-control-input"
@@ -212,30 +212,33 @@ export default function ContactSection() {
 
                   <div className="form-group">
                     <label className="form-label">{isEnglish ? "Inquiry Subject *" : "Objet de la démarche *"}</label>
-                    <select
-                      value={formData.subject}
-                      onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                      className="form-control-input"
-                    >
-                      <option value="Demande d'information générale">
-                        {isEnglish ? "General Information" : "Information générale"}
-                      </option>
-                      <option value="Renseignement pour Club Média Scolaire">
-                        {isEnglish ? "School Media Club Inquiry" : "Renseignement pour club scolaire"}
-                      </option>
-                      <option value="Partenariat Radio Communautaire">
-                        {isEnglish ? "Community Radio Partnership" : "Partenariat radio communautaire"}
-                      </option>
-                      <option value="Proposition de Mentorat Journalistique">
-                        {isEnglish ? "Journalistic Mentorship Proposal" : "Proposition de mentorat"}
-                      </option>
-                      <option value="Partenariat Institutionnel / Bailleurs">
-                        {isEnglish ? "Institutional / Donor Partnership" : "Partenariat institutionnel / Bailleurs"}
-                      </option>
-                      <option value="Autre">
-                        {isEnglish ? "Other Inquiry" : "Autre demande"}
-                      </option>
-                    </select>
+                    <div className="contact-select-wrapper">
+                      <select
+                        value={formData.subject}
+                        onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                        className="form-control-input contact-select"
+                      >
+                        <option value="Demande d'information générale">
+                          {isEnglish ? "General Information" : "Information générale"}
+                        </option>
+                        <option value="Renseignement pour Club Média Scolaire">
+                          {isEnglish ? "School Media Club Inquiry" : "Renseignement pour club scolaire"}
+                        </option>
+                        <option value="Partenariat Radio Communautaire">
+                          {isEnglish ? "Community Radio Partnership" : "Partenariat radio communautaire"}
+                        </option>
+                        <option value="Proposition de Mentorat Journalistique">
+                          {isEnglish ? "Journalistic Mentorship Proposal" : "Proposition de mentorat"}
+                        </option>
+                        <option value="Partenariat Institutionnel / Bailleurs">
+                          {isEnglish ? "Institutional / Donor Partnership" : "Partenariat institutionnel / Bailleurs"}
+                        </option>
+                        <option value="Autre">
+                          {isEnglish ? "Other Inquiry" : "Autre demande"}
+                        </option>
+                      </select>
+                      <ChevronDown size={18} className="contact-select-arrow" />
+                    </div>
                   </div>
                 </div>
 
@@ -244,11 +247,7 @@ export default function ContactSection() {
                   <textarea
                     rows={5}
                     required
-                    placeholder={
-                      isEnglish 
-                        ? "Specify your institution, region and expectations..." 
-                        : "Précisez votre établissement, votre région d'attache et vos attentes..."
-                    }
+                    placeholder="Dites nous brièvement quelles sont vos attentes..."
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     className="form-control-input"

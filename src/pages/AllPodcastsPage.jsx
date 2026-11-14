@@ -476,7 +476,7 @@ export default function AllPodcastsPage({ onBackToHome }) {
                     flexDirection: "column",
                     position: "relative",
                     transition: "all 0.25s ease",
-                    border: isItemPlaying ? "2px solid #166534" : "1px solid rgba(0,0,0,0.08)"
+                    border: isItemPlaying ? "1px solid #166534" : "1px solid rgba(0,0,0,0.08)"
                   }}
                 >
                   <div className="team-card-photo-wrapper" style={{ height: "200px", position: "relative", overflow: "hidden" }}>
@@ -683,7 +683,7 @@ export default function AllPodcastsPage({ onBackToHome }) {
                   {/* Built-in Full Interactive Audio Player in Modal */}
                   <div style={{
                     background: "linear-gradient(135deg, #f0fdf4 0%, #e8f5e9 100%)",
-                    border: "1.5px solid rgba(22, 101, 52, 0.2)",
+                    border: "1px solid rgba(22, 101, 52, 0.2)",
                     borderRadius: "16px",
                     padding: "1.25rem",
                     margin: "1.25rem 0",

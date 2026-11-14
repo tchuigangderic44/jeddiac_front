@@ -63,10 +63,6 @@ export default function HeroSection({ stats, onOpenApplication, onExploreAxes })
   // Dynamic data from API
   const [apiMetrics, setApiMetrics] = useState(stats || null);
   const [leaderData, setLeaderData] = useState(null);
-  const [heroImage, setHeroImage] = useState(null);
-  const [heroImageCaption, setHeroImageCaption] = useState(null);
-  const [heroImageLocation, setHeroImageLocation] = useState(null);
-  const [latestDispatch, setLatestDispatch] = useState(null);
 
   useEffect(() => {
     if (stats) setApiMetrics((prev) => ({ ...(prev || {}), ...stats }));
@@ -137,27 +133,6 @@ export default function HeroSection({ stats, onOpenApplication, onExploreAxes })
         }
       })
       .catch((err) => console.warn("Hero leader load err:", err.message));
-
-    // Load authentic media and latest dispatch from news API
-    api.getNews("?limit=10")
-      .then((res) => {
-        if (!isMounted || !res || !res.values) return;
-        const withCover = res.values.find((n) => n.coverImage && n.status === "active");
-        if (withCover) {
-          setHeroImage(getMediaUrl(withCover.coverImage));
-          setHeroImageCaption(isEnglish && withCover.titleEn ? withCover.titleEn : withCover.title);
-          setHeroImageLocation(
-            isEnglish && withCover.categoryEn
-              ? withCover.categoryEn
-              : withCover.category || "Dépêche Officielle"
-          );
-        }
-        const latest = res.values.find((n) => n.status === "active");
-        if (latest) {
-          setLatestDispatch(latest);
-        }
-      })
-      .catch((err) => console.warn("Hero news load err:", err.message));
 
     return () => {
       isMounted = false;
@@ -340,22 +315,14 @@ export default function HeroSection({ stats, onOpenApplication, onExploreAxes })
           <div className="hero-visual-composition">
             {/* Primary Large Image Frame */}
             <div className="hero-main-photo-frame">
-              {heroImage ? (
-                <img 
-                  src={heroImage} 
-                  alt={heroImageCaption || t("heroPhotoTag")} 
-                  className="hero-main-photo" 
-                />
-              ) : (
-                <img 
-                  src="/assets/congo-basin-hero.jpg" 
-                  alt="Programme JEDDIAC - Bassin du Congo" 
-                  className="hero-main-photo" 
-                />
-              )}
+              <img 
+                src="/assets/jeddiac-formation-hero.jpg" 
+                alt="Programme JEDDIAC - Session de formation et leadership jeunesse" 
+                className="hero-main-photo" 
+              />
               <div className="hero-photo-tag-overlay">
                 <MapPin size={13} />
-                <span>{heroImageLocation || t("heroPhotoTag")}</span>
+                <span>{t("heroPhotoTag")}</span>
               </div>
             </div>
 
@@ -443,19 +410,13 @@ export default function HeroSection({ stats, onOpenApplication, onExploreAxes })
               )}
             </div>
 
-            {/* Floating Live Dispatch Card */}
+            {/* Floating Live Status Card - Static JEDDIAC Info */}
             <div className="hero-floating-status-pill">
               <span className="status-indicator-dot"></span>
               <div>
-                <strong>
-                  {latestDispatch
-                    ? (isEnglish && latestDispatch.categoryEn ? latestDispatch.categoryEn : (latestDispatch.category || t("heroStatusTitle")))
-                    : t("heroStatusTitle")}
-                </strong>
+                <strong>JEDDIAC</strong>
                 <span>
-                  {latestDispatch
-                    ? (isEnglish && latestDispatch.titleEn ? latestDispatch.titleEn : latestDispatch.title)
-                    : t("heroStatusDesc")}
+                  {isEnglish ? "Youth, Media & Environment" : "Jeunesse, médias et environnement"}
                 </span>
               </div>
             </div>

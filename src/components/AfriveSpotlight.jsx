@@ -49,12 +49,18 @@ export default function AfriveSpotlight({ onOpenApplication }) {
               </button>
             </div>
 
-            {/* Founder Vision Box with Photo */}
-            <div className="afrive-vision-card">
+            {/* Founder Vision Box with Photo - Clickable link to https://afrive.info */}
+            <a 
+              href="https://afrive.info" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="afrive-vision-card"
+              title={isEnglish ? "Visit AFRIVE (afrive.info)" : "Visiter le site officiel d'AFRIVE (afrive.info)"}
+            >
               <div className="afrive-vision-photo-frame">
                 <img 
-                  src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&auto=format&fit=crop&q=80" 
-                  alt={t("afriveVisionPhotoAlt")} 
+                  src="/assets/afrive-logo.png" 
+                  alt={isEnglish ? "AFRIVE Logo" : "Logo AFRIVE"} 
                   className="afrive-vision-img"
                   loading="lazy"
                 />
@@ -70,7 +76,7 @@ export default function AfriveSpotlight({ onOpenApplication }) {
                   <strong>{t("afriveVisionFounderName")}</strong> · {t("afriveVisionFounderRole")}
                 </div>
               </div>
-            </div>
+            </a>
           </div>
         </div>
       </div>

@@ -3,15 +3,18 @@ import { Bell, Calendar, ArrowRight, ArrowLeft, Clock, Search, X, Tag, Sparkles,
 import { api, getMediaUrl } from "../services/api";
 import { useLanguage } from "../context/LanguageContext";
 import EnrichedArticleContent from "../components/EnrichedArticleContent";
+import NewsPictogram from "../components/NewsPictogram";
+import ActivityConceptsSection from "../components/ActivityConceptsSection";
 import { OFFICIAL_NEWS } from "../data/officialNews";
 
 export const THEMATIC_CATEGORIES = [
-  { fr: "Médias & Formation", en: "Media & Training", icon: "🎙️" },
-  { fr: "Environnement & Déchets", en: "Environment & Waste", icon: "🌱" },
-  { fr: "Eau & Biodiversité", en: "Water & Biodiversity", icon: "💧" },
-  { fr: "Alimentation & Cantine", en: "Food & School Canteen", icon: "🥗" },
-  { fr: "Innovation & Réemploi", en: "Innovation & Reuse", icon: "🔄" },
-  { fr: "Rencontres & Restitution", en: "Dialogue & Restitution", icon: "🏛️" }
+  { fr: "Protocole Opérationnel", en: "Rollout Protocol", icon: "📋" },
+  { fr: "Diagnostic & Cadre", en: "Diagnostic & Framework", icon: "🔍" },
+  { fr: "Partenariat & Accord", en: "Partnership & Agreement", icon: "🤝" },
+  { fr: "Formation & Pratique", en: "Training & Practice", icon: "🎓" },
+  { fr: "Initiative de Terrain", en: "Field Initiative", icon: "🎯" },
+  { fr: "Mise en Œuvre & Enquête", en: "Implementation & Reporting", icon: "📸" },
+  { fr: "Restitution & Bilan", en: "Restitution & Evaluation", icon: "📢" }
 ];
 
 export default function AllNewsPage({ onBackToHome, onOpenApplication, initialCategory = "all" }) {
@@ -150,40 +153,6 @@ export default function AllNewsPage({ onBackToHome, onOpenApplication, initialCa
               </button>
             )}
           </div>
-
-          {/* Sort & Counter */}
-          <div className="dedicated-sort-group">
-            <span className="results-counter-pill">
-              <strong>{filteredNews.length}</strong> {t("allNewsCount")}
-            </span>
-            <select
-              value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value)}
-              className="dedicated-select"
-            >
-              <option value="newest">{isEnglish ? "Most Recent First" : "Plus récents d'abord"}</option>
-              <option value="oldest">{isEnglish ? "Oldest First" : "Plus anciens d'abord"}</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Category Pills with 6 Thematic Priorities */}
-        <div className="dedicated-category-pills">
-          {categories.map((cat) => {
-            const thematicObj = THEMATIC_CATEGORIES.find((tc) => tc.fr === cat || tc.en === cat);
-            const isThematic = Boolean(thematicObj);
-
-            return (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`dedicated-cat-btn ${isThematic ? "thematic-priority-btn" : ""} ${selectedCategory === cat ? "active" : ""}`}
-              >
-                <span>{cat === "all" ? t("allNewsFilterAll") : cat}</span>
-                {isThematic && <span className="cat-thematic-dot" title="Axe thématique officiel"></span>}
-              </button>
-            );
-          })}
         </div>
 
         {/* Loading State */}
@@ -217,28 +186,7 @@ export default function AllNewsPage({ onBackToHome, onOpenApplication, initialCa
               const tags = (isEnglish && item.tagsEn) ? item.tagsEn : item.tags;
               return (
                 <article key={item.id} className="news-editorial-card">
-                  <div className="news-card-photo-wrap">
-                    {imageSrc ? (
-                      <img src={imageSrc} alt={title} className="news-card-photo" loading="lazy" />
-                    ) : (
-                      <div className="news-card-default-bg">
-                        <div className="news-card-default-brand">
-                          <img 
-                            src="/assets/jeddiac-lineaire-blanc.png" 
-                            alt="JEDDIAC" 
-                            className="news-card-default-logo"
-                            onError={(e) => { e.currentTarget.style.display = "none"; }}
-                          />
-                          <span className="news-card-default-caption">
-                            {category}
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                    <span className="news-category-badge">
-                      {category}
-                    </span>
-                  </div>
+                  <NewsPictogram item={item} isEnglish={isEnglish} />
 
                   <div className="news-card-body">
                     <h3 className="news-card-title">{title}</h3>
@@ -266,6 +214,12 @@ export default function AllNewsPage({ onBackToHome, onOpenApplication, initialCa
             })}
           </div>
         )}
+
+        {/* Section Des concepts d'activités */}
+        <ActivityConceptsSection
+          isEnglish={isEnglish}
+          onOpenApplication={onOpenApplication}
+        />
       </div>
 
       {/* Full Detail Modal */}
@@ -283,39 +237,13 @@ export default function AllNewsPage({ onBackToHome, onOpenApplication, initialCa
                 <X size={20} />
               </button>
 
-              <span className="badge badge-green-light" style={{ marginBottom: "1rem" }}>
-                {modalCategory}
-              </span>
-
-              <div style={{ marginBottom: "1.25rem", borderRadius: "10px", overflow: "hidden", maxHeight: "260px" }}>
-                {selectedNews.coverImage ? (
-                  <img 
-                    src={getMediaUrl(selectedNews.coverImage)} 
-                    alt={modalTitle} 
-                    style={{ width: "100%", height: "220px", objectFit: "cover", display: "block" }} 
-                  />
-                ) : (
-                  <div className="news-card-default-bg" style={{ height: "180px" }}>
-                    <div className="news-card-default-brand">
-                      <img 
-                        src="/assets/jeddiac-lineaire-blanc.png" 
-                        alt="JEDDIAC" 
-                        className="news-card-default-logo"
-                        onError={(e) => { e.currentTarget.style.display = "none"; }}
-                      />
-                      <span className="news-card-default-caption">
-                        {modalCategory}
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </div>
+              <NewsPictogram item={selectedNews} isEnglish={isEnglish} isModal={true} />
 
               <h2 style={{ fontSize: "1.75rem", color: "#13221B", lineHeight: "1.35", marginBottom: "1rem" }}>
                 {modalTitle}
               </h2>
 
-              <div style={{ display: "flex", gap: "1.2rem", color: "#6A8278", fontSize: "0.88rem", marginBottom: "1.5rem" }}>
+              <div style={{ display: "flex", gap: "1.2rem", color: "#6A8278", fontSize: "0.95rem", marginBottom: "1.5rem" }}>
                 <span style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
                   <Calendar size={14} />
                   {new Date(selectedNews.publishedAt || selectedNews.createdAt).toLocaleDateString(
@@ -329,9 +257,9 @@ export default function AllNewsPage({ onBackToHome, onOpenApplication, initialCa
                 </span>
               </div>
 
-              <div style={{ color: "#2B4036", lineHeight: "1.8", fontSize: "1.05rem" }}>
+              <div style={{ color: "#2B4036", lineHeight: "1.8", fontSize: "1.12rem" }}>
                 {modalSummary && (
-                  <p style={{ fontWeight: 600, fontSize: "1.15rem", marginBottom: "1.2rem", color: "#13221B" }}>
+                  <p style={{ fontWeight: 600, fontSize: "1.22rem", marginBottom: "1.2rem", color: "#13221B" }}>
                     {modalSummary}
                   </p>
                 )}

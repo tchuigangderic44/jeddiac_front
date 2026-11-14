@@ -125,7 +125,7 @@ export default function ApplicationModal({ isOpen, onClose, prefilledSubject }) 
               {isEnglish ? "Join the Youth Media Network" : "Rejoindre le Réseau des Jeunes Médias"}
             </h3>
 
-            <p style={{ color: "#4F675D", fontSize: "0.95rem", lineHeight: "1.6", marginBottom: "1.8rem" }}>
+            <p style={{ color: "#4F675D", fontSize: "1.02rem", lineHeight: "1.65", marginBottom: "1.8rem" }}>
               {isEnglish 
                 ? "Whether you are a school press club, a community radio station, a journalism student or a youth ecological association, integrate the network to receive trainings, mentoring and mobile kits."
                 : "Que vous soyez un club journal scolaire, une radio communautaire, un étudiant en journalisme ou une association, intégrez le réseau pour bénéficier de formations et de dotations techniques."}
@@ -138,7 +138,7 @@ export default function ApplicationModal({ isOpen, onClose, prefilledSubject }) 
             )}
 
             <form onSubmit={handleSubmit}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+              <div className="form-row-two-col">
                 <div className="form-group">
                   <label className="form-label" style={{ color: "#13221B" }}>
                     {isEnglish ? "Full Name or Lead Contact *" : "Nom complet ou Référent *"}
@@ -147,7 +147,7 @@ export default function ApplicationModal({ isOpen, onClose, prefilledSubject }) 
                     type="text"
                     required
                     className="form-control"
-                    placeholder={isEnglish ? "e.g. Paul Mbarga" : "Ex: Paul Mbarga"}
+                    placeholder="Association JEDDIAC"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   />
@@ -161,14 +161,14 @@ export default function ApplicationModal({ isOpen, onClose, prefilledSubject }) 
                     type="email"
                     required
                     className="form-control"
-                    placeholder="contact@exemple.org"
+                    placeholder="contact@jeddiac.org"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   />
                 </div>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+              <div className="form-row-two-col">
                 <div className="form-group">
                   <label className="form-label" style={{ color: "#13221B" }}>
                     {isEnglish ? "Phone / WhatsApp *" : "Téléphone / WhatsApp *"}
@@ -203,7 +203,7 @@ export default function ApplicationModal({ isOpen, onClose, prefilledSubject }) 
                 </div>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+              <div className="form-row-two-col">
                 <div className="form-group">
                   <label className="form-label" style={{ color: "#13221B" }}>
                     {isEnglish ? "Structure Category *" : "Typologie de structure *"}
@@ -243,11 +243,7 @@ export default function ApplicationModal({ isOpen, onClose, prefilledSubject }) 
                   rows={4}
                   required
                   className="form-control"
-                  placeholder={
-                    isEnglish
-                      ? "Describe your current media activities, training needs or equipment objectives..."
-                      : "Décrivez vos activités médiatiques actuelles, vos besoins en formation ou matériel..."
-                  }
+                  placeholder="Dites nous brièvement quelles sont vos attentes..."
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 />
